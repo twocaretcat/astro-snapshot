@@ -1,55 +1,65 @@
 {
-  "name": "@twocaretcat/astro-snapshot",
-  "version": "1.0.0",
-  "description": "Astro integration for generating screenshots of pages using Puppeteer.",
-  "license": "MIT",
-  "exports": {
-    ".": "./src/index.ts",
-    "./package.json": "./deno.json"
-  },
-  "exclude": [
-    "npm/"
-  ],
-  "tasks": {
-    "build:npm": "deno run --allow-read --allow-write --allow-env --allow-run=npm scripts/build-npm.ts"
-  },
-  "fmt": {
-    "useTabs": true,
-    "lineWidth": 120,
-    "singleQuote": true
-  },
-  "lint": {
-    "rules": {
-      "tags": [
-        "recommended",
-        "jsr"
-      ]
-    }
-  },
-  "compilerOptions": {
-    "lib": [
-      "deno.window",
-      "dom",
-      "dom.iterable"
-    ],
-    "strict": true
-  },
-  "publish": {
-    "include": [
-      "src/**/*.ts",
-      "README.md",
-      "LICENSE",
-      "deno.json"
-    ]
-  },
-  "imports": {
-    "@deno/dnt": "jsr:@deno/dnt@^0.42.3",
-    "@semantic-release/exec": "npm:@semantic-release/exec@^7.1.0",
-    "@semantic-release/git": "npm:@semantic-release/git@^10.0.1",
-    "conventional-changelog-conventionalcommits": "npm:conventional-changelog-conventionalcommits@^9.1.0",
-    "puppeteer": "npm:puppeteer@^24.26.1",
-    "astro": "npm:astro@^5.0.0",
-    "semantic-release": "npm:semantic-release@^24.2.9"
-  },
-  "nodeModulesDir": "auto"
+	"name": "@twocaretcat/astro-snapshot",
+	"version": "1.0.0",
+	"description": "Astro integration for generating screenshots of pages using Puppeteer.",
+	"license": "MIT",
+	"exports": {
+		".": "./src/index.ts",
+		"./package.json": "./deno.json"
+	},
+	"exclude": [
+		"npm/"
+	],
+	"tasks": {
+		"version": {
+			"description": "Sets the version in deno.json.\n\nUSAGE: deno task version <version>",
+			"command": "deno run --allow-read=deno.json --allow-write=deno.json scripts/update-version.ts"
+		},
+		"build:npm": {
+			"description": "Build the package for npm. No build step is required for JSR.\n\nUSAGE: deno task build:npm",
+			"command": "deno run --allow-read --allow-write --allow-env --allow-run=npm scripts/build-npm.ts"
+		}
+	},
+	"fmt": {
+		"exclude": [
+			"**/*.svg"
+		],
+		"useTabs": true,
+		"lineWidth": 120,
+		"singleQuote": true
+	},
+	"lint": {
+		"rules": {
+			"tags": [
+				"recommended",
+				"jsr"
+			]
+		}
+	},
+	"compilerOptions": {
+		"lib": [
+			"deno.window",
+			"dom",
+			"dom.iterable"
+		],
+		"strict": true
+	},
+	"publish": {
+		"include": [
+			"src/**/*.ts",
+			"README.md",
+			"LICENSE",
+			"deno.json"
+		]
+	},
+	"imports": {
+		"@deno/dnt": "jsr:@deno/dnt@^0.42.3",
+		"@semantic-release/exec": "npm:@semantic-release/exec@^7.1.0",
+		"@semantic-release/git": "npm:@semantic-release/git@^10.0.1",
+		"conventional-changelog-conventionalcommits": "npm:conventional-changelog-conventionalcommits@^9.1.0",
+		"puppeteer": "npm:puppeteer@^24.26.1",
+		"astro": "npm:astro@^5.0.0",
+		"semantic-release": "npm:semantic-release@^24.2.9"
+	},
+	"nodeModulesDir": "auto"
 }
