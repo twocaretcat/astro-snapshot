@@ -1,11 +1,8 @@
 {
 	"name": "@twocaretcat/astro-snapshot",
 	"version": "1.0.0",
-	"description": "Astro integration for generating screenshots of pages using Puppeteer.",
-	"license": "MIT",
 	"exports": {
-		".": "./src/index.ts",
-		"./package.json": "./deno.json"
+		".": "./src/index.ts"
 	},
 	"exclude": [
 		"npm/"
@@ -48,8 +45,7 @@
 		"include": [
 			"src/**/*.ts",
 			"README.md",
-			"LICENSE",
-			"deno.json"
+			"LICENSE"
 		]
 	},
 	"imports": {
