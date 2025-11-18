@@ -21,11 +21,6 @@
 <br/>
 </div>
 
-> [!WARNING]
-> This is currently an experimental project or proof-of-concept. It may contain bugs or incomplete features, and is not
-> intended for production use. Breaking changes may be made at any time. Consider more stable alternatives for critical
-> applications.
-
 ## 👋 About
 
 Generate screenshots of your [Astro] pages automatically at build time with **Astro Snapshot**. Perfect for creating
@@ -592,14 +587,14 @@ launchOptions: {
 
 ## 🤝 Contributing
 
-Pull requests, bug reports, feature requests, and other kinds of contributions are greatly appreciated. See
-[the contribution guide](docs/CONTRIBUTING.md) for more details.
+Pull requests, bug reports, feature requests, and other kinds of contributions are welcome. See the
+[contribution guide](docs/CONTRIBUTING.md) for more details.
 
 ## 🧾 License
 
-Copyright © 2025 [John Goodliff](https://johng.io/r/astro-snapshot).
+Copyright © 2025 [John Goodliff](https://johng.io/r/astro-snapshot) ([@twocaretcat](https://github.com/twocaretcat)).
 
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+This project is licensed under the MIT license. See the [license](LICENSE) for more details.
 
 We are not affiliated with or endorsed by Astro.
 
@@ -607,14 +602,20 @@ We are not affiliated with or endorsed by Astro.
 
 ### Recommended
 
+Other projects you might like:
+
 - **👤 [Gatsby Plugin: Component to Image]**: A similar image generation plugin for the Gatsby framework.
 
 ### Used By
+
+Notable projects that depend on this one:
 
 - **👤 [Tally]**: A free online tool to count the number of characters, words, paragraphs, and lines in your text.
   **Tally** uses this integration to generate social images.
 
 ### Alternatives
+
+Similar projects you might want to use instead:
 
 - **🌐 [astro-selfie]**: A similar integration that automatically generates images for every page.
 
