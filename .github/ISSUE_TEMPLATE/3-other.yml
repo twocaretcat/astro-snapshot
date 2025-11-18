@@ -10,8 +10,8 @@ body:
       options:
         - label: I've added an emoji to the issue title
           required: true
-        - label: I've added a label to the issue
-          required: true
+        - label: I've added a label to the issue (if possible)
+          required: false
   - type: textarea
     attributes:
       label: What?

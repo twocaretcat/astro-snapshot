@@ -12,6 +12,8 @@ body:
           required: true
         - label: I have searched for existing issues
           required: true
+        - label: I'm willing to [implement this myself](blob/main/docs/CONTRIBUTING.md) (optional)
+          required: false
   - type: input
     attributes:
       label: Platform
