@@ -1,6 +1,7 @@
 <!-- Project Header -->
 <div align="center">
-<h1 class="projectName">📸 Astro Snapshot</h1>
+<img class="projectLogo" src="docs/icon.svg" alt="Project logo" title="Project logo" width="256">
+<h1 class="projectName">Astro Snapshot</h1>
 <p class="projectBadges">
   <img src="https://johng.io/badges/category/Plugin.svg" alt="Project category" title="Project category">
   <img src="https://img.shields.io/github/languages/top/twocaretcat/astro-snapshot.svg" alt="Language" title="Language">
