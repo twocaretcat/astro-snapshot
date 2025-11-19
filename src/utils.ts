@@ -81,3 +81,27 @@ export function logStatus(
 
 	logger[method](`  ${bullet} ${io}${status}`);
 }
+
+/**
+ * Formats a duration in milliseconds as a human-readable string.
+ *
+ * Values under 1000ms are displayed as whole milliseconds (e.g., "53ms").
+ * Values 1000ms and above are displayed as seconds with one decimal place (e.g., "1.4s").
+ *
+ * @param ms - The duration in milliseconds to format
+ * @returns A formatted duration string with appropriate unit suffix
+ *
+ * @example
+ * ```ts
+ * formatDuration(53);    // "53ms"
+ * formatDuration(1400);  // "1.4s"
+ * formatDuration(5230);  // "5.2s"
+ * ```
+ */
+export function formatDuration(ms: number): string {
+	if (ms < 1000) {
+		return `${Math.round(ms)}ms`;
+	}
+
+	return `${(ms / 1000).toFixed(1)}s`;
+}
