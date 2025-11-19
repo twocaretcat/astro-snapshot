@@ -1,85 +1,28 @@
 /**
- * Astro Snapshot — Automatic page screenshots during build.
+ * Astro integration for generating automated page snapshots using Puppeteer.
  *
- * This integration captures screenshots of selected pages after the build
- * completes. It starts a local preview server of the built site, navigates to
- * each configured page using Puppeteer, and writes screenshots to the specified
- * output paths. This is useful for generating preview thumbnails, social cards,
- * visual regression artifacts, or documentation images directly from your site.
- *
- * Each page may define its own viewport size, navigation options, and
- * screenshot settings. Shared defaults can be provided, and only pages
- * explicitly listed in the configuration will be processed.
- *
- * ## Usage
- * ```ts
- * // astro.config.mjs
- * import { defineConfig } from 'astro/config';
- * import snapshot from 'astro-snapshot';
- *
- * export default defineConfig({
- *   integrations: [
- *     snapshot({
- *       pages: {
- *         '/': true,
- *         '/about': {
- *           width: 1920,
- *           height: 1080,
- *           outputPath: 'public/images/about-preview.png'
- *         }
- *       }
- *     })
- *   ]
- * });
- * ```
- *
- * ## How It Works
- * - Runs after `astro build`
- * - Starts a temporary preview server to render routes
- * - Launches a headless Chromium instance via Puppeteer
- * - Captures one or more screenshots per configured page
- * - Writes resulting image files to disk
- *
- * To customize Chromium launch behavior, pass `launchOptions`. To adjust
- * default screenshot behavior, use `defaults` in the integration config.
+ * This module provides an integration that runs after the build process,
+ * starts a local preview server, and captures screenshots for configured
+ * routes using a headless browser.
  *
  * @module
  */
+import { styleText } from 'node:util';
 import { type AstroConfig, type AstroIntegration, preview } from 'astro';
 import { launch } from 'puppeteer';
 import { fileURLToPath } from 'node:url';
 import { mkdir } from 'node:fs/promises';
 import { dirname, relative, resolve } from 'node:path';
 import type { HandleBuildDone, HandleConfigDone, ScreenshotConfig, SnapshotIntegrationConfig } from './types.ts';
-import { getFormat } from './utils.ts';
+import { formatDuration, getFormat, logStatus } from './utils.ts';
 
 /**
- * Creates the Astro Screenshot integration
+ * Creates an Astro integration that captures screenshots of specified pages
+ * during the `astro:build:done` lifecycle event.
  *
- * @param config - Configuration for the screenshot integration
- * @returns Astro integration object
- *
- * @example
- * ```ts
- * // astro.config.mjs
- * import { defineConfig } from 'astro/config';
- * import snapshot from 'astro-snapshot';
- *
- * export default defineConfig({
- *   integrations: [
- *     snapshot({
- *       pages: {
- *         '/': true,
- *         '/about': {
- *           width: 1920,
- *           height: 1080,
- *           outputPath: 'public/images/about-preview.png'
- *         }
- *       }
- *     })
- *   ]
- * });
- * ```
+ * @param config - Integration configuration, including page mappings, defaults,
+ * and Puppeteer settings.
+ * @returns The configured Astro integration.
  */
 export default function snapshot(
 	config: SnapshotIntegrationConfig,
@@ -147,16 +90,19 @@ export default function snapshot(
 	 * @param param0 - Object containing the Astro logger instance.
 	 */
 	const handleBuildDone: HandleBuildDone = async ({ logger }) => {
+		const startTime = performance.now();
+
+		logger.info('🔭 Integration loaded.');
+
 		const pageEntries = Object.entries(pages);
 
 		if (pageEntries.length === 0) {
-			logger.debug(
+			logger.warn(
 				'No pages configured for screenshot generation. Skipping...',
 			);
 
 			return;
 		}
-
 		// Start local server to render pages
 		const previewServer = await preview({
 			root: rootDir,
@@ -165,6 +111,10 @@ export default function snapshot(
 
 		// Launch Puppeteer
 		const browser = await launch(launchOptions);
+
+		logger.info('🔭 Generating screenshots...');
+
+		logger.label = '';
 
 		try {
 			for (const [pagePath, screenshotConfigs] of pageEntries) {
@@ -177,6 +127,7 @@ export default function snapshot(
 					);
 
 					const absoluteOutputPath = resolve(rootDir, outputPath);
+					const relativePath = relative(rootDir, absoluteOutputPath);
 
 					// Ensure output directory exists
 					await mkdir(dirname(absoluteOutputPath), { recursive: true });
@@ -189,18 +140,17 @@ export default function snapshot(
 					await page.screenshot(screenshotOptions);
 					await page.close();
 
-					// Store the generated screenshot path
-					const relativePath = relative(rootDir, absoluteOutputPath);
-
-					logger.info(
-						`📸 Screenshot generated: ${normalizedPagePath} → ${relativePath}`,
-					);
+					logStatus(logger, normalizedPagePath, relativePath);
 				}
 			}
 		} finally {
 			await browser.close();
 			await previewServer.stop();
 		}
+
+		logger.info(
+			styleText('green', `✓ Completed in ${formatDuration(performance.now() - startTime)}.`),
+		);
 	};
 
 	return {
