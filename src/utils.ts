@@ -1,4 +1,11 @@
+/**
+ * Utility functions for the Astro Snapshot integration.
+ *
+ * @module
+ */
 import type { Format } from './types.ts';
+import { styleText } from 'node:util';
+import type { AstroIntegrationLogger } from 'astro';
 
 /**
  * Extracts and normalizes the image format from a given file path.
@@ -40,4 +47,37 @@ export function getFormat(path: string): Format {
 	}
 
 	throw new Error('Unsupported extension');
+}
+
+/**
+ * Logs a status message showing input/output file paths with optional warning.
+ *
+ * @param logger - The Astro integration logger instance to use for output
+ * @param inputPath - The source file path to display
+ * @param outputPath - The destination file path to display
+ * @param warningLabel - Optional warning text to append. If provided, logs as warning in yellow; otherwise logs as info in green
+ *
+ * @example
+ * ```ts
+ * logStatus(logger, 'src/input.ts', 'dist/output.js');
+ * // Outputs (green): ▶ src/input.ts → dist/output.js
+ *
+ * logStatus(logger, 'src/input.ts', 'dist/output.js', 'skipped');
+ * // Outputs (yellow): ▶ src/input.ts → dist/output.js (skipped)
+ * ```
+ */
+export function logStatus(
+	logger: AstroIntegrationLogger,
+	inputPath: string,
+	outputPath: string,
+	warningLabel?: string,
+) {
+	const [method, color, status] = warningLabel
+		? ['warn', 'yellow', ` ${styleText('dim', `(${warningLabel})`)}`] as const
+		: ['info', 'green', ''] as const;
+
+	const bullet = styleText(color, '▶');
+	const io = `${inputPath} → ${outputPath}`;
+
+	logger[method](`  ${bullet} ${io}${status}`);
 }
