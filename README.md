@@ -24,7 +24,7 @@
 ## 👋 About
 
 Generate screenshots of your [Astro] pages automatically at build time with **Astro Snapshot**. Perfect for creating
-social media images, content previews, and dynamic icons.
+social images, content previews, and dynamic icons.
 
 This integration was inspired by a similar plugin I wrote for [Gatsby] called [Gatsby Plugin: Component to Image] and
 [astro-selfie]. Compared to astro-selfie, this integration exposes a lot more configuration options that allow you to
@@ -86,7 +86,7 @@ your `astro.config.js` automatically.
 ### Automatic (w/ `astro add`)
 
 > [!NOTE]
-> This grabs the package from NPM. If you want to use the JSR version, you will need to install it manually.
+> This grabs the package from npm. If you want to use the JSR version, you will need to install it manually.
 
 We can use the Astro CLI to install the integration automatically using your preferred package manager:
 
@@ -298,7 +298,9 @@ export default defineConfig({
 
 ## 🤖 Advanced Usage
 
-### Full Configuration Example
+### Kitchen Sink
+
+Here's an example with all available configuration options:
 
 ```js
 // astro.config.mjs
@@ -315,6 +317,7 @@ export default defineConfig({
 						outputPath: 'public/og/home.png',
 						width: 1200, // Viewport width (default: 1200)
 						height: 630, // Viewport height (default: 630)
+						overwrite: true, // Overwrite existing screenshots (default: false)
 
 						// Puppeteer page.goto() options
 						gotoOptions: {
@@ -341,6 +344,7 @@ export default defineConfig({
 			defaults: {
 				width: 1200,
 				height: 630,
+				overwrite: true,
 				gotoOptions: {
 					waitUntil: 'networkidle2',
 				},
