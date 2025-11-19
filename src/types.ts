@@ -1,3 +1,9 @@
+/**
+ * Type definitions for the Astro Snapshot integration.
+ *
+ * @module
+ */
+
 import type { AstroIntegration } from 'astro';
 import type { GoToOptions, ScreenshotOptions } from 'puppeteer';
 import type puppeteer from 'puppeteer';
@@ -27,21 +33,27 @@ export interface ScreenshotConfig {
 	/**
 	 * Custom output path for the screenshot.
 	 * Can be absolute or relative to the project root.
-	 * @default "public/screenshots/[page-path].png"
+	 * @default `public/screenshots/${pagePath}.png`
 	 */
 	outputPath: `${string}.${Format}`;
 
 	/**
 	 * Width of the screenshot viewport in pixels.
-	 * @default 1200 (OpenGraph standard width)
+	 * @default 1200 // OpenGraph standard width
 	 */
 	width?: number;
 
 	/**
 	 * Height of the screenshot viewport in pixels.
-	 * @default 630 (OpenGraph standard height)
+	 * @default 630 // OpenGraph standard height
 	 */
 	height?: number;
+
+	/**
+	 * Whether to overwrite existing screenshots. If `false` and the file exists, the screenshot will be skipped.
+	 * @default false
+	 */
+	overwrite?: boolean;
 
 	/**
 	 * Options to pass to Puppeteer's `page.goto()` method.
@@ -75,7 +87,7 @@ export interface SnapshotIntegrationConfig {
 	 * Default configuration applied to all pages.
 	 * Can be overridden per page in `pages`.
 	 */
-	defaults?: Omit<ScreenshotConfig, 'skip' | 'outputPath'>;
+	defaults?: Omit<ScreenshotConfig, 'outputPath'>;
 
 	/**
 	 * Puppeteer launch options.

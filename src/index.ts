@@ -14,7 +14,7 @@ import { fileURLToPath } from 'node:url';
 import { mkdir } from 'node:fs/promises';
 import { dirname, relative, resolve } from 'node:path';
 import type { HandleBuildDone, HandleConfigDone, ScreenshotConfig, SnapshotIntegrationConfig } from './types.ts';
-import { formatDuration, getFormat, logStatus } from './utils.ts';
+import { fileExists, formatDuration, getFormat, logStatus } from './utils.ts';
 
 /**
  * Creates an Astro integration that captures screenshots of specified pages
@@ -55,6 +55,7 @@ export default function snapshot(
 			// Or operator is used to ignore 0
 			width: pageConfig.width || defaults.width || 1200,
 			height: pageConfig.height || defaults.height || 630,
+			overwrite: pageConfig.overwrite ?? defaults.overwrite ?? false,
 			goToOptions: {
 				waitUntil: 'networkidle2',
 				...defaults.gotoOptions,
@@ -122,12 +123,20 @@ export default function snapshot(
 				const pageUrl = `http://localhost:${port}${normalizedPagePath}` as const;
 
 				for (const screenshotConfig of screenshotConfigs) {
-					const { width, height, goToOptions, outputPath, screenshotOptions } = resolveScreenshotConfig(
+					const { width, height, overwrite, goToOptions, outputPath, screenshotOptions } = resolveScreenshotConfig(
 						screenshotConfig,
 					);
 
 					const absoluteOutputPath = resolve(rootDir, outputPath);
 					const relativePath = relative(rootDir, absoluteOutputPath);
+
+					const doesFileExist = await fileExists(absoluteOutputPath);
+
+					if (doesFileExist && !overwrite) {
+						logStatus(logger, normalizedPagePath, relativePath, 'skipped');
+
+						continue;
+					}
 
 					// Ensure output directory exists
 					await mkdir(dirname(absoluteOutputPath), { recursive: true });
@@ -140,7 +149,7 @@ export default function snapshot(
 					await page.screenshot(screenshotOptions);
 					await page.close();
 
-					logStatus(logger, normalizedPagePath, relativePath);
+					logStatus(logger, normalizedPagePath, relativePath, doesFileExist && overwrite ? 'overwritten' : undefined);
 				}
 			}
 		} finally {
