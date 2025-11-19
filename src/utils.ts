@@ -3,6 +3,7 @@
  *
  * @module
  */
+import { access } from 'node:fs/promises';
 import type { Format } from './types.ts';
 import { styleText } from 'node:util';
 import type { AstroIntegrationLogger } from 'astro';
@@ -47,6 +48,29 @@ export function getFormat(path: string): Format {
 	}
 
 	throw new Error('Unsupported extension');
+}
+
+/**
+ * Checks if a file exists at the given path.
+ *
+ * @param path - The file path to check.
+ * @returns A promise that resolves to `true` if the file exists, `false` otherwise.
+ *
+ * @example
+ * ```ts
+ * if (await fileExists('/path/to/file.png')) {
+ *   console.log('File exists');
+ * }
+ * ```
+ */
+export async function fileExists(path: string): Promise<boolean> {
+	try {
+		await access(path);
+
+		return true;
+	} catch {
+		return false;
+	}
 }
 
 /**
