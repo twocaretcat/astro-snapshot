@@ -6,6 +6,7 @@ const author = {
 	domain: 'johng.io',
 } as const;
 const packageName = 'astro-snapshot' as const;
+const repoUrl = `https://github.com/${author.username}/${packageName}` as const;
 const dir = {
 	src: './src',
 	out: './npm',
@@ -29,7 +30,8 @@ await build({
 	package: {
 		name: deno.name,
 		version: Deno.args[0] ?? deno.version,
-		description: 'Astro integration for generating screenshots of pages using Puppeteer.',
+		description:
+			'An Astro integration for generating screenshots of your pages automatically at build time. Perfect for creating social images, content previews, dynamic icons, and more!',
 		keywords: [
 			'withastro',
 			'astro',
@@ -53,10 +55,10 @@ await build({
 		},
 		repository: {
 			type: 'git',
-			url: `git+https://github.com/${author.username}/${packageName}.git`,
+			url: `git+${repoUrl}.git`,
 		},
-		homepage: `https://${author.domain}/p/${packageName}`,
-		bugs: `https://github.com/${author.username}/${packageName}/issues`,
+		homepage: repoUrl,
+		bugs: `${repoUrl}/issues`,
 		funding: [
 			{
 				type: 'individual',
