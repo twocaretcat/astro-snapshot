@@ -336,6 +336,14 @@ export default defineConfig({
 								height: 630,
 							},
 						},
+
+						// Puppeteer page.setViewport() options
+						setViewportOptions: {
+							deviceScaleFactor: 2, // Higher resolution screenshots
+							isMobile: false,
+							hasTouch: false,
+							isLandscape: true,
+						},
 					},
 				],
 			},
@@ -347,6 +355,9 @@ export default defineConfig({
 				overwrite: true,
 				gotoOptions: {
 					waitUntil: 'networkidle2',
+				},
+				setViewportOptions: {
+					deviceScaleFactor: 2,
 				},
 			},
 
