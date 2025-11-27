@@ -24,7 +24,7 @@
 ## 👋 About
 
 Generate screenshots of your [Astro] pages automatically at build time with **Astro Snapshot**. Perfect for creating
-social images, content previews, dynamic icons, and more!.
+social images, content previews, dynamic icons, and more!
 
 This integration was inspired by a similar plugin I wrote for [Gatsby] called [Gatsby Plugin: Component to Image] and
 [astro-selfie]. Compared to astro-selfie, this integration exposes a lot more configuration options that allow you to
