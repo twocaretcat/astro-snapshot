@@ -5,7 +5,7 @@
  */
 
 import type { AstroIntegration } from 'astro';
-import type { GoToOptions, ScreenshotOptions } from 'puppeteer';
+import type { GoToOptions, ScreenshotOptions, Viewport } from 'puppeteer';
 import type puppeteer from 'puppeteer';
 
 /**
@@ -69,6 +69,13 @@ export interface ScreenshotConfig {
 	 * @see https://pptr.dev/api/puppeteer.screenshotoptions
 	 */
 	screenshotOptions?: Omit<ScreenshotOptions, 'path' | 'format'>;
+
+	/**
+	 * Options to pass to Puppeteer's `page.setViewport()` method.
+	 * Note: `width` and `height` will be merged with these options.
+	 * @see https://pptr.dev/api/puppeteer.viewport
+	 */
+	setViewportOptions?: Omit<Viewport, 'width' | 'height'>;
 }
 
 /**

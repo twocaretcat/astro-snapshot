@@ -69,6 +69,10 @@ export default function snapshot(
 				...defaults.screenshotOptions,
 				...pageConfig.screenshotOptions,
 			} as const,
+			setViewportOptions: {
+				...defaults.setViewportOptions,
+				...pageConfig.setViewportOptions,
+			} as const,
 		};
 	};
 
@@ -123,9 +127,10 @@ export default function snapshot(
 				const pageUrl = `http://localhost:${port}${normalizedPagePath}` as const;
 
 				for (const screenshotConfig of screenshotConfigs) {
-					const { width, height, overwrite, goToOptions, outputPath, screenshotOptions } = resolveScreenshotConfig(
-						screenshotConfig,
-					);
+					const { width, height, overwrite, goToOptions, outputPath, screenshotOptions, setViewportOptions } =
+						resolveScreenshotConfig(
+							screenshotConfig,
+						);
 
 					const absoluteOutputPath = resolve(rootDir, outputPath);
 					const relativePath = relative(rootDir, absoluteOutputPath);
@@ -144,7 +149,7 @@ export default function snapshot(
 					// Create page and take screenshot
 					const page = await browser.newPage();
 
-					await page.setViewport({ width, height });
+					await page.setViewport({ width, height, ...setViewportOptions });
 					await page.goto(pageUrl, goToOptions);
 					await page.screenshot(screenshotOptions);
 					await page.close();
