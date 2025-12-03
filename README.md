@@ -3,10 +3,10 @@
 <img class="projectLogo" src="docs/icon.svg" alt="Project logo" title="Project logo" width="256">
 <h1 class="projectName">Astro Snapshot</h1>
 <p class="projectBadges">
-  <img src="https://johng.io/badges/category/Plugin.svg" alt="Project category" title="Project category">
-  <img src="https://img.shields.io/github/languages/top/twocaretcat/astro-snapshot.svg" alt="Language" title="Language">
-  <img src="https://img.shields.io/github/repo-size/twocaretcat/astro-snapshot.svg" alt="Repository size" title="Repository size">
-  <a href="LICENSE"><img src="https://img.shields.io/github/license/twocaretcat/astro-snapshot.svg" alt="Project license" title="Project license"/></a>
+	<img src="https://johng.io/badges/category/Plugin.svg" alt="Project category" title="Project category">
+	<img src="https://img.shields.io/github/languages/top/twocaretcat/astro-snapshot.svg" alt="Language" title="Language">
+	<img src="https://img.shields.io/github/repo-size/twocaretcat/astro-snapshot.svg" alt="Repository size" title="Repository size">
+	<a href="LICENSE"><img src="https://img.shields.io/github/license/twocaretcat/astro-snapshot.svg" alt="Project license" title="Project license"/></a>
 	<a href="https://github.com/semantic-release/semantic-release"><img src="https://img.shields.io/badge/semantic--release-conventionalcommits-e10079?logo=semantic-release" alt="Semantic Release" title="Semantic Release"/></a>
 </p>
 <p class="projectBadges status">
@@ -16,7 +16,7 @@
 	<a href="https://www.npmjs.com/package/@twocaretcat/astro-snapshot"><img src="https://img.shields.io/npm/v/@twocaretcat/astro-snapshot" alt="View package on npmjs" title="View package on npmjs"/></a>
 </p>
 <p class="projectDesc">
-  An Astro integration for generating screenshots of your pages automatically at build time
+	An Astro integration for generating screenshots of your pages automatically at build time
 </p>
 <br/>
 </div>
@@ -26,34 +26,35 @@
 Generate screenshots of your [Astro] pages automatically at build time with **Astro Snapshot**. Perfect for creating
 social images, content previews, dynamic icons, and more!
 
-This integration was inspired by a similar plugin I wrote for [Gatsby] called [Gatsby Plugin: Component to Image] and
-[astro-selfie]. Compared to astro-selfie, this integration exposes a lot more configuration options that allow you to
-completely customize how images are generated.
+This integration was inspired by [astro-selfie] and a similar plugin I wrote for [Gatsby] called
+[Gatsby Plugin: Component to Image]. Compared to astro-selfie, this integration exposes a lot more configuration options
+which allow you to completely customize how images are generated.
 
 ### Features
 
-- **🚀 Works with any page** : Generate one or more images from any valid Astro page
-  - Not limited by presets or available integration options like other solutions
-  - Not limited by types of JSX elements or CSS properties supported by [Satori]
+- **🧩 Framework agnostic**: Generate one or more images from any valid Astro page
+  - Unlike other integrations for generating social images, not limited to preset layouts
+  - Unlike [Satori], not limited to certain types of JSX elements or CSS properties
   - Use whatever front-end framework you want
-- **📷 Configurable output filetypes**: Generate PNG, JPEG, or WebP images with arbitrary dimensions
-  - Formats are automatically detected from the file extension
-  - Pass though options to [Puppeteer] for precise control of image quality, encoding speed, and more
-- **📂 Customizable output paths**: Full control over paths of the generated images
-  - Save images to the `public` directory to include them in the build, unprocessed
-  - Save images to the `dist` directory if you don't want to include theme in source control
-  - Save them in the `src` dir for further compression or importing into components*
-  - Or save them somewhere else, your choice
-- **🎛️ Default options**: Reuse the same options for multiple images
-  - Provide defaults for all options and override them on a per-image basis
+- **📸 Customizable outputs**: Full control over the generated images
+  - Generate multiple images per page with different configurations
+  - Save images to `public`, `dist`, `src`, or any other directory
+  - Save PNG, JPEG, or WebP images, with the format automatically detected from the output filename
+  - Save images at any resolution
+  - Choose whether to overwrite existing images or skip them
+- ⚙️ **Flexible configuration**: Advanced options for power users
+  - Define global defaults to keep configs minimal and override them on a per-image basis
+  - Pass through options directly to [Puppeteer] for precise control of the browser, viewport, and screenshot generation
+    process
 - 🔧 **TypeScript support**: Full type safety for all options and functions
-  - No need to worry about typos or incorrect config values
+  - Import types from the package to make sure your config is correct
+  - Install the package from JSR for use with TypeScript-native runtimes like Deno
 
 ### Use cases
 
 - **🏞️ Social images**: Use your existing front-end components to generate [Open Graph] images and/or Twitter cards for
   your blog posts or other content
-- **📰 Content previews**: Generate screenshots of your website for use in documentation, marketing materials
+- **📰 Content previews**: Generate screenshots of your website for use in documentation, marketing materials, etc.
 - **🖼️ Favicons**: Dynamically generate favicons for your website
 
 ### How it works
@@ -66,27 +67,25 @@ completely customize how images are generated.
 > for the images not existing the first time you perform a build (i.e. use a placeholder image or catch errors from
 > `import` statements).
 
-After the Astro build completes, this plugin uses [Puppeteer] to render the pages in a headless browser and save
-screenshots of the rendered content as images
+Here's a high-level overview of how the integration works:
+
+1. After the Astro build completes, we launch a local preview server to serve the static files
+2. Then, we use [Puppeteer] to:
+   1. launch a headless browser
+   2. navigate to the pages you configured
+   3. take screenshots of each one and save them to the filesystem as images
 
 ## 📦 Installation
 
-> [!TIP]
-> If you see any warnings like `Cannot find package 'puppeteer'` after adding the integration, your package manager may
-> not have installed peer dependencies for you. If this happens, install Puppeteer manually like so:
->
-> ```bash
-> npm install puppeteer
-> ```
+> [!NOTE]
+> Some package managers may block Puppeteer's install scripts. Refer to the [troubleshooting](#troubleshooting) section
+> if you run into this issue.
 
 This package is available on both [JSR](https://jsr.io/@twocaretcat/astro-snapshot) and
-[npm](https://www.npmjs.com/package/@twocaretcat/astro-snapshot). It's also support the `astro add` command to update
+[npm](https://www.npmjs.com/package/@twocaretcat/astro-snapshot). It also supports the `astro add` command to update
 your `astro.config.js` automatically.
 
 ### Automatic (w/ `astro add`)
-
-> [!NOTE]
-> This grabs the package from npm. If you want to use the JSR version, you will need to install it manually.
 
 We can use the Astro CLI to install the integration automatically using your preferred package manager:
 
@@ -144,20 +143,16 @@ vlt astro add astro-snapshot
 
 </details>
 
+> [!NOTE]
+> This grabs the package from npm. If you want to use the JSR version, you will need to install it manually instead.
+
 If you run into any issues, try the manual installation steps below.
 
 ### Manual
 
-> [!TIP]
-> JSR has some advantages if you're using TypeScript or Deno:
->
-> - It ships typed, modern ESM code by default
-> - No need for separate type declarations
-> - Faster, leaner installs without extraneous files
->
-> You can use JSR with your favorite package manager.
+#### 1. Install
 
-First, install it using your preferred package manager:
+First, install the package using your preferred package manager:
 
 <details>
 <summary>🦕 Deno</summary>
@@ -237,6 +232,16 @@ vlt install @twocaretcat/astro-snapshot      # npm
 
 </details>
 
+> [!TIP]
+> You can choose whether you want to install the package from JSR or npm. JSR has some advantages if you're using
+> TypeScript or Deno:
+>
+> - It ships typed, modern ESM code by default
+> - No need for separate type declarations
+> - Faster, leaner installs without extraneous files
+
+#### 2. Configure
+
 Then, apply the integration to your `astro.config.*` file using the integrations property:
 
 ```diff
@@ -245,7 +250,7 @@ import { defineConfig } from 'astro/config';
 +import snapshot from 'astro-snapshot';
 
 export default defineConfig({
-  // ...
+	// ...
 -  integrations: [],
 +  integrations: [snapshot()],
 });
@@ -255,7 +260,7 @@ export default defineConfig({
 
 ### Configure the Integration
 
-Add the integration to your `astro.config.mjs` or `astro.config.ts` file and configure it like so:
+Add the integration to your `astro.config.mjs` or `astro.config.ts` file and pass in an object to configure it like so:
 
 ```js
 // astro.config.mjs
@@ -265,6 +270,7 @@ import snapshot from 'astro-snapshot';
 export default defineConfig({
 	integrations: [
 		snapshot({
+			defaults: {},
 			pages: {
 				// Single screenshot for homepage
 				'/': [
@@ -295,6 +301,20 @@ export default defineConfig({
 	],
 });
 ```
+
+The `defaults` object is optional and can be used to set default values for all screenshots.
+
+> [!NOTE]
+> Input paths must reference a valid Astro page on your site. If not, you'll get a screenshot of a 404 page.
+
+The `pages` object is required. It maps URL paths to an array of screenshot configurations.
+
+Each screenshot configuration must have an `outputPath` property. Image file formats are determined automatically by
+their output filenames. All other properties are optional.
+
+See the section below for more configuration examples. For a real-world example, check out the
+[astro.config.mjs](https://github.com/twocaretcat/Tally/blob/c09b17f083549bcec57510194b4fe1e6d06b627e/astro.config.ts)
+for [Tally]. Tally uses this integration to generate social images for the site in multiple languages and aspect ratios.
 
 ## 🤖 Advanced Usage
 
@@ -374,6 +394,40 @@ export default defineConfig({
 });
 ```
 
+Several properties exist so that you can pass options directly to Puppeteer for fine-grained control:
+
+- `gotoOptions` - [Puppeteer `page.goto()` options](https://pptr.dev/api/puppeteer.page.goto)
+- `setViewportOptions` - [Puppeteer `page.setViewport()` options](https://pptr.dev/api/puppeteer.page.setviewport)
+- `screenshotOptions` - [Puppeteer `page.screenshot()` options](https://pptr.dev/api/puppeteer.page.screenshot)
+- `launchOptions` - [Puppeteer `puppeteer.launch()` options](https://pptr.dev/api/puppeteer.browserlauncher.launch)
+
+### TypeScript
+
+Using TypeScript? Import the `Config` type to get type checking:
+
+```js
+// astro.config.ts
+import { defineConfig } from 'astro/config';
+import snapshot, { type Config } from 'astro-snapshot';
+
+const ASTRO_SNAPSHOT_CONFIG: Config = {
+	pages: {
+		'/': [
+			{
+				// ERROR: Type '"public/og/home.bmp"' is not assignable to type '`${string}.png` | `${string}.jpeg` | `${string}.webp`'.
+				outputPath: 'public/og/home.bmp',
+			},
+		]
+	}
+};
+
+export default defineConfig({
+	integrations: [
+		snapshot(ASTRO_SNAPSHOT_CONFIG);
+	]
+});
+```
+
 ### Multiple Formats for Social Media
 
 > [!TIP]
@@ -396,10 +450,10 @@ export default defineConfig({
 	integrations: [
 		snapshot({
 			pages: {
-				'/': Object.entries(socialMediaSizes).map(([platform, dims]) => ({
+				'/': Object.entries(socialMediaSizes).map(([platform, dims]) => [{
 					outputPath: `public/social/${platform}.png`,
 					...dims,
-				})),
+				}]),
 			},
 		}),
 	],
@@ -450,63 +504,104 @@ export default defineConfig({
 });
 ```
 
-### Conditional Screenshot Generation
+## 📚 API Reference
 
-> [!TIP]
-> Optimize build performance by conditionally generating screenshots based on environment variables or build mode.
+### `SnapshotIntegrationConfig`
 
-Control when screenshots are generated:
+| Property        | Type                                 | Required | Default              | Description                             |
+| --------------- | ------------------------------------ | -------- | -------------------- | --------------------------------------- |
+| `pages`         | `Record<string, ScreenshotConfig[]>` | ✅       | -                    | Map of page paths to screenshot configs |
+| `defaults`      | `Partial<ScreenshotConfig>`          | ❌       | `{}`                 | Default config for all screenshots      |
+| `launchOptions` | `PuppeteerLaunchOptions`             | ❌       | `{ headless: true }` | Puppeteer launch options                |
+| `port`          | `number`                             | ❌       | `4322`               | Preview server port                     |
 
-```js
-// astro.config.mjs
-const isDevelopment = process.env.NODE_ENV === 'development';
-const shouldGenerateScreenshots = process.env.GENERATE_SCREENSHOTS === 'true';
+### `ScreenshotConfig`
 
-export default defineConfig({
-	integrations: [
-		// Only add integration when needed
-		...(shouldGenerateScreenshots || !isDevelopment
-			? [
-				snapshot({
-					pages: {
-						'/': [{ outputPath: 'public/og/home.png' }],
-					},
-				}),
-			]
-			: []),
-	],
-});
-```
+| Property             | Type                                          | Required | Default                         | Description                       |
+| -------------------- | --------------------------------------------- | -------- | ------------------------------- | --------------------------------- |
+| `outputPath`         | `string`                                      | ✅       | -                               | Output path with format extension |
+| `width`              | `number`                                      | ❌       | `1200`                          | Viewport width in pixels          |
+| `height`             | `number`                                      | ❌       | `630`                           | Viewport height in pixels         |
+| `gotoOptions`        | `GoToOptions`                                 | ❌       | `{ waitUntil: 'networkidle2' }` | Puppeteer goto options            |
+| `screenshotOptions`  | `Omit<ScreenshotOptions, 'path' \| 'format'>` | ❌       | `{}`                            | Puppeteer screenshot options      |
+| `setViewportOptions` | `Omit<Viewport, 'width' \| 'height'>`         | ❌       | `{}`                            | Puppeteer setViewport options     |
 
-### Custom Viewport Configurations
+### Supported Formats
 
-Different viewports for different purposes:
+The format is automatically detected from the file extension in `outputPath`:
 
-```js
-// astro.config.mjs
-const viewports = {
-	desktop: { width: 1920, height: 1080 },
-	tablet: { width: 768, height: 1024 },
-	mobile: { width: 375, height: 667 },
-};
+- `.png` - PNG format
+- `.jpg` / `.jpeg` - JPEG format
+- `.webp` - WebP format
 
-export default defineConfig({
-	integrations: [
-		snapshot({
-			pages: {
-				'/': Object.entries(viewports).map(([device, dims]) => ({
-					outputPath: `public/previews/${device}.png`,
-					...dims,
-				})),
-			},
-		}),
-	],
-});
-```
+## 🛟 Support
 
-### Waiting for Dynamic Content
+Need help? See the [support resources](https://github.com/twocaretcat/.github/blob/main/docs/SUPPORT.md) for information
+on how to:
 
-Handle pages with animations or lazy-loaded content:
+- request features
+- report bugs
+- ask questions
+- report security vulnerabilities
+
+### Troubleshooting
+
+<details>
+<summary><strong>Puppeteer can’t download a browser during installation</strong></summary>
+
+Some package managers block post-install scripts (for example, when using `--ignore-scripts` or strict CI environments).
+When this happens, Puppeteer will skip downloading a compatible browser, and the integration won’t be able to launch one
+during snapshot generation.
+
+To resolve this, configure your package manager to allow install scripts, install a compatible Chromium or Chrome binary
+manually, or configure Puppeteer to use an existing browser. You can point to a custom binary using the
+`PUPPETEER_EXECUTABLE_PATH` environment variable or the `launchOptions.executablePath` option.
+
+</details>
+
+<details>
+<summary><strong>Browser fails to launch in CI due to Linux sandbox restrictions</strong></summary>
+
+In many container-based CI environments, the Linux sandbox required by Chromium is unavailable. As a result, Puppeteer
+may fail to start with messages such as `No usable sandbox!`.
+
+To fix this, refer to Puppeteer’s instructions on how to
+[configure a sandbox for Chrome on Linux](https://pptr.dev/troubleshooting#setting-up-chrome-linux-sandbox).
+
+> [!CAUTION]
+> Alternatively, you can also disable the sandbox entirely by providing additional Chromium flags in
+> `launchOptions.args`:
+>
+> ```js
+> // astro.config.mjs
+> export default defineConfig({
+>   integrations: [
+>     snapshot({
+>       launchOptions: {
+>         args: ['--no-sandbox', '--disable-setuid-sandbox'];
+>       },
+>       // ...
+>     }),
+>   ],
+> });
+> ```
+>
+> The sandbox exists to prevent malicious websites from gaining elevated privileges on your system, so disabling it is
+> not recommended for production environments.
+
+Alternatively, run your build inside a base image that includes proper sandbox support, like the official
+Chrome/Chromium images.
+
+</details>
+
+<details>
+<summary><strong>Screenshots appear blank or missing styles</strong></summary>
+
+This usually occurs when resources haven’t finished loading before the snapshot is taken. Adjusting the timing of page
+navigation can help ensure all assets render correctly.
+
+You can modify `gotoOptions.waitUntil` to values such as `networkidle2`, `networkidle0`, or `load`, or increase the
+timeout to give the page more time to fully render:
 
 ```js
 // astro.config.mjs
@@ -529,81 +624,41 @@ export default defineConfig({
 });
 ```
 
-## 📚 API Reference
+</details>
 
-### `SnapshotIntegrationConfig`
+<details>
+<summary><strong>Routes return 404 or do not match the expected paths</strong></summary>
 
-| Property        | Type                                 | Required | Default              | Description                             |
-| --------------- | ------------------------------------ | -------- | -------------------- | --------------------------------------- |
-| `pages`         | `Record<string, ScreenshotConfig[]>` | ✅       | -                    | Map of page paths to screenshot configs |
-| `defaults`      | `Partial<ScreenshotConfig>`          | ❌       | `{}`                 | Default config for all screenshots      |
-| `launchOptions` | `PuppeteerLaunchOptions`             | ❌       | `{ headless: true }` | Puppeteer launch options                |
-| `port`          | `number`                             | ❌       | `4322`               | Preview server port                     |
+If the preview server can’t serve a configured route, the screenshot will fail or capture an error page. This often
+happens when the route path in your config doesn’t match the output of your built site.
 
-### `ScreenshotConfig`
+Double-check that your configured paths align with the final build output, and ensure the integration runs after your
+site has fully completed its build process.
 
-| Property            | Type                | Required | Default                         | Description                       |
-| ------------------- | ------------------- | -------- | ------------------------------- | --------------------------------- |
-| `outputPath`        | `string`            | ✅       | -                               | Output path with format extension |
-| `width`             | `number`            | ❌       | `1200`                          | Viewport width in pixels          |
-| `height`            | `number`            | ❌       | `630`                           | Viewport height in pixels         |
-| `gotoOptions`       | `GoToOptions`       | ❌       | `{ waitUntil: 'networkidle2' }` | Puppeteer goto options            |
-| `screenshotOptions` | `ScreenshotOptions` | ❌       | `{}`                            | Puppeteer screenshot options      |
+</details>
 
-### Supported Formats
+<details>
+<summary><strong>Output files are not written or directories are missing</strong></summary>
 
-The format is automatically detected from the file extension in `outputPath`:
+While the integration creates necessary directories automatically, certain environments—especially CI filesystems—may
+impose write restrictions. This can prevent screenshots from being saved.
 
-- `.png` - PNG format
-- `.jpg` / `.jpeg` - JPEG format
-- `.webp` - WebP format
+Verify that the target directory is writable and not mounted as read-only. On CI systems, ensure your working directory
+permits file creation before running the build.
 
-## ❓ FAQ
-
-### Screenshots not generating
-
-1. Check that pages are correctly specified in config
-2. Ensure Puppeteer dependencies are installed
-3. Verify the build completes without errors
-4. Check console output for screenshot generation logs
-
-### Permission errors
-
-On some systems, Puppeteer may need additional configuration:
-
-```js
-launchOptions: {
-	args: ['--no-sandbox', '--disable-setuid-sandbox'];
-}
-```
-
-### Memory issues with many screenshots
-
-Process pages in batches or increase Node memory:
-
-```bash
-NODE_OPTIONS="--max-old-space-size=4096" npm run build
-```
-
-### Docker deployment
-
-Add these args for containerized environments:
-
-```js
-launchOptions: {
-	args: [
-		'--no-sandbox',
-		'--disable-setuid-sandbox',
-		'--disable-dev-shm-usage',
-		'--disable-gpu',
-	];
-}
-```
+</details>
 
 ## 🤝 Contributing
 
-Pull requests, bug reports, feature requests, and other kinds of contributions are welcome. See the
-[contribution guide](docs/CONTRIBUTING.md) for more details.
+Want to help out? Pull requests are welcome for:
+
+- feature implementations
+- bug fixes
+- translations
+- documentation
+- tests
+
+See the [contribution guide](../../contribute) for more details.
 
 ## 🧾 License
 
