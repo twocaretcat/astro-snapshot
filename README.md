@@ -32,7 +32,7 @@ which allow you to completely customize how images are generated.
 
 ### Features
 
-- **🧩 Framework agnostic**: Generate one or more images from any valid Astro page
+- **🧩 Framework agnostic**: Generate images from any valid Astro page
   - Unlike other integrations for generating social images, not limited to preset layouts
   - Unlike [Satori], not limited to certain types of JSX elements or CSS properties
   - Use whatever front-end framework you want
@@ -79,7 +79,7 @@ Here's a high-level overview of how the integration works:
 
 > [!NOTE]
 > Some package managers may block Puppeteer's install scripts. Refer to the [troubleshooting](#troubleshooting) section
-> if you run into this issue.
+> if you run into any issues.
 
 This package is available on both [JSR](https://jsr.io/@twocaretcat/astro-snapshot) and
 [npm](https://www.npmjs.com/package/@twocaretcat/astro-snapshot). It also supports the `astro add` command to update
@@ -144,7 +144,7 @@ vlt astro add astro-snapshot
 </details>
 
 > [!NOTE]
-> This grabs the package from npm. If you want to use the JSR version, you will need to install it manually instead.
+> `astro add` grabs the package from npm. If you want to use the JSR version, you'll need to install it manually instead.
 
 If you run into any issues, try the manual installation steps below.
 
@@ -240,14 +240,14 @@ vlt install @twocaretcat/astro-snapshot      # npm
 > - No need for separate type declarations
 > - Faster, leaner installs without extraneous files
 
-#### 2. Configure
+#### 2. Add to Config
 
 Then, apply the integration to your `astro.config.*` file using the integrations property:
 
 ```diff
-// astro.config.mjs
+// astro.config.mjs or astro.config.ts
 import { defineConfig } from 'astro/config';
-+import snapshot from 'astro-snapshot';
++import snapshot from '@twocaretcat/astro-snapshot';
 
 export default defineConfig({
 	// ...
@@ -258,14 +258,14 @@ export default defineConfig({
 
 ## 🕹️ Usage
 
-### Configure the Integration
+### Getting Started
 
 Add the integration to your `astro.config.mjs` or `astro.config.ts` file and pass in an object to configure it like so:
 
 ```js
 // astro.config.mjs
 import { defineConfig } from 'astro/config';
-import snapshot from 'astro-snapshot';
+import snapshot from '@twocaretcat/astro-snapshot';
 
 export default defineConfig({
 	integrations: [
@@ -278,7 +278,7 @@ export default defineConfig({
 						outputPath: 'public/og/home.png',
 					},
 				],
-				// Multiple screenshots for about page (different sizes)
+				// Multiple screenshots for about page (different sizes and formats)
 				'/about': [
 					{
 						outputPath: 'public/og/about-og.png',
@@ -291,7 +291,7 @@ export default defineConfig({
 						height: 1080,
 					},
 					{
-						outputPath: 'public/og/about-twitter.png',
+						outputPath: 'public/og/about-twitter.webp',
 						width: 1200,
 						height: 675,
 					},
@@ -305,7 +305,7 @@ export default defineConfig({
 The `defaults` object is optional and can be used to set default values for all screenshots.
 
 > [!NOTE]
-> Input paths must reference a valid Astro page on your site. If not, you'll get a screenshot of a 404 page.
+> Input paths must reference a valid Astro page on your site. If not, you'll get a screenshot of a 404 page instead 😞.
 
 The `pages` object is required. It maps URL paths to an array of screenshot configurations.
 
@@ -325,7 +325,7 @@ Here's an example with all available configuration options:
 ```js
 // astro.config.mjs
 import { defineConfig } from 'astro/config';
-import snapshot from 'astro-snapshot';
+import snapshot from '@twocaretcat/astro-snapshot';
 
 export default defineConfig({
 	integrations: [
@@ -408,7 +408,7 @@ Using TypeScript? Import the `Config` type to get type checking:
 ```js
 // astro.config.ts
 import { defineConfig } from 'astro/config';
-import snapshot, { type Config } from 'astro-snapshot';
+import snapshot, { type Config } from '@twocaretcat/astro-snapshot';
 
 const ASTRO_SNAPSHOT_CONFIG: Config = {
 	pages: {
@@ -467,7 +467,7 @@ Generate screenshots for all blog posts:
 ```js
 // astro.config.mjs
 import { defineConfig } from 'astro/config';
-import snapshot from 'astro-snapshot';
+import snapshot from '@twocaretcat/astro-snapshot';
 
 // Get all blog post slugs (implement based on your setup)
 const blogPosts = await getBlogPostSlugs();
