@@ -3,7 +3,7 @@
 	"workspace": [
 		"./tests/fixtures/basic"
 	],
-	"version": "2.1.0",
+	"version": "2.2.0",
 	"exports": {
 		".": "./src/index.ts"
 	},
@@ -68,5 +68,7 @@
 		"sirv": "npm:sirv@^3.0.2"
 	},
 	"nodeModulesDir": "auto",
-	"allowScripts": ["npm:puppeteer"]
+	"allowScripts": [
+		"npm:puppeteer"
+	]
 }
