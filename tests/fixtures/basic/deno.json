@@ -6,6 +6,6 @@
 		"astro": "astro"
 	},
 	"imports": {
-		"astro": "npm:astro@^5.0.0"
+		"astro": "npm:astro@^6.0.0"
 	}
 }
