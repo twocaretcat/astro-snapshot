@@ -69,7 +69,7 @@ which allow you to completely customize how images are generated.
 
 Here's a high-level overview of how the integration works:
 
-1. After the Astro build completes, we launch a local preview server to serve the static files
+1. After the Astro build completes, we launch a local static file server to serve the build output
 2. Then, we use [Puppeteer] to:
    1. launch a headless browser
    2. navigate to the pages you configured
@@ -80,6 +80,21 @@ Here's a high-level overview of how the integration works:
 > [!NOTE]
 > Some package managers may block Puppeteer's install scripts. Refer to the [troubleshooting](#troubleshooting) section
 > if you run into any issues.
+
+> [!TIP]
+> You can choose whether you want to install the package from JSR or npm. Either way, you get full type support.
+>
+> JSR has some advantages if you're using TypeScript or Deno:
+>
+> - It ships typed, modern ESM code by default
+> - No need for separate type declarations
+> - Faster, leaner installs without extraneous files
+>
+> npm may be preferable if:
+>
+> - You're using a Node-based project and want `astro` resolved as a peer dependency, avoiding potential version
+>   mismatch issues
+> - You're using `astro add`, which installs from npm automatically
 
 This package is available on both [JSR](https://jsr.io/@twocaretcat/astro-snapshot) and
 [npm](https://www.npmjs.com/package/@twocaretcat/astro-snapshot). It also supports the `astro add` command to update
@@ -143,9 +158,6 @@ vlt astro add astro-snapshot
 
 </details>
 
-> [!NOTE]
-> `astro add` grabs the package from npm. If you want to use the JSR version, you'll need to install it manually instead.
-
 If you run into any issues, try the manual installation steps below.
 
 ### Manual
@@ -158,7 +170,7 @@ First, install the package using your preferred package manager:
 <summary>🦕 Deno</summary>
 
 ```bash
-deno add jsr:@twocaretcat/astro-snapshot     # JSR (recommended)
+deno add jsr:@twocaretcat/astro-snapshot     # JSR
 ```
 
 ```bash
@@ -231,14 +243,6 @@ vlt install @twocaretcat/astro-snapshot      # npm
 ```
 
 </details>
-
-> [!TIP]
-> You can choose whether you want to install the package from JSR or npm. JSR has some advantages if you're using
-> TypeScript or Deno:
->
-> - It ships typed, modern ESM code by default
-> - No need for separate type declarations
-> - Faster, leaner installs without extraneous files
 
 #### 2. Add to Config
 
@@ -645,6 +649,31 @@ impose write restrictions. This can prevent screenshots from being saved.
 
 Verify that the target directory is writable and not mounted as read-only. On CI systems, ensure your working directory
 permits file creation before running the build.
+
+</details>
+
+<details>
+<summary><strong>Build fails with <code>Astro found issue(s) with your configuration</code></strong></summary>
+
+> [!NOTE]
+> This issue was fixed in **v2.2.0**. If you're on v2.1.0 or lower, upgrade to resolve it. Astro is still used
+> internally to provide types, so it's still possible for the integration's version of Astro to get out of sync, but it
+> won't break your build anymore.
+
+When updating Astro in your project, the version used by the integration may fall behind, particularly when installing
+from JSR, where `astro` is bundled as a direct dependency rather than a peer dependency. If the two versions differ, the
+integration's copy of Astro may fail to validate your config against its older schema, producing an error like:
+
+```
+[config] Astro found issue(s) with your configuration:
+
+! experimental: Invalid or outdated experimental feature.
+```
+
+This tends to surface when your config uses experimental flags or other options introduced in a newer version of Astro
+than the one the integration was published against.
+
+You can usually fix this by deleting your `node_modules` and lockfile, then reinstalling your dependencies.
 
 </details>
 
