@@ -81,6 +81,21 @@ Here's a high-level overview of how the integration works:
 > Some package managers may block Puppeteer's install scripts. Refer to the [troubleshooting](#troubleshooting) section
 > if you run into any issues.
 
+> [!TIP]
+> You can choose whether you want to install the package from JSR or npm. Either way, you get full type support.
+>
+> JSR has some advantages if you're using TypeScript or Deno:
+>
+> - It ships typed, modern ESM code by default
+> - No need for separate type declarations
+> - Faster, leaner installs without extraneous files
+>
+> npm may be preferable if:
+>
+> - You're using a Node-based project and want `astro` resolved as a peer dependency, avoiding potential version
+>   mismatch issues
+> - You're using `astro add`, which installs from npm automatically
+
 This package is available on both [JSR](https://jsr.io/@twocaretcat/astro-snapshot) and
 [npm](https://www.npmjs.com/package/@twocaretcat/astro-snapshot). It also supports the `astro add` command to update
 your `astro.config.js` automatically.
@@ -143,10 +158,6 @@ vlt astro add astro-snapshot
 
 </details>
 
-> [!NOTE]
-> `astro add` grabs the package from npm. If you want to use the JSR version, you'll need to install it manually
-> instead.
-
 If you run into any issues, try the manual installation steps below.
 
 ### Manual
@@ -159,7 +170,7 @@ First, install the package using your preferred package manager:
 <summary>🦕 Deno</summary>
 
 ```bash
-deno add jsr:@twocaretcat/astro-snapshot     # JSR (recommended)
+deno add jsr:@twocaretcat/astro-snapshot     # JSR
 ```
 
 ```bash
@@ -232,14 +243,6 @@ vlt install @twocaretcat/astro-snapshot      # npm
 ```
 
 </details>
-
-> [!TIP]
-> You can choose whether you want to install the package from JSR or npm. JSR has some advantages if you're using
-> TypeScript or Deno:
->
-> - It ships typed, modern ESM code by default
-> - No need for separate type declarations
-> - Faster, leaner installs without extraneous files
 
 #### 2. Add to Config
 
