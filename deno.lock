@@ -17,7 +17,8 @@
     "npm:astro@5": "5.15.4_@types+node@24.2.0_vite@6.4.1__@types+node@24.2.0__picomatch@4.0.3_zod@3.25.76",
     "npm:conventional-changelog-conventionalcommits@^9.1.0": "9.1.0",
     "npm:puppeteer@^24.26.1": "24.29.1_devtools-protocol@0.0.1521046",
-    "npm:semantic-release@^24.2.9": "24.2.9_marked@15.0.12_@octokit+core@7.0.6"
+    "npm:semantic-release@^24.2.9": "24.2.9_marked@15.0.12_@octokit+core@7.0.6",
+    "npm:sirv@^3.0.2": "3.0.2"
   },
   "jsr": {
     "@david/code-block-writer@13.0.3": {
@@ -555,6 +556,9 @@
         "@pnpm/network.ca-file",
         "config-chain"
       ]
+    },
+    "@polka/url@1.0.0-next.29": {
+      "integrity": "sha512-wwQAWhWSuHaag8c4q/KN/vCoeOJYshAIvMQwD4GpSb3OiZklFfvAgmj0VCBBImRpuF/aFgIRzllXlVX93Jevww=="
     },
     "@puppeteer/browsers@2.10.13": {
       "integrity": "sha512-a9Ruw3j3qlnB5a/zHRTkruppynxqaeE4H9WNj5eYGRWqw0ZauZ23f4W2ARf3hghF5doozyD+CRtt7XSYuYRI/Q==",
@@ -3386,6 +3390,14 @@
         "pkg-conf"
       ]
     },
+    "sirv@3.0.2": {
+      "integrity": "sha512-2wcC/oGxHis/BoHkkPwldgiPSYcpZK3JU28WoMVv55yHJgcZ8rlXvuG9iZggz+sU1d4bRgIGASwyWqjxu3FM0g==",
+      "dependencies": [
+        "@polka/url",
+        "mrmime",
+        "totalist"
+      ]
+    },
     "sisteransi@1.0.5": {
       "integrity": "sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg=="
     },
@@ -3632,6 +3644,9 @@
       "dependencies": [
         "is-number"
       ]
+    },
+    "totalist@3.0.1": {
+      "integrity": "sha512-sf4i37nQ2LBx4m3wB74y+ubopq6W/dIzXg0FDGjsYnZHVa1Da8FH853wlL2gtUhg+xJXjfk3kUZS3BRoQeoQBQ=="
     },
     "traverse@0.6.8": {
       "integrity": "sha512-aXJDbk6SnumuaZSANd21XAo15ucCDE38H4fkqiGsc3MhCK+wOlZvLP9cB/TvpHT0mOyWgC4Z8EwRlzqYSUzdsA=="
@@ -4007,7 +4022,8 @@
       "npm:astro@5",
       "npm:conventional-changelog-conventionalcommits@^9.1.0",
       "npm:puppeteer@^24.26.1",
-      "npm:semantic-release@^24.2.9"
+      "npm:semantic-release@^24.2.9",
+      "npm:sirv@^3.0.2"
     ],
     "packageJson": {
       "overrides": {
