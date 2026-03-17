@@ -66,5 +66,6 @@
 		"astro": "npm:astro@^5.0.0",
 		"semantic-release": "npm:semantic-release@^24.2.9"
 	},
-	"nodeModulesDir": "auto"
+	"nodeModulesDir": "auto",
+	"allowScripts": ["npm:puppeteer"]
 }

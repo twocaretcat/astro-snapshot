@@ -1,0 +1,27 @@
+name: 🧪 Run Tests
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: 🧪 Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📂 Checkout
+        uses: actions/checkout@v6
+
+      - name: 🦕 Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+          cache: true
+
+      - name: 📥 Install dependencies
+        run: deno install
+
+      - name: 🧪 Run tests
+        run: deno task test
