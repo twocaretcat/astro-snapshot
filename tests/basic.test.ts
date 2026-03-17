@@ -13,10 +13,10 @@ const OUTPUT_IMAGE_PATH = resolve(FIXTURE_DIR, OUTPUT_PATH, 'index.png');
 Deno.test.beforeAll(async () => {
 	try {
 		await Deno.remove(resolve(FIXTURE_DIR, OUTPUT_PATH), { recursive: true });
-	} catch (err) {
+	} catch (error) {
 		// Ignore if the directory doesn't exist yet, but re-throw everything else
 		// (ie. missing --allow-write permission)
-		if (!(err instanceof Deno.errors.NotFound)) throw err;
+		if (!(error instanceof Deno.errors.NotFound)) throw error;
 	}
 });
 

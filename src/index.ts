@@ -2,17 +2,19 @@
  * Astro integration for generating automated page snapshots using Puppeteer.
  *
  * This module provides an integration that runs after the build process,
- * starts a local preview server, and captures screenshots for configured
+ * starts a local static file server, and captures screenshots for configured
  * routes using a headless browser.
  *
  * @module
  */
-import { styleText } from 'node:util';
-import { type AstroConfig, type AstroIntegration, preview } from 'astro';
-import { launch } from 'puppeteer';
-import { fileURLToPath } from 'node:url';
+import type { AstroIntegration } from 'astro';
 import { mkdir } from 'node:fs/promises';
+import { createServer } from 'node:http';
 import { dirname, relative, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { styleText } from 'node:util';
+import { launch } from 'puppeteer';
+import sirv from 'sirv';
 import type { HandleBuildDone, HandleConfigDone, ScreenshotConfig, SnapshotIntegrationConfig } from './types.ts';
 import { fileExists, formatDuration, getFormat, logStatus } from './utils.ts';
 
@@ -38,7 +40,6 @@ export default function snapshot(
 	} as const;
 	const port = config.port ?? 4322;
 
-	let astroConfig: AstroConfig;
 	let rootDir: string;
 
 	/**
@@ -80,21 +81,20 @@ export default function snapshot(
 	 * Handles the `astro:config:done` lifecycle event.
 	 * Stores the Astro configuration and root directory for later use.
 	 *
-	 * @param param0 - Object containing the resolved Astro config.
+	 * @param options - Object containing the resolved Astro config.
 	 */
 	const handleConfigDone: HandleConfigDone = ({ config }) => {
-		astroConfig = config;
-		rootDir = fileURLToPath(astroConfig.root);
+		rootDir = fileURLToPath(config.root);
 	};
 
 	/**
 	 * Handles the `astro:build:done` lifecycle event.
-	 * Launches a local preview server and uses Puppeteer to generate
+	 * Starts a local static file server and uses Puppeteer to generate
 	 * screenshots for all configured pages.
 	 *
-	 * @param param0 - Object containing the Astro logger instance.
+	 * @param options - Object containing the build output directory and Astro logger instance.
 	 */
-	const handleBuildDone: HandleBuildDone = async ({ logger }) => {
+	const handleBuildDone: HandleBuildDone = async ({ dir, logger }) => {
 		const startTime = performance.now();
 
 		logger.info('🔭 Integration loaded.');
@@ -108,11 +108,11 @@ export default function snapshot(
 
 			return;
 		}
-		// Start local server to render pages
-		const previewServer = await preview({
-			root: rootDir,
-			server: { port },
-		});
+
+		// Start a static file server to render pages
+		const server = createServer(sirv(fileURLToPath(dir)));
+
+		await new Promise<void>((resolve) => server.listen(port, resolve));
 
 		// Launch Puppeteer
 		const browser = await launch(launchOptions);
@@ -159,7 +159,7 @@ export default function snapshot(
 			}
 		} finally {
 			await browser.close();
-			await previewServer.stop();
+			await new Promise<void>((resolve, reject) => server.close((error) => (error ? reject(error) : resolve())));
 		}
 
 		logger.info(
