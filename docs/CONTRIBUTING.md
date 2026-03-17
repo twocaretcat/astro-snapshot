@@ -122,7 +122,12 @@ deno lint
 
 ## Testing
 
-There are currently no tests.
+We use Deno's built-in test runner for integration tests. The tests build a fixture Astro project with the integration
+configured and assert on the output. To run the tests:
+
+```bash
+deno task test
+```
 
 ## Building
 
