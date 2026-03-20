@@ -1,18 +1,19 @@
 import assert from 'node:assert';
 import { resolve } from 'node:path';
-import { OUTPUT_PATH } from './constants.ts';
+import { OUTPUT_DIR_NAME, OUTPUT_IMAGE_NAME } from './constants.ts';
 
 const DIR_NAME = import.meta.dirname;
 
 assert(DIR_NAME);
 
-const FIXTURE_DIR = resolve(DIR_NAME, 'fixtures', 'basic');
-const OUTPUT_IMAGE_PATH = resolve(FIXTURE_DIR, OUTPUT_PATH, 'index.png');
+const ABS_FIXTURE_PATH = resolve(DIR_NAME, 'fixture');
+const ABS_OUTPUT_PATH = resolve(ABS_FIXTURE_PATH, OUTPUT_DIR_NAME);
+const ABS_OUTPUT_IMAGE_PATH = resolve(ABS_OUTPUT_PATH, OUTPUT_IMAGE_NAME);
 
 // Clean up any existing screenshots so old files can't cause a false pass
 Deno.test.beforeAll(async () => {
 	try {
-		await Deno.remove(resolve(FIXTURE_DIR, OUTPUT_PATH), { recursive: true });
+		await Deno.remove(ABS_OUTPUT_PATH, { recursive: true });
 	} catch (error) {
 		// Ignore if the directory doesn't exist yet, but re-throw everything else
 		// (ie. missing --allow-write permission)
@@ -21,10 +22,10 @@ Deno.test.beforeAll(async () => {
 });
 
 // Run the Astro build inside the fixture project and assert the screenshot was created
-Deno.test('basic fixture generates screenshots on build', async () => {
+Deno.test('fixture generates screenshot on build', async () => {
 	const result = await new Deno.Command('deno', {
-		args: ['run', 'build'],
-		cwd: FIXTURE_DIR,
+		args: ['task', 'build'],
+		cwd: ABS_FIXTURE_PATH,
 		stdout: 'piped',
 		stderr: 'piped',
 	}).output();
@@ -37,8 +38,8 @@ Deno.test('basic fixture generates screenshots on build', async () => {
 		throw new Error(`Astro build failed:\n${stdout}\n${stderr}`);
 	}
 
-	const stat = await Deno.stat(OUTPUT_IMAGE_PATH);
+	const stat = await Deno.stat(ABS_OUTPUT_IMAGE_PATH);
 
-	assert(stat.isFile, `Expected screenshot at ${OUTPUT_IMAGE_PATH}`);
-	assert(stat.size > 0, `Screenshot at ${OUTPUT_IMAGE_PATH} is empty`);
+	assert(stat.isFile, `Expected screenshot at ${ABS_OUTPUT_IMAGE_PATH}`);
+	assert(stat.size > 0, `Screenshot at ${ABS_OUTPUT_IMAGE_PATH} is empty`);
 });

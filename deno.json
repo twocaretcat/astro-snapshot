@@ -1,7 +1,7 @@
 {
 	"name": "@twocaretcat/astro-snapshot",
 	"workspace": [
-		"./tests/fixtures/basic"
+		"./tests/fixture"
 	],
 	"version": "2.2.0",
 	"exports": {
@@ -18,7 +18,7 @@
 		},
 		"test": {
 			"description": "Run all integration tests.",
-			"command": "deno test --allow-run=deno --allow-read=tests/fixtures/ --allow-write=tests/fixtures/ tests/"
+			"command": "deno test --allow-run=deno --allow-read=tests/fixture/ --allow-write=tests/fixture/ tests/"
 		},
 		"version": {
 			"description": "Sets the version in deno.json.\n\nUSAGE: deno task version <version>",
