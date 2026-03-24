@@ -35,10 +35,12 @@ jobs:
           node-version: 'lts/*'
 
       - name: 📥 Install dependencies
+        working-directory: packages/astro-snapshot
         run: deno install
 
       # Project is built using @semantic-release/exec during the publish step
       - name: 🚀 Build & Publish
+        working-directory: packages/astro-snapshot
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: deno run -A semantic-release

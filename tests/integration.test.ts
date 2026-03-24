@@ -23,8 +23,8 @@ Deno.test.beforeAll(async () => {
 
 // Run the Astro build inside the fixture project and assert the screenshot was created
 Deno.test('fixture generates screenshot on build', async () => {
-	const result = await new Deno.Command('deno', {
-		args: ['task', 'build'],
+	const result = await new Deno.Command(Deno.execPath(), {
+		args: ['run', '-A', 'astro', 'build'],
 		cwd: ABS_FIXTURE_PATH,
 		stdout: 'piped',
 		stderr: 'piped',

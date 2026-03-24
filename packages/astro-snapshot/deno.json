@@ -1,0 +1,42 @@
+{
+	"name": "@twocaretcat/astro-snapshot",
+	"version": "2.2.0",
+	"exports": "./src/index.ts",
+	"exclude": [
+		"npm/"
+	],
+	"tasks": {
+		"version": {
+			"description": "Sets the version in deno.json.\n\nUSAGE: deno task version <version>",
+			"command": "deno run --allow-read=deno.json --allow-write=deno.json scripts/update-version.ts"
+		},
+		"build:npm": {
+			"description": "Build the package for npm. No build step is required for JSR.\n\nUSAGE: deno task build:npm",
+			"command": "deno run --allow-read --allow-write --allow-env --allow-run=npm scripts/build-npm.ts"
+		}
+	},
+	"compilerOptions": {
+		"lib": [
+			"deno.window",
+			"dom",
+			"dom.iterable"
+		],
+		"strict": true
+	},
+	"publish": {
+		"include": [
+			"src/**/*.ts",
+			"README.md",
+			"LICENSE"
+		]
+	},
+	"imports": {
+		"@deno/dnt": "jsr:@deno/dnt@^0.42.3",
+		"@semantic-release/exec": "npm:@semantic-release/exec@^7.1.0",
+		"@semantic-release/git": "npm:@semantic-release/git@^10.0.1",
+		"conventional-changelog-conventionalcommits": "npm:conventional-changelog-conventionalcommits@^9.3.0",
+		"puppeteer": "npm:puppeteer@^24.39.1",
+		"semantic-release": "npm:semantic-release@^24.2.9",
+		"sirv": "npm:sirv@^3.0.2"
+	}
+}
