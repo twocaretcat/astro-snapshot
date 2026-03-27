@@ -56,6 +56,7 @@ There are three workspace members:
 
 - **`packages/astro-snapshot`:** the `@twocaretcat/astro-snapshot` library itself
 - **`tests/fixture`:** a minimal Astro site used as an integration test fixture
+- **`docs/site`:** the documentation site built with [Starlight]
 
 Most `deno` commands can be run from the repo root to apply across all members, or from within a specific member's
 directory if you're only working on that part of the project. The exceptions are tasks defined in a member's own
@@ -69,6 +70,15 @@ astro-snapshot/
 │       ├── 📄 docs.yml        # Deploy docs site to GitHub Pages
 │       ├── 📄 publish.yml     # Build & publish to JSR and npm
 │       └── 📄 test.yml        # Run integration tests
+│
+├── 📂 docs/
+│   ├── 📂 site/               # Docs site (workspace member)
+│   │   ├── 📂 src/
+│   │   ├── 📄 astro.config.ts
+│   │   └── 📄 deno.json       # Docs site dependencies
+│   ├── 📄 CONTRIBUTING.md
+│   ├── 📄 SECURITY.md
+│   └── 📄 icon.svg
 │
 ├── 📂 packages/
 │   └── 📂 astro-snapshot/     # The @twocaretcat/astro-snapshot library (workspace member)
@@ -190,6 +200,32 @@ directly from the package source so changes are reflected immediately without a 
 deno task test
 ```
 
+## Documentation
+
+> [!IMPORTANT]
+> These tasks are only available in the `docs/site/` workspace member. Run them from that directory.
+
+The documentation site is built with [Starlight](https://starlight.astro.build/) and lives in the [docs/site/](./site/)
+directory. It is deployed automatically to GitHub Pages on every push to `main`.
+
+### Running the Dev Server
+
+```bash
+deno task dev
+```
+
+### Building for Production
+
+```bash
+deno task build
+```
+
+### Serving
+
+```bash
+deno task serve
+```
+
 ## Building
 
 We use a custom script to produce a Node.js-compatible npm package using [dnt] (Deno to Node Transform). No build step
@@ -198,7 +234,7 @@ is required for JSR.
 ### Building for npm
 
 > [!IMPORTANT]
-> This task is only available in the `packages/astro-snapshot` workspace member. Run it from that directory.
+> This task is only available in the `packages/astro-snapshot/` workspace member. Run it from that directory.
 
 ```bash
 deno task build:npm        # Build with version from deno.json
@@ -240,7 +276,7 @@ workspace member.
 
 > [!IMPORTANT]
 > You don't need to run this task manually. It is run automatically by the publish workflow to bump the version number
-> before publishing. It is only available in the `packages/astro-snapshot` workspace member.
+> before publishing. It is only available in the `packages/astro-snapshot/` workspace member.
 
 ```bash
 deno task version 1.0.0
@@ -264,7 +300,7 @@ See the existing source for examples of how to write code that fits with the pro
 
 - Add JSDoc comments for all exported functions and types
 - Keep comments up-to-date with code changes
-- If necessary, update the [README](../README.md) and any other applicable files in the [docs/](../docs/) directory
+- If necessary, update the [README](../README.md) and any other applicable files in the [docs/](./) directory
 
 ### Commit Messages
 
