@@ -4,6 +4,7 @@
 	],
 	"tasks": {
 		"dev": "astro dev",
+		// Unstable flag is required because Typedoc uses unprefixed imports for Node builtins
 		"build": "deno run -A --unstable-bare-node-builtins astro build",
 		"serve": "astro preview"
 	},
