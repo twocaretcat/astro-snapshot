@@ -1,0 +1,97 @@
+---
+title: Troubleshooting
+description: Solutions to common problems with Astro Snapshot.
+sidebar:
+  order: 0
+---
+
+Here's some common issues and their solutions. If your problem isn't listed here, [open an issue on GitHub](https://github.com/twocaretcat/astro-snapshot/issues) and I'll see if I can help.
+
+## Puppeteer can't download a browser during installation
+
+Some package managers block post-install scripts (for example, when using `--ignore-scripts` or in strict CI environments). When this happens, Puppeteer will skip downloading a browser and the integration won't be able to launch one during snapshot generation.
+
+To resolve this, configure your package manager to allow install scripts, install a compatible Chromium or Chrome binary manually, or configure Puppeteer to use an existing browser. You can point to a custom binary using the `PUPPETEER_EXECUTABLE_PATH` environment variable or the `launchOptions.executablePath` option.
+
+## Browser fails to launch in CI due to Linux sandbox restrictions
+
+In many container-based CI environments, the Linux sandbox required by Chromium is unavailable. Puppeteer may fail to start with messages such as `No usable sandbox!`.
+
+To fix this, refer to Puppeteer's instructions on how to [configure a sandbox for Chrome on Linux](https://pptr.dev/troubleshooting#setting-up-chrome-linux-sandbox), or run your build inside a base image that includes proper sandbox support, such as the official Chrome/Chromium Docker images.
+
+:::danger
+The sandbox exists to prevent malicious websites from gaining elevated privileges on your system, so disabling it is not recommended for production environments.
+:::
+
+Alternatively, you can disable the sandbox entirely using additional Chromium flags:
+
+```diff lang="ts" title="astro.config.ts"
+import { defineConfig } from 'astro/config';
+import snapshot from '@twocaretcat/astro-snapshot';
+
+export default defineConfig({
+	integrations: [
+		snapshot({
++			launchOptions: {
++				args: ['--no-sandbox', '--disable-setuid-sandbox'],
++			},
+			pages: {
+				// ...
+			},
+		}),
+	],
+});
+```
+
+## Screenshots appear blank or missing styles
+
+This usually occurs when resources haven't finished loading before the screenshot is taken. You can adjust `gotoOptions.waitUntil` to `networkidle2`, `networkidle0`, or `load`, or increase the timeout to give the page more time to fully render:
+
+```diff lang="ts" title="astro.config.ts"
+import { defineConfig } from 'astro/config';
+import snapshot from '@twocaretcat/astro-snapshot';
+
+export default defineConfig({
+	integrations: [
+		snapshot({
+			pages: {
+				'/dashboard': [
+					{
+						outputPath: 'public/og/dashboard.png',
++						gotoOptions: {
++							waitUntil: 'networkidle0',
++							timeout: 60000,
++						},
+					},
+				],
+			},
+		}),
+	],
+});
+```
+
+## Routes return 404 or do not match expected paths
+
+If the local server can't serve a configured route, the screenshot will fail or capture an error page. Double-check that your configured paths align with the final build output.
+
+## Output files are not written or directories are missing
+
+While the integration creates necessary directories automatically, certain environments, especially CI filesystems, may impose write restrictions that prevent screenshots from being saved. Verify that the target directory is writable and not mounted as read-only.
+
+## Build fails with `Astro found issue(s) with your configuration`
+
+:::note
+[This issue](https://github.com/twocaretcat/astro-snapshot/issues/26) was fixed in [**v2.2.0**](/changelog/version/v2-2-0/). If you're on [v2.1.0](/changelog/version/v2-1-0/) or lower, upgrade to resolve it.
+:::
+
+When updating Astro in your project, the version used by the integration may fall behind — particularly when installing from JSR, where `astro` is bundled as a direct dependency rather than a peer dependency. If the two versions differ, the integration's copy of Astro may fail to validate your config against its older schema, producing an error like:
+
+```bash title="> astro build"
+[config] Astro found issue(s) with your configuration:
+
+! experimental: Invalid or outdated experimental feature.
+```
+
+This tends to surface when your config uses experimental flags or other options introduced in a newer version of Astro than the one the integration was published against.
+
+To fix this, make sure the version of Astro in your project matches the version of Astro used by the integration. Usually, you can force the same version to be downloaded by just deleting your `node_modules` and lockfile, then reinstalling your dependencies.
