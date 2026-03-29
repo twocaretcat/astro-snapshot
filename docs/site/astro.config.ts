@@ -16,7 +16,7 @@ export default defineConfig({
 	integrations: [
 		snapshot({
 			pages: {
-				'/demo': [
+				'/showcase/demo': [
 					{
 						outputPath: `src/assets/demo.png`,
 						width: 1280,
@@ -94,9 +94,11 @@ export default defineConfig({
 									},
 									{
 										label: 'Troubleshooting',
-										autogenerate: {
-											directory: 'guide/troubleshooting',
-										},
+										slug: 'guide/troubleshooting',
+									},
+									{
+										label: 'How it Works',
+										slug: 'guide/how-it-works',
 									},
 								],
 							},
@@ -150,14 +152,14 @@ export default defineConfig({
 						],
 					},
 					{
-						label: 'Demo',
-						link: '/demo',
+						label: 'Showcase',
+						link: '/showcase/demo',
 						icon: 'laptop',
 						items: [
 							{
-								label: 'Demo',
+								label: 'Showcase',
 								autogenerate: {
-									directory: 'demo',
+									directory: 'showcase',
 								},
 							},
 						],
