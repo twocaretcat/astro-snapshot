@@ -1,0 +1,114 @@
+---
+title: Installation
+description: Install Astro Snapshot using your preferred package manager.
+sidebar:
+  order: 0
+---
+
+import PackageManagerTabs from '../../../../components/PackageManagerTabs.astro';
+import { Code } from 'starlight-theme-nova/components';
+
+Astro Snapshot is available on both [JSR](https://jsr.io/@twocaretcat/astro-snapshot) and [npm](https://www.npmjs.com/package/@twocaretcat/astro-snapshot), so you can choose where you want to install it from. Either way, you get full type support.
+
+:::tip[JSR or npm?]
+**JSR** is a good choice if you're using TypeScript or Deno: it ships typed, modern ESM code by default with no need for separate type declarations.
+
+**npm** may be preferable if you're using a Node-based project, as `astro` is resolved as a peer dependency which avoids potential version mismatch issues. It also works seamlessly with `astro add`.
+:::
+
+:::note[Some package managers may block Puppeteer's install scripts]
+If Puppeteer fails to download a browser during installation, refer to the [Troubleshooting](/guide/troubleshooting/) page.
+:::
+
+## Automatic (with `astro add`)
+
+You can use the Astro CLI to install and set up the integration automatically using your preferred package manager.
+
+:::note
+`astro add` installs from npm. To use the JSR version, follow the manual installation steps below.
+:::
+
+<PackageManagerTabs
+	npm="npx astro add @twocaretcat/astro-snapshot"
+	pnpm="pnpm astro add @twocaretcat/astro-snapshot"
+	yarn="yarn astro add @twocaretcat/astro-snapshot"
+	bun="bunx astro add @twocaretcat/astro-snapshot"
+	deno="deno run -A astro add @twocaretcat/astro-snapshot"
+	vlt="vlt astro add @twocaretcat/astro-snapshot"
+	codeComponent={Code}
+/>
+
+## Manual
+
+If you run into any issues, you can install the package manually instead.
+
+### 1. Install
+
+First, install the package using your preferred package manager.
+
+<PackageManagerTabs>
+	<Fragment slot="npm">
+		```bash title="npm"
+		npm install @twocaretcat/astro-snapshot
+		```
+		```bash title="JSR"
+		npx jsr add @twocaretcat/astro-snapshot
+		```
+	</Fragment>
+	<Fragment slot="pnpm">
+		```bash title="npm"
+		pnpm add @twocaretcat/astro-snapshot
+		```
+		```bash title="JSR"
+		pnpm i jsr:@twocaretcat/astro-snapshot
+		```
+	</Fragment>
+	<Fragment slot="yarn">
+		```bash title="npm"
+		yarn add @twocaretcat/astro-snapshot
+		```
+		```bash title="JSR"
+		yarn add jsr:@twocaretcat/astro-snapshot
+		```
+	</Fragment>
+	<Fragment slot="bun">
+		```bash title="npm"
+		bun add @twocaretcat/astro-snapshot
+		```
+		```bash title="JSR"
+		bunx jsr add @twocaretcat/astro-snapshot
+		```
+	</Fragment>
+	<Fragment slot="deno">
+		```bash title="npm"
+		deno add npm:@twocaretcat/astro-snapshot
+		```
+		```bash title="JSR (recommended)"
+		deno add jsr:@twocaretcat/astro-snapshot
+		```
+	</Fragment>
+	<Fragment slot="vlt">
+		```bash title="npm"
+		vlt install @twocaretcat/astro-snapshot
+		```
+		```bash title="JSR"
+		vlt install jsr:@twocaretcat/astro-snapshot
+		```
+	</Fragment>
+</PackageManagerTabs>
+
+### 2. Add to Config
+
+Then add it to your `astro.config.*`.
+
+```diff lang="ts" title="astro.config.ts"
+import { defineConfig } from 'astro/config';
++import snapshot from '@twocaretcat/astro-snapshot';
+
+export default defineConfig({
+-  integrations: [],
++  integrations: [snapshot({ pages: {} })],
+});
+```
+
+Next, you'll need to [configure](/guide/getting-started/configuration/) some pages to screenshot.
