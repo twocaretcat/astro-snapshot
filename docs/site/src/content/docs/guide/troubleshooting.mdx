@@ -25,16 +25,16 @@ The sandbox exists to prevent malicious websites from gaining elevated privilege
 
 Alternatively, you can disable the sandbox entirely using additional Chromium flags:
 
-```diff lang="ts" title="astro.config.ts"
+```ts title="astro.config.ts"
 import { defineConfig } from 'astro/config';
 import snapshot from '@twocaretcat/astro-snapshot';
 
 export default defineConfig({
 	integrations: [
 		snapshot({
-+			launchOptions: {
-+				args: ['--no-sandbox', '--disable-setuid-sandbox'],
-+			},
+			launchOptions: {// [!code ++]
+				args: ['--no-sandbox', '--disable-setuid-sandbox'],// [!code ++]
+			},// [!code ++]
 			pages: {
 				// ...
 			},
@@ -47,7 +47,7 @@ export default defineConfig({
 
 This usually occurs when resources haven't finished loading before the screenshot is taken. You can adjust `gotoOptions.waitUntil` to `networkidle2`, `networkidle0`, or `load`, or increase the timeout to give the page more time to fully render:
 
-```diff lang="ts" title="astro.config.ts"
+```ts title="astro.config.ts"
 import { defineConfig } from 'astro/config';
 import snapshot from '@twocaretcat/astro-snapshot';
 
@@ -58,10 +58,10 @@ export default defineConfig({
 				'/dashboard': [
 					{
 						outputPath: 'public/og/dashboard.png',
-+						gotoOptions: {
-+							waitUntil: 'networkidle0',
-+							timeout: 60000,
-+						},
+						gotoOptions: {// [!code ++]
+							waitUntil: 'networkidle0',// [!code ++]
+							timeout: 60000,// [!code ++]
+						},// [!code ++]
 					},
 				],
 			},

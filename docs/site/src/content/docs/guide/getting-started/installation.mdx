@@ -101,13 +101,13 @@ First, install the package using your preferred package manager.
 
 Then add it to your `astro.config.*`.
 
-```diff lang="ts" title="astro.config.ts"
+```ts title="astro.config.ts"
 import { defineConfig } from 'astro/config';
-+import snapshot from '@twocaretcat/astro-snapshot';
+import snapshot from '@twocaretcat/astro-snapshot';// [!code ++]
 
 export default defineConfig({
--  integrations: [],
-+  integrations: [snapshot({ pages: {} })],
+  integrations: [],// [!code --]
+  integrations: [snapshot({ pages: {} })],// [!code ++]
 });
 ```
 

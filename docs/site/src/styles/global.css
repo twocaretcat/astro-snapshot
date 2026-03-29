@@ -9,7 +9,7 @@
 
 /* Use custom font for site title and h1 */
 .site-title, h1 {
-  font-family: 'Dela Gothic One', Impact, 'Arial Black', system-ui;
+	font-family: 'Dela Gothic One', Impact, 'Arial Black', system-ui;
 }
 
 /* Reduce the tab size in code blocks to 2 spaces */

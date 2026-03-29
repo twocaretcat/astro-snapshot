@@ -61,24 +61,24 @@ The output image format is detected automatically from the file extension in `ou
 
 Use the `defaults` option to set shared values across all screenshots, then override them per-image as needed.
 
-```diff lang="ts" title="astro.config.ts"
+```ts title="astro.config.ts"
 import { defineConfig } from 'astro/config';
 import snapshot from '@twocaretcat/astro-snapshot';
 
 export default defineConfig({
 	integrations: [
 		snapshot({
-+			defaults: {
-+				width: 1200,
-+				height: 630,
-+				overwrite: true,
-+			},
+			defaults: {// [!code highlight]
+				width: 1200,// [!code highlight]
+				height: 630,// [!code highlight]
+				overwrite: true,// [!code highlight]
+			},// [!code highlight]
 			pages: {
 				'/': [{ outputPath: 'public/og/home.png' }],
 				'/about': [
 					{
 						outputPath: 'public/og/about.png',
-+						height: 400, // overrides the default of 630
+						height: 400, // overrides the default of 630[!code highlight]
 					},
 				],
 			},

@@ -7,7 +7,7 @@ sidebar:
 
 Import the `Config` type to get full type checking and autocompletion for your integration config.
 
-```diff lang="ts" title="astro.config.ts"
+```ts title="astro.config.ts"
 import { defineConfig } from 'astro/config';
 import snapshot, { type Config } from '@twocaretcat/astro-snapshot';
 
@@ -15,8 +15,8 @@ const snapshotConfig: Config = {
 	pages: {
 		'/': [
 			{
--				// Type error: '.bmp' is not a supported format
-				outputPath: 'public/og/home.bmp',
+				// Type error: '.bmp' is not a supported format
+				outputPath: 'public/og/home.bmp', // [!code --]
 			},
 		],
 	},
