@@ -15,14 +15,6 @@
 			"command": "deno run --allow-read --allow-write --allow-env --allow-run=npm scripts/build-npm.ts && deno fmt"
 		}
 	},
-	"compilerOptions": {
-		"lib": [
-			"deno.window",
-			"dom",
-			"dom.iterable"
-		],
-		"strict": true
-	},
 	"fmt": {
 		"exclude": [
 			"!npm/"

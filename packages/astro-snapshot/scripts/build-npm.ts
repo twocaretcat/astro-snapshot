@@ -22,7 +22,7 @@ await build({
 	],
 	outDir: dir.out,
 	compilerOptions: {
-		lib: ['ES2022', 'DOM'],
+		lib: ['ES2022'],
 		target: 'ES2022',
 	},
 	shims: {},
