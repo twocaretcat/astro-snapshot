@@ -1,12 +1,12 @@
 import { build, emptyDir } from '@deno/dnt';
 import deno from '../deno.json' with { type: 'json' };
 
-const author = {
+const AUTHOR = {
 	username: 'twocaretcat',
 	domain: 'johng.io',
 } as const;
-const packageName = 'astro-snapshot' as const;
-const repoUrl = `https://github.com/${author.username}/${packageName}` as const;
+const PACKAGE_NAME = 'astro-snapshot' as const;
+const REPO_URL = `https://github.com/${AUTHOR.username}/${PACKAGE_NAME}` as const;
 const dir = {
 	src: './src',
 	out: './npm',
@@ -51,26 +51,26 @@ await build({
 		license: 'MIT',
 		author: {
 			name: 'John Goodliff',
-			url: `https://${author.domain}`,
+			url: `https://${AUTHOR.domain}`,
 		},
 		repository: {
 			type: 'git',
-			url: `git+${repoUrl}.git`,
+			url: `git+${REPO_URL}.git`,
 		},
-		homepage: repoUrl,
-		bugs: `${repoUrl}/issues`,
+		homepage: `https://${PACKAGE_NAME}.${AUTHOR.domain}`,
+		bugs: `${REPO_URL}/issues`,
 		funding: [
 			{
 				type: 'individual',
-				url: `https://${author.domain}/funding`,
+				url: `https://${AUTHOR.domain}/funding`,
 			},
 			{
 				type: 'GitHub Sponsors',
-				url: `https://github.com/sponsors/${author.username}`,
+				url: `https://github.com/sponsors/${AUTHOR.username}`,
 			},
 			{
 				type: 'Patreon',
-				url: `https://patreon.com/${author.username}`,
+				url: `https://patreon.com/${AUTHOR.username}`,
 			},
 			{
 				type: 'Brave Creators',
