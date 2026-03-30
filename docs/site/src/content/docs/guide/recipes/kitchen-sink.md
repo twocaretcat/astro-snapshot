@@ -70,5 +70,5 @@ snapshot({
 }),
 ```
 
-See the [API Reference](/api-reference/interfaces/config/) for full documentation of each option, and the
+See the [API Reference](/api-reference/interfaces/config) for full documentation of each option, and the
 [Puppeteer docs](https://pptr.dev/api) for details on the pass-through options.

@@ -21,7 +21,7 @@ export default defineConfig({
 						outputPath: `src/assets/demo.png`,
 						width: 1280,
 						height: 720,
-						overwrite: true,
+						overwrite: false,
 					},
 				],
 			},
@@ -68,7 +68,6 @@ export default defineConfig({
 					actions: ['copy', 'view', 'chatgpt', 'claude'],
 					injectMarkdownRoutes: false,
 				}),
-				starlightLinksValidator(),
 				starlightSidebarTopics([
 					{
 						label: 'Guide',
@@ -169,6 +168,11 @@ export default defineConfig({
 						changelog: ['/changelog/**/*'],
 						'api-reference': ['/api-reference/**/*'],
 					},
+				}),
+				starlightLinksValidator({
+					exclude: [
+						'/changelog{,/**/*}',
+					],
 				}),
 			],
 			customCss: [

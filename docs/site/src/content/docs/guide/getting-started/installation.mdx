@@ -11,13 +11,13 @@ import { Code } from 'starlight-theme-nova/components';
 Astro Snapshot is available on both [JSR](https://jsr.io/@twocaretcat/astro-snapshot) and [npm](https://www.npmjs.com/package/@twocaretcat/astro-snapshot), so you can choose where you want to install it from. Either way, you get full type support.
 
 :::tip[JSR or npm?]
-**JSR** is a good choice if you're using TypeScript or Deno: it ships typed, modern ESM code by default with no need for separate type declarations.
+**JSR** is a good choice if you're using TypeScript or Deno. It ships typed, modern ESM code by default with no need for separate type declarations.
 
 **npm** may be preferable if you're using a Node-based project, as `astro` is resolved as a peer dependency which avoids potential version mismatch issues. It also works seamlessly with `astro add`.
 :::
 
 :::note[Some package managers may block Puppeteer's install scripts]
-If Puppeteer fails to download a browser during installation, refer to the [Troubleshooting](/guide/troubleshooting/) page.
+If Puppeteer fails to download a browser during installation, refer to the [Troubleshooting](/guide/troubleshooting) page.
 :::
 
 ## Automatic (with `astro add`)
@@ -111,4 +111,4 @@ export default defineConfig({
 });
 ```
 
-Next, you'll need to [configure](/guide/getting-started/configuration/) some pages to screenshot.
+Next, you'll need to [configure](/guide/getting-started/configuration) some pages to screenshot.
