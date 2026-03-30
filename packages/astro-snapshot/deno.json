@@ -12,16 +12,13 @@
 		},
 		"build:npm": {
 			"description": "Build the package for npm. No build step is required for JSR.\n\nUSAGE: deno task build:npm",
-			"command": "deno run --allow-read --allow-write --allow-env --allow-run=npm scripts/build-npm.ts"
+			"command": "deno run --allow-read --allow-write --allow-env --allow-run=npm scripts/build-npm.ts && deno fmt"
 		}
 	},
-	"compilerOptions": {
-		"lib": [
-			"deno.window",
-			"dom",
-			"dom.iterable"
-		],
-		"strict": true
+	"fmt": {
+		"exclude": [
+			"!npm/"
+		]
 	},
 	"publish": {
 		"include": [

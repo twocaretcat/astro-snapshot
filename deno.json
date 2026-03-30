@@ -43,6 +43,6 @@
 	"nodeModulesDir": "auto",
 	"unstable": ["fmt-component"],
 	"imports": {
-		"astro": "npm:astro@^6.0.5"
+		"astro": "npm:astro@^6.1.1"
 	}
 }

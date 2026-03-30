@@ -11,26 +11,26 @@
     "jsr:@std/path@^1.1.1": "1.1.4",
     "jsr:@ts-morph/bootstrap@0.27": "0.27.0",
     "jsr:@ts-morph/common@0.27": "0.27.0",
-    "npm:@astrojs/starlight@~0.38.1": "0.38.1_astro@6.0.6__typescript@5.9.3_typescript@5.9.3",
+    "npm:@astrojs/starlight@~0.38.1": "0.38.1_astro@6.1.1",
     "npm:@fontsource/dela-gothic-one@^5.2.7": "5.2.7",
     "npm:@semantic-release/exec@^7.1.0": "7.1.0_semantic-release@24.2.9__typescript@5.9.3_typescript@5.9.3",
     "npm:@semantic-release/git@^10.0.1": "10.0.1_semantic-release@24.2.9__typescript@5.9.3_typescript@5.9.3",
-    "npm:astro@^6.0.5": "6.0.6_typescript@5.9.3",
+    "npm:astro@^6.1.1": "6.1.1",
     "npm:conventional-changelog-conventionalcommits@^9.3.0": "9.3.0",
     "npm:puppeteer@^24.39.1": "24.39.1_typescript@5.9.3",
     "npm:remark-github-blockquote-alert@^2.1.0": "2.1.0",
     "npm:semantic-release@^24.2.9": "24.2.9_typescript@5.9.3",
     "npm:sharp@~0.34.5": "0.34.5",
     "npm:sirv@^3.0.2": "3.0.2",
-    "npm:starlight-changelogs@0.5": "0.5.0_@astrojs+starlight@0.38.1__astro@6.0.6___typescript@5.9.3__typescript@5.9.3_astro@6.0.6__typescript@5.9.3_typescript@5.9.3",
+    "npm:starlight-changelogs@0.5": "0.5.0_@astrojs+starlight@0.38.1__astro@6.1.1_astro@6.1.1",
     "npm:starlight-contextual-menu@~0.1.5": "0.1.5_astro@6.0.6__typescript@5.9.3_starlight-markdown@0.1.5__astro@6.0.6___typescript@5.9.3__typescript@5.9.3_typescript@5.9.3",
-    "npm:starlight-github-alerts@0.2": "0.2.0_@astrojs+starlight@0.38.1__astro@6.0.6___typescript@5.9.3__typescript@5.9.3_astro@6.0.6__typescript@5.9.3_typescript@5.9.3",
-    "npm:starlight-links-validator@~0.20.1": "0.20.1_@astrojs+starlight@0.38.1__astro@6.0.6___typescript@5.9.3__typescript@5.9.3_astro@6.0.6__typescript@5.9.3_typescript@5.9.3",
-    "npm:starlight-llms-txt@0.8": "0.8.0_@astrojs+starlight@0.38.1__astro@6.0.6___typescript@5.9.3__typescript@5.9.3_astro@6.0.6__typescript@5.9.3_typescript@5.9.3",
+    "npm:starlight-github-alerts@0.2": "0.2.0_@astrojs+starlight@0.38.1__astro@6.1.1_astro@6.1.1",
+    "npm:starlight-links-validator@~0.20.1": "0.20.1_@astrojs+starlight@0.38.1__astro@6.1.1_astro@6.1.1",
+    "npm:starlight-llms-txt@0.8": "0.8.0_@astrojs+starlight@0.38.1__astro@6.1.1_astro@6.1.1",
     "npm:starlight-markdown@~0.1.5": "0.1.5_astro@6.0.6__typescript@5.9.3_typescript@5.9.3",
-    "npm:starlight-sidebar-topics@~0.7.1": "0.7.1_@astrojs+starlight@0.38.1__astro@6.0.6___typescript@5.9.3__typescript@5.9.3_astro@6.0.6__typescript@5.9.3_typescript@5.9.3",
-    "npm:starlight-theme-nova@~0.11.7": "0.11.7_@astrojs+starlight@0.38.1__astro@6.0.6___typescript@5.9.3__typescript@5.9.3_astro@6.0.6__typescript@5.9.3_typescript@5.9.3",
-    "npm:starlight-typedoc@~0.21.5": "0.21.5_@astrojs+starlight@0.38.1__astro@6.0.6___typescript@5.9.3__typescript@5.9.3_typedoc@0.28.17__typescript@5.9.3_typedoc-plugin-markdown@4.11.0__typedoc@0.28.17___typescript@5.9.3__typescript@5.9.3_astro@6.0.6__typescript@5.9.3_typescript@5.9.3",
+    "npm:starlight-sidebar-topics@~0.7.1": "0.7.1_@astrojs+starlight@0.38.1__astro@6.1.1_astro@6.1.1",
+    "npm:starlight-theme-nova@~0.11.7": "0.11.7_@astrojs+starlight@0.38.1__astro@6.1.1_astro@6.1.1",
+    "npm:starlight-typedoc@~0.21.5": "0.21.5_@astrojs+starlight@0.38.1__astro@6.1.1_typedoc@0.28.17__typescript@5.9.3_typedoc-plugin-markdown@4.11.0__typedoc@0.28.17___typescript@5.9.3__typescript@5.9.3_astro@6.1.1",
     "npm:typedoc-plugin-markdown@^4.11.0": "4.11.0_typedoc@0.28.17__typescript@5.9.3_typescript@5.9.3",
     "npm:typedoc-plugin-rename-defaults@~0.7.3": "0.7.3_typedoc@0.28.17__typescript@5.9.3_typescript@5.9.3",
     "npm:typedoc@~0.28.17": "0.28.17_typescript@5.9.3"
@@ -199,7 +199,7 @@
     "@ascorbic/loader-utils@1.0.2_astro@6.0.6__typescript@5.9.3_typescript@5.9.3": {
       "integrity": "sha512-pg43g83gojVtEsAkXfjWuzJhuXneJp4wM/leBftGkCPV3yxKgB92EWA+nWu735BgbBMph3P7DrVqVc3ikt+dJA==",
       "dependencies": [
-        "astro"
+        "astro@6.0.6_typescript@5.9.3"
       ]
     },
     "@astrojs/compiler@3.0.1": {
@@ -236,13 +236,39 @@
         "vfile"
       ]
     },
-    "@astrojs/mdx@5.0.2_astro@6.0.6__typescript@5.9.3_typescript@5.9.3": {
+    "@astrojs/markdown-remark@7.1.0": {
+      "integrity": "sha512-P+HnCsu2js3BoTc8kFmu+E9gOcFeMdPris75g+Zl4sY8+bBRbSQV6xzcBDbZ27eE7yBGEGQoqjpChx+KJYIPYQ==",
+      "dependencies": [
+        "@astrojs/internal-helpers",
+        "@astrojs/prism",
+        "github-slugger",
+        "hast-util-from-html",
+        "hast-util-to-text",
+        "js-yaml",
+        "mdast-util-definitions",
+        "rehype-raw",
+        "rehype-stringify",
+        "remark-gfm",
+        "remark-parse",
+        "remark-rehype",
+        "remark-smartypants",
+        "retext-smartypants",
+        "shiki@4.0.2",
+        "smol-toml",
+        "unified",
+        "unist-util-remove-position",
+        "unist-util-visit",
+        "unist-util-visit-parents",
+        "vfile"
+      ]
+    },
+    "@astrojs/mdx@5.0.2_astro@6.1.1": {
       "integrity": "sha512-0as6odPH9ZQhS3pdH9dWmVOwgXuDtytJiE4VvYgR0lSFBvF4PSTyE0HdODHm/d7dBghvWTPc2bQaBm4y4nTBNw==",
       "dependencies": [
-        "@astrojs/markdown-remark",
+        "@astrojs/markdown-remark@7.0.1",
         "@mdx-js/mdx",
         "acorn",
-        "astro",
+        "astro@6.1.1",
         "es-module-lexer",
         "estree-util-visit",
         "hast-util-to-html",
@@ -269,17 +295,17 @@
         "zod@4.3.6"
       ]
     },
-    "@astrojs/starlight@0.38.1_astro@6.0.6__typescript@5.9.3_typescript@5.9.3": {
+    "@astrojs/starlight@0.38.1_astro@6.1.1": {
       "integrity": "sha512-CATPH4Dy44OYAJhoyUHh6NqpColWEVufanGVwnM0l/bcaNMo5V/rypwL0Vu0Edp+ZIXE7/1DA9CrNj5jmCVSLQ==",
       "dependencies": [
-        "@astrojs/markdown-remark",
+        "@astrojs/markdown-remark@7.1.0",
         "@astrojs/mdx",
         "@astrojs/sitemap",
         "@pagefind/default-ui",
         "@types/hast",
         "@types/js-yaml",
         "@types/mdast",
-        "astro",
+        "astro@6.1.1",
         "astro-expressive-code",
         "bcp-47",
         "hast-util-from-html",
@@ -1485,10 +1511,10 @@
       "integrity": "sha512-LElXdjswlqjWrPpJFg1Fx4wpkOCxj1TDHlSV4PlaRxHGWko024xICaa97ZkMfs6DRKlCguiAI+rbXv5GWwXIkg==",
       "bin": true
     },
-    "astro-expressive-code@0.41.7_astro@6.0.6__typescript@5.9.3_typescript@5.9.3": {
+    "astro-expressive-code@0.41.7_astro@6.1.1": {
       "integrity": "sha512-hUpogGc6DdAd+I7pPXsctyYPRBJDK7Q7d06s4cyP0Vz3OcbziP3FNzN0jZci1BpCvLn9675DvS7B9ctKKX64JQ==",
       "dependencies": [
-        "astro",
+        "astro@6.1.1",
         "rehype-expressive-code"
       ]
     },
@@ -1500,7 +1526,71 @@
       "dependencies": [
         "@astrojs/compiler",
         "@astrojs/internal-helpers",
-        "@astrojs/markdown-remark",
+        "@astrojs/markdown-remark@7.0.1",
+        "@astrojs/telemetry",
+        "@capsizecss/unpack",
+        "@clack/prompts",
+        "@oslojs/encoding",
+        "@rollup/pluginutils",
+        "aria-query",
+        "axobject-query",
+        "ci-info",
+        "clsx",
+        "common-ancestor-path",
+        "cookie",
+        "devalue",
+        "diff",
+        "dlv",
+        "dset",
+        "es-module-lexer",
+        "esbuild",
+        "flattie",
+        "fontace",
+        "github-slugger",
+        "html-escaper",
+        "http-cache-semantics",
+        "js-yaml",
+        "magic-string",
+        "magicast",
+        "mrmime",
+        "neotraverse",
+        "obug",
+        "p-limit@7.3.0",
+        "p-queue",
+        "package-manager-detector",
+        "piccolore",
+        "picomatch@4.0.3",
+        "rehype",
+        "semver",
+        "shiki@4.0.2",
+        "smol-toml",
+        "svgo",
+        "tinyclip",
+        "tinyexec",
+        "tinyglobby",
+        "tsconfck",
+        "ultrahtml",
+        "unifont",
+        "unist-util-visit",
+        "unstorage",
+        "vfile",
+        "vite",
+        "vitefu",
+        "xxhash-wasm",
+        "yargs-parser@22.0.0",
+        "zod@4.3.6"
+      ],
+      "optionalDependencies": [
+        "sharp"
+      ],
+      "bin": true
+    },
+    "astro@6.1.1": {
+      "integrity": "sha512-vq8sHpu1JsY1fWAunn+tdKNbVDmLQNiVdyuGsVT2csgITdFGXXVAyEXFWc1DzkMN0ehElPeiHnqItyQOJK+GqA==",
+      "dependencies": [
+        "@astrojs/compiler",
+        "@astrojs/internal-helpers",
+        "@astrojs/markdown-remark@7.1.0",
         "@astrojs/telemetry",
         "@capsizecss/unpack",
         "@clack/prompts",
@@ -4686,7 +4776,7 @@
     "split2@4.2.0": {
       "integrity": "sha512-UcjcJOWknrNkF6PLX83qcHM6KHgVKNkV62Y8a5uYDVv9ydGQVwAHMKqHdJje1VTWpljG0WYpCDhrCdAOYH4TWg=="
     },
-    "starlight-changelogs@0.5.0_@astrojs+starlight@0.38.1__astro@6.0.6___typescript@5.9.3__typescript@5.9.3_astro@6.0.6__typescript@5.9.3_typescript@5.9.3": {
+    "starlight-changelogs@0.5.0_@astrojs+starlight@0.38.1__astro@6.1.1_astro@6.1.1": {
       "integrity": "sha512-bqBAHle6N4jApkLz8qlN+k8nmaJUXvYunrJeYWTZats15SeEmsT+1N7KdshODCky2AzLfIBy4Qa2v1YSQNrjxQ==",
       "dependencies": [
         "@ascorbic/loader-utils",
@@ -4701,23 +4791,23 @@
     "starlight-contextual-menu@0.1.5_astro@6.0.6__typescript@5.9.3_starlight-markdown@0.1.5__astro@6.0.6___typescript@5.9.3__typescript@5.9.3_typescript@5.9.3": {
       "integrity": "sha512-MYQ6eFDIBBnKrEh3XqR7RZ6YDJ641ADmrSjj93d+cVJGPvrCHrd6VYiKeehhczsrn6GqjaCCFAn4xUd69gcfcQ==",
       "dependencies": [
-        "astro",
+        "astro@6.0.6_typescript@5.9.3",
         "starlight-markdown"
       ]
     },
-    "starlight-github-alerts@0.2.0_@astrojs+starlight@0.38.1__astro@6.0.6___typescript@5.9.3__typescript@5.9.3_astro@6.0.6__typescript@5.9.3_typescript@5.9.3": {
+    "starlight-github-alerts@0.2.0_@astrojs+starlight@0.38.1__astro@6.1.1_astro@6.1.1": {
       "integrity": "sha512-tba3q9S+Oc63McFBjvlu0gNDL1YkeaoPFVex3iD9XAvBmp0J63ynMj/QDCcTfsBNPdFD+MIdsNi18It+aZwn4A==",
       "dependencies": [
         "@astrojs/starlight",
         "unist-util-visit"
       ]
     },
-    "starlight-links-validator@0.20.1_@astrojs+starlight@0.38.1__astro@6.0.6___typescript@5.9.3__typescript@5.9.3_astro@6.0.6__typescript@5.9.3_typescript@5.9.3": {
+    "starlight-links-validator@0.20.1_@astrojs+starlight@0.38.1__astro@6.1.1_astro@6.1.1": {
       "integrity": "sha512-bPfX9tlvkLcygIwo4nszOf7TOj1iqfZEpUss5oxRlaa3/mt7zGBHANSkanVMd0FK6VQa2oUD9MjH1DszykkwPA==",
       "dependencies": [
         "@astrojs/starlight",
         "@types/picomatch",
-        "astro",
+        "astro@6.1.1",
         "github-slugger",
         "hast-util-from-html",
         "hast-util-has-property",
@@ -4730,14 +4820,14 @@
         "unist-util-visit"
       ]
     },
-    "starlight-llms-txt@0.8.0_@astrojs+starlight@0.38.1__astro@6.0.6___typescript@5.9.3__typescript@5.9.3_astro@6.0.6__typescript@5.9.3_typescript@5.9.3": {
+    "starlight-llms-txt@0.8.0_@astrojs+starlight@0.38.1__astro@6.1.1_astro@6.1.1": {
       "integrity": "sha512-SyENqKy5SMms0/RsEPLv1wLI3EvqZeVgVKQZ6umBR4PXEiIg9iisxXPD3lXOdoxEr+ro4Z/9z731UVOgz8LGKA==",
       "dependencies": [
         "@astrojs/mdx",
         "@astrojs/starlight",
         "@types/hast",
         "@types/micromatch",
-        "astro",
+        "astro@6.1.1",
         "github-slugger",
         "hast-util-select",
         "micromatch",
@@ -4752,17 +4842,17 @@
     "starlight-markdown@0.1.5_astro@6.0.6__typescript@5.9.3_typescript@5.9.3": {
       "integrity": "sha512-23LXRaZp7pyE+r/HP6rxHfwic8HfvUBT4EImECA6encs/eTtrF0Z+7svANofdtfbiNt31D5q26i03B6FtcSmGg==",
       "dependencies": [
-        "astro"
+        "astro@6.0.6_typescript@5.9.3"
       ]
     },
-    "starlight-sidebar-topics@0.7.1_@astrojs+starlight@0.38.1__astro@6.0.6___typescript@5.9.3__typescript@5.9.3_astro@6.0.6__typescript@5.9.3_typescript@5.9.3": {
+    "starlight-sidebar-topics@0.7.1_@astrojs+starlight@0.38.1__astro@6.1.1_astro@6.1.1": {
       "integrity": "sha512-2PBR05ZUvnKNoJtbL2u6GoE1qmQD0tFcd5+inYEJHJkx3LE2P+vlNslofTGHLtzch2XzyNbHUBQQu35bouA6NQ==",
       "dependencies": [
         "@astrojs/starlight",
         "picomatch@4.0.3"
       ]
     },
-    "starlight-theme-nova@0.11.7_@astrojs+starlight@0.38.1__astro@6.0.6___typescript@5.9.3__typescript@5.9.3_astro@6.0.6__typescript@5.9.3_typescript@5.9.3": {
+    "starlight-theme-nova@0.11.7_@astrojs+starlight@0.38.1__astro@6.1.1_astro@6.1.1": {
       "integrity": "sha512-mmW/tDEtN0bpFp2c3Kkj1WIKnV8eZYUL17Zvb/6/QFtQkx2RPzkRqbsEfaPv0urRNche6i7KrvMPhnqUB2J8xA==",
       "dependencies": [
         "@aria-ui/core",
@@ -4782,7 +4872,7 @@
         "@astrojs/starlight"
       ]
     },
-    "starlight-typedoc@0.21.5_@astrojs+starlight@0.38.1__astro@6.0.6___typescript@5.9.3__typescript@5.9.3_typedoc@0.28.17__typescript@5.9.3_typedoc-plugin-markdown@4.11.0__typedoc@0.28.17___typescript@5.9.3__typescript@5.9.3_astro@6.0.6__typescript@5.9.3_typescript@5.9.3": {
+    "starlight-typedoc@0.21.5_@astrojs+starlight@0.38.1__astro@6.1.1_typedoc@0.28.17__typescript@5.9.3_typedoc-plugin-markdown@4.11.0__typedoc@0.28.17___typescript@5.9.3__typescript@5.9.3_astro@6.1.1": {
       "integrity": "sha512-7JGaPHrP+HgX0sYGnafZcPuzMm+3OmHx7kqE0DWTrsuBfoQS02lJ6/PtJF9y0KCDcfsBynyo0G/1ttHcBq5Vww==",
       "dependencies": [
         "@astrojs/starlight",
@@ -5409,7 +5499,7 @@
   },
   "workspace": {
     "dependencies": [
-      "npm:astro@^6.0.5"
+      "npm:astro@^6.1.1"
     ],
     "packageJson": {
       "overrides": {
