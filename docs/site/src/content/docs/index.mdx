@@ -1,0 +1,57 @@
+---
+title: Docs
+description: Docs for Astro Snapshot, an Astro integration for generating screenshots of your pages automatically at build time. Perfect for creating social images, content previews, dynamic icons, and more!
+template: splash
+banner:
+  content: Now compatible with Astro 6!
+hero:
+  title: Say cheese!
+  tagline: Generate screenshots of your Astro pages automatically at build time with Astro Snapshot. Perfect for creating social images, content previews, dynamic icons, and more!
+  image:
+    file: ../../../../icon.svg
+  actions:
+    - text: Get Started
+      link: /guide/getting-started/installation
+      icon: rocket
+    - text: Demo
+      link: /showcase/demo
+      icon: laptop
+      variant: secondary
+    - text: View on GitHub
+      link: https://github.com/twocaretcat/astro-snapshot
+      icon: github
+      variant: minimal
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+## Features
+
+<CardGrid stagger>
+	<Card title="Framework agnostic" icon="puzzle">
+		Generate images from any valid Astro page, using whatever front-end framework you want. Not limited to preset layouts or restricted CSS like other solutions.
+	</Card>
+	<Card title="Customizable outputs" icon="seti:image">
+		You have full control over the generated images. Choose between PNG, JPEG, or WebP. Generate multiple images per page with different configurations. Save them anywhere.
+	</Card>
+	<Card title="Flexible configuration" icon="setting">
+		Define global defaults and override them per image. Pass through options directly to [Puppeteer](https://pptr.dev/) for precise control of the browser, viewport, and screenshot generation process.
+	</Card>
+	<Card title="TypeScript support" icon="seti:typescript">
+		Full type safety for all options. Import the `Config` type to catch mistakes in your config before you build. Install the package from [JSR](https://jsr.io/@twocaretcat/astro-snapshot) for use with TypeScript-native runtimes like [Deno](https://deno.com/).
+	</Card>
+</CardGrid>
+
+## Use Cases
+
+<CardGrid stagger>
+	<Card title="Social images" icon="x.com">
+		Use your existing front-end components to generate [Open Graph](https://ogp.me/) images and/or Twitter cards for your blog posts or other content.
+	</Card>
+	<Card title="Content previews" icon="seti:font">
+		Generate screenshots of your website for use in documentation, marketing materials, showcases, etc.
+	</Card>
+	<Card title="Favicons" icon="seti:favicon">
+		Dynamically generate favicons for your website.
+	</Card>
+</CardGrid>

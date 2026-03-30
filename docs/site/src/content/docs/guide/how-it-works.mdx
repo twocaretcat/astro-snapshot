@@ -1,0 +1,25 @@
+---
+title: How it Works
+description: Learn how Astro Snapshot works under the hood.
+sidebar:
+  order: 1
+---
+
+:::caution[Build Cycle Limitation]
+Note that, because this plugin runs _**after**_ the build completes, you will not be able to import the generated
+images into your components or perform any further operations with them in the same build cycle.
+
+This is relevant if you want to output images to `src/` and import them in pages to take advantage of Astro's image optimization.
+
+You can, however, use them in the next build, provided they are not overwritten. If you do this, make sure to account
+for the images not existing the first time you perform a build (i.e. use a placeholder image or catch errors from
+`import` statements).
+:::
+
+Here's a high-level overview of how the integration works:
+
+1. After the Astro build completes, we launch a local static file server ([sirv](https://github.com/lukeed/sirv)) to serve the build output
+2. Then, we use [Puppeteer](https://pptr.dev) to:
+	1. launch a headless browser
+	2. navigate to the pages you configured
+	3. take screenshots of each one and save them to the filesystem as images

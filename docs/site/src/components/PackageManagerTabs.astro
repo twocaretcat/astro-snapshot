@@ -1,0 +1,247 @@
+---
+/**
+ * A `<Tabs>` wrapper that renders one tab per package manager.
+ *
+ * Each package manager can be configured via a simple string (the shell command to run),
+ * or an object with optional metadata (`order`, `label`, `icon`) and/or a `code` string.
+ * For complex tab content (e.g. multiple code blocks), pass a named slot matching the
+ * package manager ID alongside an object prop to carry ordering and display metadata.
+ *
+ * All tab instances on the page share a default `syncKey` so the user's choice persists
+ * across navigations. Pass `syncKey={undefined}` explicitly to opt out.
+ *
+ * @example Simple string commands
+ * ```astro
+ * <PackageManagerTabs
+ *   npm="npm install pkg"
+ *   pnpm="pnpm add pkg"
+ *   bun="bun add pkg"
+ * />
+ * ```
+ *
+ * @example Slot content with metadata via prop object
+ * ```astro
+ * <PackageManagerTabs deno={{ order: 1 }}>
+ *   <Fragment slot="deno">
+ *     ```bash title="JSR (recommended)"
+ *     deno add jsr:pkg
+ *     ```
+ *     ```bash title="npm"
+ *     deno add npm:pkg
+ *     ```
+ *   </Fragment>
+ * </PackageManagerTabs>
+ * ```
+ *
+ * @module
+ */
+
+import type { ComponentProps } from 'astro/types';
+import { Code, TabItem, Tabs } from '@astrojs/starlight/components';
+
+/** The supported package manager identifiers, also used as named slot names. */
+type PackageManagerId = 'npm' | 'pnpm' | 'yarn' | 'bun' | 'deno' | 'vlt';
+
+type TabsProps = ComponentProps<typeof Tabs>;
+type TabItemProps = ComponentProps<typeof TabItem>;
+type CodeProps = ComponentProps<typeof Code>;
+
+/**
+ * Per-package-manager configuration object.
+ *
+ * Extends `CodeProps` so any prop accepted by the `<Code>` component
+ * (e.g. `lang`, `meta`, `theme`) can be passed through when rendering
+ * a string command. `code` replaces the positional command string.
+ *
+ * `order`, `label`, and `icon` control tab display and ordering and are
+ * consumed by `PackageManagerTabs` itself before the rest is forwarded.
+ */
+type PackageManagerConfig = Omit<CodeProps, 'code'> & {
+	/**
+	 * Display order for this tab (lower values appear first).
+	 * Tabs without an explicit order follow the default order after ordered tabs.
+	 */
+	order?: number;
+	/** Overrides the default tab label for this package manager. */
+	label?: TabItemProps['label'];
+	/** Overrides the default tab icon for this package manager. */
+	icon?: TabItemProps['icon'];
+	/** The shell command to display in a `<Code>` block. Omit when using a named slot. */
+	code?: string;
+};
+
+/** Accepted value for a package manager prop: a bare command string or a config object. */
+type PackageManagerProp = string | PackageManagerConfig;
+
+interface Props {
+	/** npm command or config. */
+	npm?: PackageManagerProp;
+	/** pnpm command or config. */
+	pnpm?: PackageManagerProp;
+	/** yarn command or config. */
+	yarn?: PackageManagerProp;
+	/** bun command or config. */
+	bun?: PackageManagerProp;
+	/** Deno command or config. */
+	deno?: PackageManagerProp;
+	/** vlt command or config. */
+	vlt?: PackageManagerProp;
+	/**
+	 * Sync key forwarded to Starlight's `<Tabs syncKey>`.
+	 * Defaults to `"pkg-manager"` so all instances on a page stay in sync.
+	 * Pass `undefined` explicitly to disable syncing.
+	 */
+	syncKey?: TabsProps['syncKey'];
+	/**
+	 * A custom component to use instead of the default `<Code>` for rendering
+	 * string commands. Must accept the same props as `<Code>`.
+	 *
+	 * @example
+	 * ```astro
+	 * import { Code } from "@astrojs/starlight/components";
+	 * <PackageManagerTabs codeComponent={Code} npm="npm install pkg" />
+	 * ```
+	 */
+	codeComponent?: typeof Code;
+}
+
+const {
+	npm,
+	pnpm,
+	yarn,
+	bun,
+	deno,
+	vlt,
+	codeComponent: CodeComponent = Code,
+} = Astro.props;
+
+// Distinguish "not provided" (use default) from explicitly `undefined` (disable sync).
+const resolvedSyncKey = Object.hasOwn(Astro.props, 'syncKey') ? Astro.props.syncKey : 'pkg-manager';
+
+/**
+ * Static display metadata for each package manager.
+ * Both fields use `NonNullable` to assert that defaults are always defined,
+ * allowing them to be used without a non-null assertion at the call site.
+ */
+type PackageManagerMeta = {
+	label: NonNullable<TabItemProps['label']>;
+	icon: NonNullable<TabItemProps['icon']>;
+};
+
+const DEFAULT: Record<PackageManagerId, PackageManagerMeta> = {
+	npm: {
+		label: 'npm',
+		icon: 'npm',
+	},
+	pnpm: {
+		label: 'pnpm',
+		icon: 'pnpm',
+	},
+	yarn: {
+		label: 'yarn',
+		icon: 'seti:yarn',
+	},
+	bun: {
+		label: 'bun',
+		icon: 'bun',
+	},
+	deno: {
+		label: 'Deno',
+		icon: 'deno',
+	},
+	vlt: {
+		label: 'vlt',
+		icon: 'seti:pipeline',
+	},
+};
+
+/** Default display order when no explicit `order` is provided. */
+const DEFAULT_ORDER: PackageManagerId[] = [
+	'npm',
+	'pnpm',
+	'yarn',
+	'bun',
+	'deno',
+	'vlt',
+];
+
+// Pre-render all slot HTML upfront. Astro doesn't allow dynamic slot names in
+// the template, so we render each named slot here and inject via set:html.
+const slotHtml: Partial<Record<PackageManagerId, string>> = {};
+for (const id of DEFAULT_ORDER) {
+	if (Astro.slots.has(id)) {
+		slotHtml[id] = await Astro.slots.render(id);
+	}
+}
+
+const propValues: Record<PackageManagerId, PackageManagerProp | undefined> = {
+	npm,
+	pnpm,
+	yarn,
+	bun,
+	deno,
+	vlt,
+};
+
+/**
+ * Normalises a raw prop value into a `PackageManagerConfig` object.
+ * A bare string is treated as the `code` shorthand.
+ */
+function normalize(prop: PackageManagerProp | undefined): PackageManagerConfig {
+	if (typeof prop === 'string') return { code: prop };
+	return prop ?? {};
+}
+
+/** A resolved tab entry ready for rendering. */
+type TabEntry = {
+	id: PackageManagerId;
+	config: PackageManagerConfig;
+	/** Position in `DEFAULT_ORDER`, used as a tiebreaker when `order` is absent. */
+	defaultIndex: number;
+};
+
+/**
+ * Sorts two tab entries by their explicit `order` value, falling back to
+ * `defaultIndex` when neither or both have an explicit order.
+ * Entries with an explicit `order` always sort before unordered entries.
+ */
+function sortTabs(a: TabEntry, b: TabEntry): number {
+	const aOrder = a.config.order;
+	const bOrder = b.config.order;
+
+	if (aOrder !== undefined && bOrder !== undefined) return aOrder - bOrder;
+	if (aOrder !== undefined) return -1;
+	if (bOrder !== undefined) return 1;
+
+	return a.defaultIndex - b.defaultIndex;
+}
+
+const tabs: TabEntry[] = DEFAULT_ORDER.map(
+	(id, defaultIndex): TabEntry | null => {
+		const config = normalize(propValues[id]);
+		const hasContent = config.code !== undefined || Astro.slots.has(id);
+
+		if (!hasContent) return null;
+
+		return { id, config, defaultIndex };
+	},
+)
+	.filter((t): t is TabEntry => t !== null)
+	.sort(sortTabs);
+---
+
+<Tabs {...resolvedSyncKey !== undefined && { syncKey: resolvedSyncKey }}>
+	{tabs.map(({ id, config }) => {
+		const { order: _order, label, icon, code, ...codeProps } = config;
+
+		return (
+		 <TabItem
+			 label={label ?? DEFAULT[id].label}
+			 icon={icon ?? DEFAULT[id].icon}
+		 >
+			 {code && <CodeComponent lang="bash" {code} {...codeProps} />}
+			 {slotHtml[id] && <Fragment set:html={slotHtml[id]} />}
+		 </TabItem>
+	 );
+	})}
+</Tabs>

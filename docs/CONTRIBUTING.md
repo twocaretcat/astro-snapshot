@@ -45,6 +45,70 @@ start a [discussion] about it or leave a comment on the issue, I can likely get 
 If an issue is unclear or you have any questions about how a feature should be implemented, reach out before making any
 changes so we can discuss the best way to do it.
 
+## Project Structure
+
+This repository is a **monorepo** (i.e. a single repository that contains multiple related projects). We use
+[Deno workspaces](https://docs.deno.com/runtime/fundamentals/workspaces/) to manage it, which means a single
+`deno install` at the root installs dependencies for all projects at once, and tools like `deno fmt` and `deno lint`
+apply consistently across the entire codebase.
+
+There are three workspace members:
+
+- **`packages/astro-snapshot`:** the `@twocaretcat/astro-snapshot` library itself
+- **`tests/fixture`:** a minimal Astro site used as an integration test fixture
+- **`docs/site`:** the documentation site built with [Starlight]
+
+Most `deno` commands can be run from the repo root to apply across all members, or from within a specific member's
+directory if you're only working on that part of the project. The exceptions are tasks defined in a member's own
+`deno.json` (like `build:npm`), which must be run from that member's directory.
+
+```
+astro-snapshot/
+│
+├── 📂 .github/
+│   └── 📂 workflows/
+│       ├── 📄 docs.yml        # Deploy docs site to GitHub Pages
+│       ├── 📄 publish.yml     # Build & publish to JSR and npm
+│       └── 📄 test.yml        # Run integration tests
+│
+├── 📂 docs/
+│   ├── 📂 site/               # Docs site (workspace member)
+│   │   ├── 📂 src/
+│   │   ├── 📄 astro.config.ts
+│   │   └── 📄 deno.json       # Docs site dependencies
+│   ├── 📄 CONTRIBUTING.md
+│   ├── 📄 SECURITY.md
+│   └── 📄 icon.svg
+│
+├── 📂 packages/
+│   └── 📂 astro-snapshot/     # The @twocaretcat/astro-snapshot library (workspace member)
+│       ├── 📂 npm/            # Build output for npm (auto-generated, not committed)
+│       ├── 📂 scripts/
+│       │   ├── 📄 build-npm.ts       # Builds the npm package using dnt
+│       │   └── 📄 update-version.ts  # Updates the version in deno.json
+│       ├── 📂 src/
+│       │   ├── 📄 index.ts    # Main module and public API
+│       │   ├── 📄 types.ts    # Exported types
+│       │   └── 📄 utils.ts    # Internal utilities
+│       ├── 📄 deno.json       # Package name, version, exports, tasks, and dependencies
+│       ├── 📄 package.json    # npm peer dependencies
+│       ├── 📄 release.config.js  # Semantic Release configuration
+│       └── 📄 tsconfig.json   # TypeScript config for TypeDoc (API reference generation)
+│
+├── 📂 tests/
+│   ├── 📂 fixture/            # Minimal Astro site used as a test fixture (workspace member)
+│   │   ├── 📂 src/
+│   │   ├── 📄 astro.config.ts # Imports the integration from packages/astro-snapshot/src/
+│   │   └── 📄 deno.json
+│   ├── 📄 constants.ts        # Shared test constants (output paths, filenames)
+│   └── 📄 integration.test.ts # Integration test: builds the fixture and asserts on output
+│
+├── 📄 deno.json               # Workspace root: shared config, formatter, linter, shared deps
+├── 📄 deno.lock
+├── 📄 package.json            # npm overrides for release tooling
+└── 📄 README.md
+```
+
 ## Development Workflow
 
 ### Prerequisites
@@ -65,15 +129,21 @@ Here's a quick example of how to contribute a new feature or bug fix:
    cd astro-snapshot
    ```
 
-2. Create a new branch:
+2. Install dependencies:
+
+   ```bash
+   deno install
+   ```
+
+3. Create a new branch:
 
    ```bash
    git checkout -b feat/your-feature-name
    ```
 
-3. Make your changes in the `src/` directory
-4. Write or update tests as needed
-5. Run the full check suite:
+4. Make your changes
+5. Write or update docs/tests as needed
+6. Run the full check suite:
 
    ```bash
    deno check
@@ -82,24 +152,24 @@ Here's a quick example of how to contribute a new feature or bug fix:
    deno task test
    ```
 
-6. Commit your changes:
+7. Commit your changes:
 
    ```bash
    git add .
    git commit -m "feat: add your feature description"
    ```
 
-7. Push and create a pull request:
+8. Push and create a pull request:
 
    ```bash
    git push origin feat/your-feature-name
    ```
 
-See below for more details.
-
 ## Checking
 
-We use Deno's built-in tools for checking code quality. Make sure to run these checks before submitting a pull request.
+We use Deno's built-in tools for checking code quality. Make sure to run these before submitting a pull request. All
+commands can be run from the repo root to check the entire codebase, or from within a workspace member's directory to
+check only that project.
 
 ### Checking TypeScript Types
 
@@ -122,26 +192,57 @@ deno lint
 
 ## Testing
 
-We use Deno's built-in test runner for integration tests. The tests build a fixture Astro project with the integration
-configured and assert on the output. To run the tests:
+We use Deno's built-in test runner for integration tests. The tests work by running an Astro build inside the fixture
+project and asserting on the output. The fixture is a minimal Astro site with the integration configured. It imports
+directly from the package source so changes are reflected immediately without a build step.
 
 ```bash
 deno task test
 ```
 
+## Documentation
+
+> [!IMPORTANT]
+> These tasks are only available in the `docs/site/` workspace member. Run them from that directory.
+
+The documentation site is built with [Starlight](https://starlight.astro.build/) and lives in the [docs/site/](./site/)
+directory. It is deployed automatically to GitHub Pages on every push to `main`.
+
+### Running the Dev Server
+
+```bash
+deno task dev
+```
+
+### Building for Production
+
+```bash
+deno task build
+```
+
+### Serving
+
+```bash
+deno task serve
+```
+
 ## Building
 
-We have a custom script to build the package for npm. This script uses [dnt] (Deno to Node Transform) to generate a
-Node.js-compatible package in the [npm/](../npm/) directory. No build step is required for JSR.
+We use a custom script to produce a Node.js-compatible npm package using [dnt] (Deno to Node Transform). No build step
+is required for JSR.
 
 ### Building for npm
 
-Generate a Node.js-compatible package:
+> [!IMPORTANT]
+> This task is only available in the `packages/astro-snapshot/` workspace member. Run it from that directory.
 
 ```bash
 deno task build:npm        # Build with version from deno.json
-deno task build:npm 0.2.0  # Build with specific version
+deno task build:npm 0.2.0  # Build with a specific version
 ```
+
+The output is written to the `npm/` directory within the package, which is excluded from version control and from JSR
+publishing.
 
 ## Publishing
 
@@ -150,7 +251,8 @@ as [@twocaretcat/astro-snapshot](https://www.npmjs.com/package/@twocaretcat/astr
 
 Publishing is automated with [Semantic Release](https://semantic-release.gitbook.io/semantic-release) using the
 [publish workflow](../.github/workflows/publish.yml). Semantic Release is configured in
-[release.config.js](../release.config.js).
+[release.config.js](../packages/astro-snapshot/release.config.js) and runs from within the `packages/astro-snapshot`
+workspace member.
 
 ### Workflow
 
@@ -164,19 +266,17 @@ Publishing is automated with [Semantic Release](https://semantic-release.gitbook
    - `docs:` - No version bump
 
 3. If a commit triggers a release, we will:
-   1. Update the version in `deno.json` using `deno task version <version>`, push the changes, and create a new tag
+   1. Update the version in [deno.json] using `deno task version <version>`, push the changes, and create a new tag
    2. Build the package for npm using `deno task build:npm`
    3. Publish the package to npm with `npm publish`
    4. Publish the package to JSR with `deno publish`
    5. Create a GitHub release with the release notes
 
-### Updating the Version in [deno.json]
+### Updating the Version
 
 > [!IMPORTANT]
 > You don't need to run this task manually. It is run automatically by the publish workflow to bump the version number
-> before publishing.
-
-Update the version field in [deno.json] with the provided value:
+> before publishing. It is only available in the `packages/astro-snapshot/` workspace member.
 
 ```bash
 deno task version 1.0.0
@@ -200,7 +300,7 @@ See the existing source for examples of how to write code that fits with the pro
 
 - Add JSDoc comments for all exported functions and types
 - Keep comments up-to-date with code changes
-- If necessary, update the [README](../README.md) and any other applicable files in the [docs/](../docs/) directory
+- If necessary, update the [README](../README.md) and any other applicable files in the [docs/](./) directory
 
 ### Commit Messages
 
@@ -224,52 +324,6 @@ feat: allow provided config object to extend other configs
 BREAKING CHANGE: `extends` key in config file is now used for extending other config files
 ```
 
-## Project Structure
-
-The project is structured as follows:
-
-<!-- Generated with `ls --tree -I node_modules -I .git --icon-theme=unicode -A --group-dirs=first` -->
-
-```bash
-📄 .editorconfig
-📄 .gitignore
-📄 deno.json                        # Deno config and task definitions
-📄 deno.lock
-📄 LICENSE
-📄 package.json
-📄 project-metadata.json
-📄 README.md
-📄 release.config.js                # Semantic Release config
-
-📂 .
-📂 .github
-├── 📂 ISSUE_TEMPLATE
-└── 📂 workflows
-📂 .vscode
-📂 docs                   # Additional documentation
-📂 npm                    # Build output for npm
-│                         # (auto-generated by the `build:npm` task)
-├── 📂 esm                # ESM output
-├── 📂 script             # CJS output
-├── 📂 src                # Source code
-📂 scripts                # Helper scripts
-├── 📄 build-npm.ts       # Build script for npm
-└── 📄 update-version.ts  # Script to update deno.json version
-📂 src                    # Source code
-├── 📄 index.ts           # Main module
-├── 📄 types.ts           # Types
-└── 📄 utils.ts           # Utility functions
-📄 .editorconfig
-📄 .gitignore
-📄 deno.json              # Deno config and task definitions
-📄 deno.lock
-📄 LICENSE
-📄 package.json
-📄 project-metadata.json
-📄 README.md
-📄 release.config.js      # Semantic Release config
-```
-
 ## License
 
 By contributing to this project, you agree that your contributions will be licensed under the project
@@ -277,4 +331,4 @@ By contributing to this project, you agree that your contributions will be licen
 
 [dnt]: https://github.com/denoland/dnt
 [discussion]: https://github.com/twocaretcat/astro-snapshot/discussions
-[deno.json]: ../deno.json
+[deno.json]: ../packages/astro-snapshot/deno.json

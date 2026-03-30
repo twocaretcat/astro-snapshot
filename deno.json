@@ -1,15 +1,8 @@
 {
-	"name": "@twocaretcat/astro-snapshot",
 	"workspace": [
-		"./tests/fixtures/basic"
-	],
-	"version": "2.2.0",
-	"exports": {
-		".": "./src/index.ts"
-	},
-	"exclude": [
-		"npm/",
-		"tests/"
+		"./packages/astro-snapshot",
+		"./tests/fixture",
+		"./docs/site"
 	],
 	"tasks": {
 		"upgrade-interactive": {
@@ -18,57 +11,38 @@
 		},
 		"test": {
 			"description": "Run all integration tests.",
-			"command": "deno test --allow-run=deno --allow-read=tests/fixtures/ --allow-write=tests/fixtures/ tests/"
-		},
-		"version": {
-			"description": "Sets the version in deno.json.\n\nUSAGE: deno task version <version>",
-			"command": "deno run --allow-read=deno.json --allow-write=deno.json scripts/update-version.ts"
-		},
-		"build:npm": {
-			"description": "Build the package for npm. No build step is required for JSR.\n\nUSAGE: deno task build:npm",
-			"command": "deno run --allow-read --allow-write --allow-env --allow-run=npm scripts/build-npm.ts"
+			"command": "deno test --allow-run=deno --allow-read=tests/fixture/ --allow-write=tests/fixture/ tests/"
 		}
 	},
 	"fmt": {
 		"useTabs": true,
 		"lineWidth": 120,
-		"singleQuote": true
+		"singleQuote": true,
+		"exclude": [
+			"**/*.svg"
+		]
 	},
 	"lint": {
 		"rules": {
 			"tags": [
 				"recommended",
+				"workspace",
 				"jsr"
 			]
 		}
 	},
 	"compilerOptions": {
-		"lib": [
-			"deno.window",
-			"dom",
-			"dom.iterable"
-		],
-		"strict": true
+		"strict": true,
+		"checkJs": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true
 	},
-	"publish": {
-		"include": [
-			"src/**/*.ts",
-			"README.md",
-			"LICENSE"
-		]
-	},
-	"imports": {
-		"@deno/dnt": "jsr:@deno/dnt@^0.42.3",
-		"@semantic-release/exec": "npm:@semantic-release/exec@^7.1.0",
-		"@semantic-release/git": "npm:@semantic-release/git@^10.0.1",
-		"astro": "npm:astro@^6.0.5",
-		"conventional-changelog-conventionalcommits": "npm:conventional-changelog-conventionalcommits@^9.3.0",
-		"puppeteer": "npm:puppeteer@^24.39.1",
-		"semantic-release": "npm:semantic-release@^24.2.9",
-		"sirv": "npm:sirv@^3.0.2"
-	},
-	"nodeModulesDir": "auto",
 	"allowScripts": [
 		"npm:puppeteer"
-	]
+	],
+	"nodeModulesDir": "auto",
+	"unstable": ["fmt-component"],
+	"imports": {
+		"astro": "npm:astro@^6.0.5"
+	}
 }

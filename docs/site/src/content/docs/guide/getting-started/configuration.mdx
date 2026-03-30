@@ -1,0 +1,98 @@
+---
+title: Configuration
+description: Configure Astro Snapshot to generate screenshots of your pages.
+sidebar:
+  order: 1
+---
+
+## Adding Pages
+
+Pass a configuration object to the integration in your `astro.config.*` to set things up.
+
+```ts title="astro.config.ts"
+import { defineConfig } from 'astro/config';
+import snapshot from '@twocaretcat/astro-snapshot';
+
+export default defineConfig({
+	integrations: [
+		snapshot({
+			pages: {
+				'/': [
+					{
+						outputPath: 'public/og/home.png',
+					},
+				],
+				'/about': [
+					{
+						outputPath: 'public/og/about.png',
+						width: 1200,
+						height: 630,
+					},
+				],
+			},
+		}),
+	],
+});
+```
+
+The only required property is `pages`, which maps URL paths to an array of screenshot configurations. You can add multiple screenshot configurations for a single page to generate multiple screenshots with different settings.
+
+:::note
+Input paths must reference a valid Astro page on your site. If not, you'll get a screenshot of a 404 page instead 😞.
+:::
+
+### Output Paths
+
+Each screenshot configuration requires an `outputPath`. The `outputPath` is resolved relative to your project root, so you can write to any directory: `public/`, `src/assets/` <sup>1</sup>, `dist/`, or somewhere else.
+
+_<sup>1</sup> This has some quirks. See [How it Works](/guide/how-it-works) for more details._
+
+#### Supported Formats
+
+The output image format is detected automatically from the file extension in `outputPath`.
+
+| Extension       | Format |
+| --------------- | ------ |
+| `.png`          | PNG    |
+| `.jpg`, `.jpeg` | JPEG   |
+| `.webp`         | WebP   |
+
+## Defaults
+
+Use the `defaults` option to set shared values across all screenshots, then override them per-image as needed.
+
+```ts title="astro.config.ts"
+import { defineConfig } from 'astro/config';
+import snapshot from '@twocaretcat/astro-snapshot';
+
+export default defineConfig({
+	integrations: [
+		snapshot({
+			defaults: {// [!code highlight]
+				width: 1200,// [!code highlight]
+				height: 630,// [!code highlight]
+				overwrite: true,// [!code highlight]
+			},// [!code highlight]
+			pages: {
+				'/': [{ outputPath: 'public/og/home.png' }],
+				'/about': [
+					{
+						outputPath: 'public/og/about.png',
+						height: 400, // overrides the default of 630[!code highlight]
+					},
+				],
+			},
+		}),
+	],
+});
+```
+
+## What's Next?
+
+You've got the basics down, now what?
+
+The [Recipes](/guide/recipes/multiple-images-per-page) section contains a number of example config files that demonstrate how to use the integration. For real-world examples, check out the [Showcase](/showcase/demo) section, which contains a demo of the integration and links to some third-party sites that use it that you can use for reference. If you want to get into the nitty-gritty, you can consult the [API Reference](/api-reference/interfaces/config).
+
+For common issues and how to fix them, check out the [Troubleshooting](/guide/troubleshooting) section.
+
+If you're curious about how the integration works, there's a brief explanation in the [How It Works](/guide/how-it-works) section.

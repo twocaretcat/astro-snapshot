@@ -1,0 +1,29 @@
+---
+title: Demo
+description: See Astro Snapshot in action with this demo!
+sidebar:
+  order: 0
+---
+
+import { Card } from '@astrojs/starlight/components';
+import { CodeFile } from 'starlight-theme-nova/components';
+
+Here's a screenshot of this page captured with Astro Snapshot:
+
+<Card>
+![Screenshot of the Astro Snapshot Demo Page](../../../../src/assets/demo.png "Screenshot of the Astro Snapshot demo page")
+</Card>
+
+Snapception! How cool is that?
+
+## Code
+
+:::note
+`overwrite` is disabled in this case because the screenshot already exists and we don't need to generate it on every build. If you want to get the same effect we are showing here, you'll need to set `overwrite: true` in your config and run the build a couple times.
+:::
+
+Here's the config used to set this up:
+
+<CodeFile path="astro.config.ts" meta="{11,17-28}" />
+
+For a complete example, check out the [source code](https://github.com/twocaretcat/astro-snapshot/tree/main/docs/site) for these docs.

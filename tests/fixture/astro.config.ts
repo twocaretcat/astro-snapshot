@@ -1,7 +1,8 @@
 import { defineConfig } from 'astro/config';
+import { join } from 'node:path';
 import process from 'node:process';
-import snapshot from '../../../src/index.ts';
-import { OUTPUT_PATH } from '../../constants.ts';
+import snapshot from '../../packages/astro-snapshot/src/index.ts';
+import { OUTPUT_DIR_NAME, OUTPUT_IMAGE_NAME } from '../constants.ts';
 
 // https://astro.build/config
 export default defineConfig({
@@ -10,7 +11,10 @@ export default defineConfig({
 			pages: {
 				'/': [
 					{
-						outputPath: `${OUTPUT_PATH}/index.png`,
+						outputPath: join(
+							OUTPUT_DIR_NAME,
+							OUTPUT_IMAGE_NAME,
+						) as typeof OUTPUT_IMAGE_NAME,
 					},
 				],
 			},

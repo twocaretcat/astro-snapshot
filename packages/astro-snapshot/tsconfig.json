@@ -1,0 +1,15 @@
+{
+	// This tsconfig is used exclusively by TypeDoc (via starlight-typedoc) to generate
+	// the API reference for the docs site. It is not used by Deno for type checking.
+	"compilerOptions": {
+		"target": "ES2022",
+		"module": "ES2022",
+		"moduleResolution": "bundler",
+		"lib": ["ES2022"],
+		"strict": true,
+		"skipLibCheck": true,
+		"allowImportingTsExtensions": true
+	},
+	"include": ["src/**/*.ts"],
+	"exclude": ["node_modules", "npm"]
+}
