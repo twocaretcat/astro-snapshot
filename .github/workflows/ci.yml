@@ -14,6 +14,9 @@ jobs:
     name: 🧹 Lint
     runs-on: ubuntu-latest
     steps:
+      - name: 📂 Checkout
+        uses: actions/checkout@v6
+
       - name: 🛠️ Setup
         uses: ./.github/actions/setup
 
@@ -24,6 +27,9 @@ jobs:
     name: 🧪 Test
     runs-on: ubuntu-latest
     steps:
+      - name: 📂 Checkout
+        uses: actions/checkout@v6
+
       - name: 🛠️ Setup
         uses: ./.github/actions/setup
 
@@ -39,10 +45,11 @@ jobs:
     name: 📦 Publish (dry run)
     runs-on: ubuntu-latest
     steps:
+      - name: 📂 Checkout
+        uses: actions/checkout@v6
+
       - name: 🛠️ Setup
         uses: ./.github/actions/setup
-        with:
-          node: true
 
       - name: 📦 Publish (dry run)
         working-directory: packages/astro-snapshot
@@ -59,10 +66,14 @@ jobs:
       pull-requests: write # to be able to comment on released pull requests
       id-token: write # to enable use of OIDC for npm provenance
     steps:
+      - name: 📂 Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
       - name: 🛠️ Setup
         uses: ./.github/actions/setup
         with:
-          fetch-depth: 0
           node: true
 
       # Project is built and published using @semantic-release/exec
