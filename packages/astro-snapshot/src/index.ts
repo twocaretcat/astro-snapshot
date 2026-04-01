@@ -5,6 +5,25 @@
  * starts a local static file server, and captures screenshots for configured
  * routes using a headless browser.
  *
+ * See the {@link https://astro-snapshot.johng.io | documentation} for more information.
+ *
+ * @example
+ * ```ts
+ * // astro.config.ts
+ * import { defineConfig } from 'astro/config';
+ * import snapshot from '@twocaretcat/astro-snapshot';
+ *
+ * export default defineConfig({
+ *   integrations: [
+ *     snapshot({
+ *       pages: {
+ *         '/': [{ outputPath: 'src/assets/og.png' }],
+ *       },
+ *     }),
+ *   ],
+ * });
+ * ```
+ *
  * @module
  */
 import type { AstroIntegration } from 'astro';
@@ -25,6 +44,35 @@ import { fileExists, formatDuration, getFormat, logStatus } from './utils.ts';
  * @param config - Integration configuration, including page mappings, defaults,
  * and Puppeteer settings.
  * @returns The configured Astro integration.
+ *
+ * @example
+ * ```ts
+ * // Capture the home page and an about page with shared defaults
+ * snapshot({
+ *   pages: {
+ *     '/': [{ outputPath: 'src/assets/home-og.png' }],
+ *     '/about': [{ outputPath: 'src/assets/about-og.png' }],
+ *   },
+ *   defaults: {
+ *     width: 1200,
+ *     height: 630,
+ *     overwrite: true,
+ *   },
+ * });
+ * ```
+ *
+ * @example
+ * ```ts
+ * // Capture multiple screenshots of the same page at different sizes
+ * snapshot({
+ *   pages: {
+ *     '/': [
+ *       { outputPath: 'src/assets/og.png', width: 1200, height: 630 },
+ *       { outputPath: 'src/assets/square.png', width: 512, height: 512 },
+ *     ],
+ *   },
+ * });
+ * ```
  */
 export default function snapshot(
 	config: SnapshotIntegrationConfig,

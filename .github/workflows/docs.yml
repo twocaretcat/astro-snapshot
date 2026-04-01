@@ -23,7 +23,7 @@ jobs:
       - name: 🛡️ Disable AppArmor
         run: echo 0 | sudo tee /proc/sys/kernel/apparmor_restrict_unprivileged_userns
 
-      - name: 🚀 Install, build, and upload artifact
+      - name: 🔨 Install, build, and upload artifact
         uses: withastro/action@v6
         with:
           path: docs/site
