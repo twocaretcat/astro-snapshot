@@ -1,4 +1,8 @@
 name: 📚 Deploy Docs
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 on:
   workflow_dispatch:
   push:
@@ -7,10 +11,6 @@ on:
   pull_request:
     branches:
       - main
-permissions:
-  contents: read
-  pages: write
-  id-token: write
 jobs:
   build:
     name: 🔨 Build

@@ -1,0 +1,73 @@
+name: ♾️ CI
+permissions:
+  contents: read
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  lint:
+    name: 🧹 Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛠️ Setup
+        uses: ./.github/actions/setup
+
+      - name: 🧹 Lint
+        run: deno lint
+
+  test:
+    name: 🧪 Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛠️ Setup
+        uses: ./.github/actions/setup
+
+      # Required for Puppeteer
+      - name: 🛡️ Disable AppArmor
+        run: echo 0 | sudo tee /proc/sys/kernel/apparmor_restrict_unprivileged_userns
+
+      # Deno checks types implicitly when running tests
+      - name: 🧪 Run tests
+        run: deno task test
+
+  dry-publish:
+    name: 📦 Publish (dry run)
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛠️ Setup
+        uses: ./.github/actions/setup
+        with:
+          node: true
+
+      - name: 📦 Publish (dry run)
+        working-directory: packages/astro-snapshot
+        run: deno task publish:npm --dry-run && deno task publish:jsr --dry-run
+
+  publish:
+    name: 🚀 Publish
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    needs: [lint, test, dry-publish]
+    permissions:
+      contents: write # to be able to publish a GitHub release
+      issues: write # to be able to comment on released issues
+      pull-requests: write # to be able to comment on released pull requests
+      id-token: write # to enable use of OIDC for npm provenance
+    steps:
+      - name: 🛠️ Setup
+        uses: ./.github/actions/setup
+        with:
+          fetch-depth: 0
+          node: true
+
+      # Project is built and published using @semantic-release/exec
+      - name: 🚀 Publish
+        working-directory: packages/astro-snapshot
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: deno run -A semantic-release

@@ -4,6 +4,9 @@
 		"./tests/fixture",
 		"./docs/site"
 	],
+	"exclude": [
+		"**/.astro"
+	],
 	"tasks": {
 		"upgrade-interactive": {
 			"description": "Upgrade all dependencies interactively.",

@@ -1,0 +1,34 @@
+name: 🛠️ Setup
+description: Checkout the repository, set up Deno, optionally set up Node.js, and install dependencies.
+inputs:
+  fetch-depth:
+    description: Number of commits to fetch. 0 fetches all history.
+    required: false
+    default: '1'
+  node:
+    description: Whether to also set up Node.js
+    required: false
+    default: 'false'
+runs:
+  using: composite
+  steps:
+    - name: 📂 Checkout
+      uses: actions/checkout@v6
+      with:
+        fetch-depth: ${{ inputs.fetch-depth }}
+
+    - name: 🦕 Setup Deno
+      uses: denoland/setup-deno@v2
+      with:
+        deno-version: v2.x
+        cache: true
+
+    - name: 🟢 Setup Node.js
+      if: inputs.node == 'true'
+      uses: actions/setup-node@v6
+      with:
+        node-version: lts/*
+
+    - name: 📥 Install dependencies
+      shell: bash
+      run: deno install

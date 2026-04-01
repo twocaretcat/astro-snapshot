@@ -3,6 +3,8 @@
  */
 export default {
 	branches: ['main'],
+	repositoryUrl: 'https://github.com/twocaretcat/astro-snapshot',
+	tagFormat: 'v${version}',
 	plugins: [
 		[
 			'@semantic-release/commit-analyzer',
@@ -20,7 +22,7 @@ export default {
 			'@semantic-release/exec',
 			{
 				prepareCmd: 'deno task version ${nextRelease.version}',
-				publishCmd: 'deno task build:npm && cd npm && npm publish && cd .. && deno publish --allow-dirty',
+				publishCmd: 'deno task "publish:*"',
 			},
 		],
 		[
