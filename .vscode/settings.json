@@ -17,5 +17,8 @@
 	},
 	"[json]": {
 		"editor.defaultFormatter": "denoland.vscode-deno"
+	},
+	"[astro]": {
+		"editor.defaultFormatter": "denoland.vscode-deno"
 	}
 }

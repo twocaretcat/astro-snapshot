@@ -33,6 +33,8 @@ export default defineConfig({
 			logo: {
 				src: '../icon.svg',
 			},
+			lastUpdated: true,
+			credits: true,
 			social: [
 				{
 					icon: 'github',
@@ -50,6 +52,9 @@ export default defineConfig({
 					href: 'https://www.npmjs.com/package/@twocaretcat/astro-snapshot',
 				},
 			],
+			components: {
+				Footer: './src/components/Footer.astro',
+			},
 			plugins: [
 				starlightTypedoc({
 					entryPoints: ['../../packages/astro-snapshot/src/index.ts'],
