@@ -61,8 +61,12 @@ export default defineConfig({
 					tsconfig: '../../packages/astro-snapshot/tsconfig.json',
 					output: 'api-reference',
 					typeDoc: {
-						name: 'Main Module',
-						plugin: ['typedoc-plugin-rename-defaults'],
+						name: 'astro-snapshot',
+						plugin: [
+							'typedoc-plugin-rename-defaults',
+							'typedoc-plugin-frontmatter',
+							'./src/plugins/frontmatter.ts',
+						],
 					},
 				}),
 				starlightChangelogs(),
