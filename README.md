@@ -60,20 +60,19 @@ which allow you to completely customize how images are generated.
 
 ## 🚀 Getting Started
 
-For installation and usage instructions, please see the [docs](https://astro-snapshot.johng.io).
+For installation and usage instructions, see the [docs](https://astro-snapshot.johng.io).
 
 ## 🛟 Support
 
-Need help? See the [support resources](https://github.com/twocaretcat/.github/blob/main/docs/SUPPORT.md) for information
-on how to:
+Need help? Refer to the [troubleshooting](https://astro-snapshot.johng.io/guide/troubleshooting/) page in the docs for a
+list of common issues and their solutions.
+
+See the [support resources](https://github.com/twocaretcat/.github/blob/main/docs/SUPPORT.md) for information on how to:
 
 - request features
 - report bugs
 - ask questions
 - report security vulnerabilities
-
-See the [troubleshooting](https://astro-snapshot.johng.io/guide/troubleshooting/) page in the docs for a list of common
-issues and their solutions.
 
 ## 🤝 Contributing
 
@@ -81,7 +80,6 @@ Want to help out? Pull requests are welcome for:
 
 - feature implementations
 - bug fixes
-- translations
 - documentation
 - tests
 
@@ -93,28 +91,12 @@ Copyright © 2026 [John Goodliff](https://johng.io/r/astro-snapshot) ([@twocaret
 
 This project is licensed under the MIT license. See the [license](LICENSE) for more details.
 
-We are not affiliated with or endorsed by Astro.
+We are not affiliated with or endorsed by [Astro].
 
 ## 🖇️ Related
 
-### Recommended
-
-Other projects you might like:
-
-- **👤 [Gatsby Plugin: Component to Image]**: A similar image generation plugin for the Gatsby framework.
-
-### Used By
-
-Notable projects that depend on this one:
-
-- **👤 [Tally]**: A free online tool to count the number of characters, words, paragraphs, and lines in your text.
-  **Tally** uses this integration to generate social images.
-
-### Alternatives
-
-Similar projects you might want to use instead:
-
-- **🌐 [astro-selfie]**: A similar integration that automatically generates images for every page.
+See the [related projects](https://astro-snapshot.johng.io/resources/related/) page in the docs a list of similar
+projects you might like.
 
 ## 💕 Funding
 
@@ -129,7 +111,7 @@ If you can't donate but still want to contribute, don't worry. There are many ot
 - 💬 spreading the word
 - ⭐ starring the project
 
-I appreciate the support!
+Thanks for the support!
 
 [Astro]: https://astro.build/
 [Gatsby]: https://www.gatsbyjs.com/
@@ -138,4 +120,3 @@ I appreciate the support!
 [Satori]: https://github.com/vercel/satori
 [Puppeteer]: https://pptr.dev/
 [Gatsby Plugin: Component to Image]: https://github.com/twocaretcat/gatsby-plugin-component-to-image
-[Tally]: https://tally.johng.io/r/astro-snapshot
