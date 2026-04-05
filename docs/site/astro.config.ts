@@ -16,7 +16,7 @@ export default defineConfig({
 	integrations: [
 		snapshot({
 			pages: {
-				'/showcase/demo': [
+				'/resources/demo': [
 					{
 						outputPath: `src/assets/demo.png`,
 						width: 1280,
@@ -160,14 +160,14 @@ export default defineConfig({
 						],
 					},
 					{
-						label: 'Showcase',
-						link: '/showcase/demo',
-						icon: 'laptop',
+						label: 'Resources',
+						link: '/resources/demo',
+						icon: 'seti:svg',
 						items: [
 							{
-								label: 'Showcase',
+								label: 'Resources',
 								autogenerate: {
-									directory: 'showcase',
+									directory: 'resources',
 								},
 							},
 						],
