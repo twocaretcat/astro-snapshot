@@ -1,5 +1,5 @@
 import { resolve } from 'node:path';
-import { beforeAll, describe, it } from '@std/testing/bdd';
+import { describe, it } from '@std/testing/bdd';
 import { FileAsserter, ImageAsserter } from './utils/assertions.ts';
 import { cleanOutput, runAstroBuild } from './utils/setup.ts';
 import { IMAGES, OUTPUT_DIR } from './fixtures.ts';
@@ -9,12 +9,10 @@ const DIR_NAME = import.meta.dirname!;
 const ABS_FIXTURE_PATH = resolve(DIR_NAME, 'fixture');
 const ABS_OUTPUT_PATH = resolve(ABS_FIXTURE_PATH, OUTPUT_DIR);
 
-describe('astro-snapshot integration', () => {
-	beforeAll(async () => {
-		await cleanOutput(ABS_OUTPUT_PATH);
-		await runAstroBuild(ABS_FIXTURE_PATH);
-	});
+await cleanOutput(ABS_OUTPUT_PATH);
+await runAstroBuild(ABS_FIXTURE_PATH);
 
+describe('astro-snapshot integration', () => {
 	for (const [key, image] of Object.entries(IMAGES)) {
 		const absolutePath = resolve(ABS_FIXTURE_PATH, image.screenshotConfig.outputPath);
 		const { expected } = image;
