@@ -37,14 +37,18 @@
  */
 
 import type { ComponentProps } from 'astro/types';
-import { Code, TabItem, Tabs } from '@astrojs/starlight/components';
+import {
+	Code as StarlightCode,
+	TabItem as StarlightTabItem,
+	Tabs as StarlightTabs,
+} from '@astrojs/starlight/components';
 
 /** The supported package manager identifiers, also used as named slot names. */
 type PackageManagerId = 'npm' | 'pnpm' | 'yarn' | 'bun' | 'deno' | 'vlt';
 
-type TabsProps = ComponentProps<typeof Tabs>;
-type TabItemProps = ComponentProps<typeof TabItem>;
-type CodeProps = ComponentProps<typeof Code>;
+type TabsProps = ComponentProps<typeof StarlightTabs>;
+type TabItemProps = ComponentProps<typeof StarlightTabItem>;
+type CodeProps = ComponentProps<typeof StarlightCode>;
 
 /**
  * Per-package-manager configuration object.
@@ -93,6 +97,16 @@ interface Props {
 	 */
 	syncKey?: TabsProps['syncKey'];
 	/**
+	 * A custom component to use instead of the default `<Tabs>` wrapper.
+	 * Must accept the same props as `<Tabs>`.
+	 */
+	tabsComponent?: typeof StarlightTabs;
+	/**
+	 * A custom component to use instead of the default `<TabItem>` for each tab.
+	 * Must accept the same props as `<TabItem>`.
+	 */
+	tabItemComponent?: typeof StarlightTabItem;
+	/**
 	 * A custom component to use instead of the default `<Code>` for rendering
 	 * string commands. Must accept the same props as `<Code>`.
 	 *
@@ -102,7 +116,7 @@ interface Props {
 	 * <PackageManagerTabs codeComponent={Code} npm="npm install pkg" />
 	 * ```
 	 */
-	codeComponent?: typeof Code;
+	codeComponent?: typeof StarlightCode;
 }
 
 const {
@@ -112,7 +126,9 @@ const {
 	bun,
 	deno,
 	vlt,
-	codeComponent: CodeComponent = Code,
+	tabsComponent: Tabs = StarlightTabs,
+	tabItemComponent: TabItem = StarlightTabItem,
+	codeComponent: Code = StarlightCode,
 } = Astro.props;
 
 // Distinguish "not provided" (use default) from explicitly `undefined` (disable sync).
@@ -184,7 +200,7 @@ const propValues: Record<PackageManagerId, PackageManagerProp | undefined> = {
 };
 
 /**
- * Normalises a raw prop value into a `PackageManagerConfig` object.
+ * Normalizes a raw prop value into a `PackageManagerConfig` object.
  * A bare string is treated as the `code` shorthand.
  */
 function normalize(prop: PackageManagerProp | undefined): PackageManagerConfig {
@@ -230,7 +246,7 @@ const tabs: TabEntry[] = DEFAULT_ORDER.map(
 	.sort(sortTabs);
 ---
 
-<Tabs {...resolvedSyncKey !== undefined && { syncKey: resolvedSyncKey }}>
+<Tabs {...(resolvedSyncKey !== undefined && { syncKey: resolvedSyncKey })}>
 	{tabs.map(({ id, config }) => {
 		const { order: _order, label, icon, code, ...codeProps } = config;
 
@@ -239,7 +255,7 @@ const tabs: TabEntry[] = DEFAULT_ORDER.map(
 			 label={label ?? DEFAULT[id].label}
 			 icon={icon ?? DEFAULT[id].icon}
 		 >
-			 {code && <CodeComponent lang="bash" {code} {...codeProps} />}
+			 {code && <Code lang="bash" {code} {...codeProps} />}
 			 {slotHtml[id] && <Fragment set:html={slotHtml[id]} />}
 		 </TabItem>
 	 );
