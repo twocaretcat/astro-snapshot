@@ -1,17 +1,6 @@
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Integration Test Page</title>
-	</head>
-	<body>
-		<h1>{new Date().toISOString()}</h1>
-	</body>
-</html>
+---
+import { RED } from '../../../fixtures.ts';
+import Layout from '../layouts/index.astro';
+---
 
-<style>
-	body {
-		background: #f00;
-	}
-</style>
+<Layout title="Integration Test Page" color={RED} />

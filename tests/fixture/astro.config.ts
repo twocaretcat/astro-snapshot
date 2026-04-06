@@ -1,23 +1,21 @@
 import { defineConfig } from 'astro/config';
-import { join } from 'node:path';
 import process from 'node:process';
 import snapshot from '../../packages/astro-snapshot/src/index.ts';
-import { OUTPUT_DIR_NAME, OUTPUT_IMAGE_NAME } from '../constants.ts';
+import type { Config } from '../../packages/astro-snapshot/src/index.ts';
+import { IMAGES } from '../fixtures.ts';
+
+const pages: Config['pages'] = {};
+
+// Group fixture images by page to build the snapshot `pages` map
+for (const { page, screenshotConfig } of Object.values(IMAGES)) {
+	(pages[page] ??= []).push(screenshotConfig);
+}
 
 // https://astro.build/config
 export default defineConfig({
 	integrations: [
 		snapshot({
-			pages: {
-				'/': [
-					{
-						outputPath: join(
-							OUTPUT_DIR_NAME,
-							OUTPUT_IMAGE_NAME,
-						) as typeof OUTPUT_IMAGE_NAME,
-					},
-				],
-			},
+			pages,
 			launchOptions: {
 				// Required for running Chrome in CI
 				args: process.env.CI ? ['--no-sandbox', '--disable-setuid-sandbox'] : [],
