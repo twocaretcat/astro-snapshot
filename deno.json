@@ -44,8 +44,11 @@
 		"npm:puppeteer"
 	],
 	"nodeModulesDir": "auto",
-	"unstable": ["fmt-component"],
+	"unstable": [
+		"fmt-component"
+	],
 	"imports": {
+		"@std/testing": "jsr:@std/testing@^1.0.17",
 		"astro": "npm:astro@^6.1.1",
 		"sharp": "npm:sharp@^0.34.5"
 	}
