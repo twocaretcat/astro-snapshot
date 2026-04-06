@@ -14,7 +14,7 @@
 		},
 		"test": {
 			"description": "Run all integration tests.",
-			"command": "deno test --allow-run=deno --allow-read=tests/fixture/ --allow-write=tests/fixture/ tests/"
+			"command": "deno test --allow-run=deno --allow-read=tests/fixture/ --allow-write=tests/fixture/ --allow-env=npm_package_config_libvips --allow-ffi=node_modules/.deno/ --allow-sys=cpus,networkInterfaces,hostname"
 		}
 	},
 	"fmt": {
@@ -46,6 +46,7 @@
 	"nodeModulesDir": "auto",
 	"unstable": ["fmt-component"],
 	"imports": {
-		"astro": "npm:astro@^6.1.1"
+		"astro": "npm:astro@^6.1.1",
+		"sharp": "npm:sharp@^0.34.5"
 	}
 }
