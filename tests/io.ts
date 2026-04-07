@@ -17,11 +17,14 @@ import type { Config } from '../packages/astro-snapshot/src/index.ts';
  */
 export type Color = sharp.Stats['dominant'];
 
+/**
+ * Properties an output image is expected to have.
+ */
 export interface ImageExpectation {
 	format: string;
 	width: number;
 	height: number;
-	color?: Color;
+	color: Color;
 }
 
 export interface FixtureImage {
@@ -29,8 +32,8 @@ export interface FixtureImage {
 	readonly page: string;
 	/** Config entry passed to the snapshot integration (includes `outputPath`). */
 	readonly screenshotConfig: Config['pages'][string][number];
-	/** Properties the produced image is expected to have. */
-	readonly expected: ImageExpectation;
+	/** Properties the produced image is expected to have. If undefined, no assertions are made (useful for setup). */
+	readonly expected?: ImageExpectation;
 }
 
 /** Directory (relative to the fixture project root) where all test outputs land. */
@@ -42,6 +45,17 @@ export const RED: Color = {
 	b: 0,
 };
 
+export const GREEN: Color = {
+	r: 0,
+	g: 255,
+	b: 0,
+};
+
+/**
+ * Default page path for all tests.
+ */
+const DEFAULT_PAGE_PATH = '/' as const;
+
 /**
  * Default image expectations for all tests.
  *
@@ -52,6 +66,54 @@ const DEFAULT_EXPECTED = {
 	width: 1200,
 	height: 630,
 	color: RED,
+} as const;
+
+/**
+ * Test cases for `overwrite: false`.
+ */
+const OVERWRITE_SKIP_TEST_CASES: Record<string, FixtureImage> = {
+	// 1. Set up the test by generating a red image.
+	'[setup] overwrite disabled': {
+		page: DEFAULT_PAGE_PATH,
+		screenshotConfig: {
+			outputPath: `${OUTPUT_DIR}/overwrite-skip.png`,
+		},
+	},
+	// 2. The second write should skip because overwrite is false.
+	'overwrite disabled': {
+		page: '/overwrite',
+		screenshotConfig: {
+			outputPath: `${OUTPUT_DIR}/overwrite-skip.png`,
+		},
+		// The image should still be red
+		expected: DEFAULT_EXPECTED,
+	},
+};
+
+/**
+ * Test cases for `overwrite: true`.
+ */
+const OVERWRITE_REPLACE_TEST_CASES: Record<string, FixtureImage> = {
+	// 1. Set up the test by generating a red image.
+	'[setup] overwrite enabled': {
+		page: DEFAULT_PAGE_PATH,
+		screenshotConfig: {
+			outputPath: `${OUTPUT_DIR}/overwrite-replace.png`,
+		},
+	},
+	// 2. The second write should replace the image because overwrite is true.
+	'overwrite enabled': {
+		page: '/overwrite',
+		screenshotConfig: {
+			outputPath: `${OUTPUT_DIR}/overwrite-replace.png`,
+			overwrite: true,
+		},
+		expected: {
+			...DEFAULT_EXPECTED,
+			// The image should now be green
+			color: GREEN,
+		},
+	},
 };
 
 /**
@@ -59,10 +121,10 @@ const DEFAULT_EXPECTED = {
  *
  * Keys are used as human-readable labels in test output.
  */
-export const IMAGES = {
+export const TEST_CASES: Record<string, FixtureImage> = {
 	// With no width/height set, the integration should fall back to the default values.
 	'bare bones': {
-		page: '/',
+		page: DEFAULT_PAGE_PATH,
 		screenshotConfig: {
 			outputPath: `${OUTPUT_DIR}/bare-bones.png`,
 		},
@@ -70,7 +132,7 @@ export const IMAGES = {
 	},
 	// Provided width should override the default.
 	'width': {
-		page: '/',
+		page: DEFAULT_PAGE_PATH,
 		screenshotConfig: {
 			outputPath: `${OUTPUT_DIR}/width.png`,
 			width: 80,
@@ -82,7 +144,7 @@ export const IMAGES = {
 	},
 	// Provided height should override the default.
 	'height': {
-		page: '/',
+		page: DEFAULT_PAGE_PATH,
 		screenshotConfig: {
 			outputPath: `${OUTPUT_DIR}/height.png`,
 			height: 40,
@@ -94,7 +156,7 @@ export const IMAGES = {
 	},
 	// Provided width and height should override the defaults.
 	'width & height': {
-		page: '/',
+		page: DEFAULT_PAGE_PATH,
 		screenshotConfig: {
 			outputPath: `${OUTPUT_DIR}/width-and-height.png`,
 			width: 80,
@@ -108,7 +170,7 @@ export const IMAGES = {
 	},
 	// A .png extension should result in a PNG screenshot.
 	'.png extension': {
-		page: '/',
+		page: DEFAULT_PAGE_PATH,
 		screenshotConfig: {
 			outputPath: `${OUTPUT_DIR}/format.png`,
 		},
@@ -119,7 +181,7 @@ export const IMAGES = {
 	},
 	// A .jpg extension should result in a JPEG screenshot.
 	'.jpg extension': {
-		page: '/',
+		page: DEFAULT_PAGE_PATH,
 		screenshotConfig: {
 			outputPath: `${OUTPUT_DIR}/format.jpg`,
 		},
@@ -130,7 +192,7 @@ export const IMAGES = {
 	},
 	// A .jpeg extension should result in a JPEG screenshot.
 	'.jpeg extension': {
-		page: '/',
+		page: DEFAULT_PAGE_PATH,
 		screenshotConfig: {
 			outputPath: `${OUTPUT_DIR}/format.jpeg`,
 		},
@@ -141,7 +203,7 @@ export const IMAGES = {
 	},
 	// A .webp extension should result in a WebP screenshot.
 	'.webp extension': {
-		page: '/',
+		page: DEFAULT_PAGE_PATH,
 		screenshotConfig: {
 			outputPath: `${OUTPUT_DIR}/format.webp`,
 		},
@@ -150,9 +212,11 @@ export const IMAGES = {
 			format: 'webp',
 		},
 	},
+	...OVERWRITE_SKIP_TEST_CASES,
+	...OVERWRITE_REPLACE_TEST_CASES,
 	// A deviceScaleFactor of 2 should result in a screenshot that is twice as large.
 	'deviceScaleFactor viewport option': {
-		page: '/',
+		page: DEFAULT_PAGE_PATH,
 		screenshotConfig: {
 			outputPath: `${OUTPUT_DIR}/viewport-device-scale-factor.png`,
 			width: 600,
@@ -163,4 +227,16 @@ export const IMAGES = {
 		},
 		expected: DEFAULT_EXPECTED,
 	},
-} satisfies Record<string, FixtureImage>;
+	// A page key without a leading '/' should be normalized to '/overwrite'.
+	'page path normalization': {
+		page: 'overwrite',
+		screenshotConfig: {
+			outputPath: `${OUTPUT_DIR}/path-normalization.png`,
+		},
+		expected: {
+			...DEFAULT_EXPECTED,
+			// The green background of /overwrite confirms the correct page was loaded.
+			color: GREEN,
+		},
+	},
+};

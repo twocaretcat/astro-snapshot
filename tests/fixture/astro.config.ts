@@ -2,12 +2,12 @@ import { defineConfig } from 'astro/config';
 import process from 'node:process';
 import snapshot from '../../packages/astro-snapshot/src/index.ts';
 import type { Config } from '../../packages/astro-snapshot/src/index.ts';
-import { IMAGES } from '../io.ts';
+import { TEST_CASES } from '../io.ts';
 
 const pages: Config['pages'] = {};
 
 // Group fixture images by page to build the snapshot `pages` map
-for (const { page, screenshotConfig } of Object.values(IMAGES)) {
+for (const { page, screenshotConfig } of Object.values(TEST_CASES)) {
 	(pages[page] ??= []).push(screenshotConfig);
 }
 

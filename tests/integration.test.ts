@@ -2,8 +2,9 @@ import { resolve } from 'node:path';
 import { describe, it } from '@std/testing/bdd';
 import { FileAsserter, ImageAsserter } from './utils/assertions.ts';
 import { cleanOutput, runAstroBuild } from './utils/setup.ts';
-import { IMAGES, OUTPUT_DIR } from './io.ts';
+import { OUTPUT_DIR, TEST_CASES } from './io.ts';
 import { highlight } from './utils/text.ts';
+import { info } from 'node:console';
 
 const DIR_NAME = import.meta.dirname!;
 
@@ -14,9 +15,14 @@ await cleanOutput(ABS_OUTPUT_PATH);
 await runAstroBuild(ABS_FIXTURE_PATH);
 
 describe('astro-snapshot integration config', () => {
-	for (const [key, image] of Object.entries(IMAGES)) {
+	for (const [key, image] of Object.entries(TEST_CASES)) {
 		const absolutePath = resolve(ABS_FIXTURE_PATH, image.screenshotConfig.outputPath);
 		const { expected } = image;
+
+		if (!expected) {
+			info(highlight`🚫 No expected output defined for ${key}. Skipping assertions...`);
+			continue;
+		}
 
 		describe(highlight`with ${key}`, () => {
 			const file = new FileAsserter(absolutePath);
