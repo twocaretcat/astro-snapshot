@@ -4,13 +4,14 @@
  * @module
  */
 import { info } from 'node:console';
+import { highlight } from './text.ts';
 
 /**
  * Removes the output directory so stale screenshots can't cause a false pass.
  * Silently succeeds if the directory doesn't exist yet.
  */
 export async function cleanOutput(absoluteOutputPath: string): Promise<void> {
-	info(`🧹 Cleaning output directory: ${absoluteOutputPath}`);
+	info(highlight`🧹 Cleaning output directory at ${absoluteOutputPath}...`);
 
 	try {
 		await Deno.remove(absoluteOutputPath, { recursive: true });
@@ -26,7 +27,7 @@ export async function cleanOutput(absoluteOutputPath: string): Promise<void> {
  * Throws with combined stdout/stderr if the build fails.
  */
 export async function runAstroBuild(absoluteFixturePath: string): Promise<void> {
-	info(`🔨 Running \`astro build\` in ${absoluteFixturePath}`);
+	info(highlight`🔨 Running \`astro build\` in ${absoluteFixturePath}...`);
 
 	const result = await new Deno.Command(Deno.execPath(), {
 		args: ['run', '-A', 'astro', 'build'],
