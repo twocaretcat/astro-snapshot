@@ -12,7 +12,7 @@
 
 import assert, { strictEqual } from 'node:assert';
 import sharp from 'sharp';
-import type { Color } from '../fixtures.ts';
+import type { Color } from '../io.ts';
 
 /**
  * Returns the keys of an object with proper TypeScript typing.
