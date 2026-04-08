@@ -9,7 +9,7 @@ import { info } from 'node:console';
 const DIR_NAME = import.meta.dirname!;
 
 const ABS_FIXTURE_PATH = resolve(DIR_NAME, 'fixture');
-const ABS_OUTPUT_PATH = resolve(ABS_FIXTURE_PATH, OUTPUT_DIR);
+const ABS_OUTPUT_PATH = resolve(ABS_FIXTURE_PATH, OUTPUT_DIR, 'shared');
 
 await cleanOutput(ABS_OUTPUT_PATH);
 await runAstroBuild(ABS_FIXTURE_PATH);
