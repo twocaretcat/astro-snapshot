@@ -1,5 +1,4 @@
 import { defineConfig } from 'astro/config';
-import process from 'node:process';
 import snapshot from '../../packages/astro-snapshot/src/index.ts';
 import type { Config } from '../../packages/astro-snapshot/src/index.ts';
 import { TEST_CASES } from '../test-cases/shared/index.ts';
@@ -16,10 +15,6 @@ export default defineConfig({
 	integrations: [
 		snapshot({
 			pages,
-			launchOptions: {
-				// Required for running Chrome in CI
-				args: process.env.CI ? ['--no-sandbox', '--disable-setuid-sandbox'] : [],
-			},
 		}),
 	],
 });
