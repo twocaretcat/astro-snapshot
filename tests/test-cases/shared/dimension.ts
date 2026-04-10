@@ -1,12 +1,12 @@
 import { DEFAULT, SHARED_OUTPUT_DIR } from '../../constants.ts';
-import type { FixtureImage } from '../../types.ts';
+import type { TestCase } from '../../types.ts';
 
 const { page, expected } = DEFAULT;
 
 /**
  * Test cases for `width` and `height`.
  */
-export const DIMENSION_TEST_CASES: Record<string, FixtureImage> = {
+export const DIMENSION_TEST_CASE_MAP: Record<string, TestCase> = {
 	// With no width/height set, the integration should fall back to the default values
 	'bare bones': {
 		page,

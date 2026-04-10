@@ -1,12 +1,12 @@
 import { DEFAULT, SHARED_OUTPUT_DIR } from '../../constants.ts';
-import type { FixtureImage } from '../../types.ts';
+import type { TestCase } from '../../types.ts';
 
 const { page, expected } = DEFAULT;
 
 /**
  * Test cases for the `outputPath` file extension.
  */
-export const EXTENSION_TEST_CASES: Record<string, FixtureImage> = {
+export const EXTENSION_TEST_CASE_MAP: Record<string, TestCase> = {
 	// A .png extension should result in a PNG screenshot
 	'.png extension': {
 		page,

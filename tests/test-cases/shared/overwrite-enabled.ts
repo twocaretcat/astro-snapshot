@@ -1,5 +1,5 @@
 import { COLOR, DEFAULT, PAGE, SHARED_OUTPUT_DIR } from '../../constants.ts';
-import type { FixtureImage } from '../../types.ts';
+import type { TestCase } from '../../types.ts';
 
 const { page, expected } = DEFAULT;
 const screenshotConfig = {
@@ -9,7 +9,7 @@ const screenshotConfig = {
 /**
  * Test cases for `overwrite: true`.
  */
-export const OVERWRITE_ENABLED_TEST_CASES: Record<string, FixtureImage> = {
+export const OVERWRITE_ENABLED_TEST_CASE_MAP: Record<string, TestCase> = {
 	// 1. Set up the test by generating a red image
 	'[setup] overwrite enabled': {
 		page,

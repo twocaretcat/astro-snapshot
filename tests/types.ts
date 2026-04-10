@@ -16,7 +16,7 @@ interface ImageExpectation {
 	color: Color;
 }
 
-export interface FixtureImage {
+export interface TestCase {
 	/** Astro page route to screenshot. */
 	readonly page: string;
 	/** Config entry passed to the snapshot integration (includes `outputPath`). */

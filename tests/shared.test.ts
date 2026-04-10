@@ -5,7 +5,7 @@ import { cleanOutput, runAstroBuild } from './utils/setup.ts';
 import { OUTPUT_DIR } from './constants.ts';
 import { highlight } from './utils/text.ts';
 import { info } from 'node:console';
-import { TEST_CASES } from './test-cases/shared/index.ts';
+import { SHARED_TEST_CASE_MAP } from './test-cases/shared/index.ts';
 
 const DIR_NAME = import.meta.dirname!;
 
@@ -16,7 +16,7 @@ await cleanOutput(ABS_OUTPUT_PATH);
 await runAstroBuild(ABS_FIXTURE_PATH);
 
 describe('astro-snapshot integration config', () => {
-	for (const [key, image] of Object.entries(TEST_CASES)) {
+	for (const [key, image] of Object.entries(SHARED_TEST_CASE_MAP)) {
 		const absolutePath = resolve(ABS_FIXTURE_PATH, image.screenshotConfig.outputPath);
 		const { expected } = image;
 

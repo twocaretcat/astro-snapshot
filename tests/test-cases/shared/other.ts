@@ -1,12 +1,12 @@
 import { DEFAULT, SHARED_OUTPUT_DIR } from '../../constants.ts';
-import type { FixtureImage } from '../../types.ts';
+import type { TestCase } from '../../types.ts';
 
 const { page, expected } = DEFAULT;
 
 /**
  * Assorted test cases.
  */
-export const OTHER_TEST_CASES: Record<string, FixtureImage> = {
+export const OTHER_TEST_CASE_MAP: Record<string, TestCase> = {
 	// A deviceScaleFactor of 2 should result in a screenshot that is twice as large
 	'deviceScaleFactor viewport option': {
 		page,
