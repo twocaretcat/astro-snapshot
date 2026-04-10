@@ -2,14 +2,11 @@ import { resolve } from 'node:path';
 import { describe, it } from '@std/testing/bdd';
 import { FileAsserter, ImageAsserter } from './utils/assertions.ts';
 import { cleanOutput, runAstroBuild } from './utils/setup.ts';
-import { OUTPUT_DIR } from './constants.ts';
+import { ABS_FIXTURE_PATH, OUTPUT_DIR } from './constants.ts';
 import { highlight } from './utils/text.ts';
 import { info } from 'node:console';
 import { SHARED_TEST_CASE_MAP } from './test-cases/shared/index.ts';
 
-const DIR_NAME = import.meta.dirname!;
-
-const ABS_FIXTURE_PATH = resolve(DIR_NAME, 'fixture');
 const ABS_OUTPUT_PATH = resolve(ABS_FIXTURE_PATH, OUTPUT_DIR, 'shared');
 
 await cleanOutput(ABS_OUTPUT_PATH);

@@ -1,5 +1,10 @@
-import { join } from 'node:path';
+import { join, resolve } from 'node:path';
 import type { Color } from './types.ts';
+
+/**
+ * Absolute path to the fixture project root.
+ */
+export const ABS_FIXTURE_PATH = resolve(import.meta.dirname!, 'fixture');
 
 /**
  * Directory (relative to the fixture project root) where all test outputs are organized under.
