@@ -32,7 +32,6 @@ function keysOf<T extends object>(obj: T): (keyof T)[] {
  * @example
  * const file = new FileAsserter(absolutePath);
  * await file.assertExists();
- * await file.assertMtimeNewer(seedMtime);
  */
 export class FileAsserter {
 	readonly #path: string;
@@ -67,36 +66,6 @@ export class FileAsserter {
 		}
 
 		assert(!exists, `Expected path to not exist: ${this.#path}`);
-	}
-
-	/**
-	 * Asserts the file's mtime has not changed from `originalMtime`.
-	 * Used to confirm a file was skipped (not overwritten) by the integration.
-	 */
-	async assertMtimeUnchanged(originalMtime: Date): Promise<void> {
-		const { mtime } = await this.#stat;
-
-		assert(mtime !== null, `Could not read mtime of ${this.#path}`);
-		strictEqual(
-			mtime!.getTime(),
-			originalMtime.getTime(),
-			`Expected mtime of ${this.#path} to be unchanged (file should have been skipped)`,
-		);
-	}
-
-	/**
-	 * Asserts the file's mtime is strictly newer than `originalMtime`.
-	 * Used to confirm a file was regenerated (overwritten) by the integration.
-	 */
-	async assertMtimeNewer(originalMtime: Date): Promise<void> {
-		const { mtime } = await this.#stat;
-
-		assert(mtime !== null, `Could not read mtime of ${this.#path}`);
-		assert(
-			mtime!.getTime() > originalMtime.getTime(),
-			`Expected mtime of ${this.#path} to be newer (file should have been overwritten), ` +
-				`but ${mtime!.toISOString()} is not after ${originalMtime.toISOString()}`,
-		);
 	}
 }
 
