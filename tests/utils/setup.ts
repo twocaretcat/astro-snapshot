@@ -5,12 +5,13 @@
  */
 import { info } from 'node:console';
 import { highlight } from './text.ts';
+import { ABS_FIXTURE_PATH } from '../constants.ts';
 
 /**
  * Removes the output directory so stale screenshots can't cause a false pass.
  * Silently succeeds if the directory doesn't exist yet.
  */
-export async function cleanOutput(absoluteOutputPath: string): Promise<void> {
+export async function cleanOutput(absoluteOutputPath: string) {
 	info(highlight`🧹 Cleaning output directory at ${absoluteOutputPath}...`);
 
 	try {
@@ -23,17 +24,22 @@ export async function cleanOutput(absoluteOutputPath: string): Promise<void> {
 }
 
 /**
- * Runs `astro build` inside the fixture project.
+ * Runs `astro build` inside the fixture project for the given scenario.
+ *
  * Throws with combined stdout/stderr if the build fails.
  */
-export async function runAstroBuild(absoluteFixturePath: string): Promise<void> {
-	info(highlight`🔨 Running \`astro build\` in ${absoluteFixturePath}...`);
+export async function runAstroBuildWithScenario(scenario: string) {
+	info(highlight`🔨 Running \`astro build\` for scenario ${scenario}...`);
 
 	const result = await new Deno.Command(Deno.execPath(), {
 		args: ['run', '-A', 'astro', 'build'],
-		cwd: absoluteFixturePath,
+		cwd: ABS_FIXTURE_PATH,
 		stdout: 'piped',
 		stderr: 'piped',
+		// Deno merges these with the inherited parent environment
+		env: {
+			SCENARIO: scenario,
+		},
 	}).output();
 
 	if (!result.success) {

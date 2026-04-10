@@ -40,6 +40,11 @@ export const COLOR: Record<string, Color> = {
  */
 export const SHARED_OUTPUT_DIR = join(OUTPUT_DIR, 'shared');
 
+/**
+ * Output subdirectory for isolated builds.
+ */
+export const ISOLATED_OUTPUT_DIR = join(OUTPUT_DIR, 'isolated');
+
 export const DEFAULT = {
 	/** Default fixture page to use for tests. */
 	page: PAGE.red,

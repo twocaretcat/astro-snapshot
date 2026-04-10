@@ -1,7 +1,7 @@
 import { resolve } from 'node:path';
 import { describe, it } from '@std/testing/bdd';
 import { FileAsserter, ImageAsserter } from './utils/assertions.ts';
-import { cleanOutput, runAstroBuild } from './utils/setup.ts';
+import { cleanOutput, runAstroBuildWithScenario } from './utils/setup.ts';
 import { ABS_FIXTURE_PATH, OUTPUT_DIR } from './constants.ts';
 import { highlight } from './utils/text.ts';
 import { info } from 'node:console';
@@ -10,7 +10,7 @@ import { SHARED_TEST_CASE_MAP } from './test-cases/shared/index.ts';
 const ABS_OUTPUT_PATH = resolve(ABS_FIXTURE_PATH, OUTPUT_DIR, 'shared');
 
 await cleanOutput(ABS_OUTPUT_PATH);
-await runAstroBuild(ABS_FIXTURE_PATH);
+await runAstroBuildWithScenario('shared');
 
 describe('astro-snapshot integration config', () => {
 	for (const [key, testCase] of Object.entries(SHARED_TEST_CASE_MAP)) {
