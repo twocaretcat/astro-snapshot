@@ -2,7 +2,7 @@ import { defineConfig } from 'astro/config';
 import process from 'node:process';
 import snapshot from '../../packages/astro-snapshot/src/index.ts';
 import type { Config } from '../../packages/astro-snapshot/src/index.ts';
-import { TEST_CASES } from '../io.ts';
+import { TEST_CASES } from '../test-cases/shared/index.ts';
 
 const pages: Config['pages'] = {};
 

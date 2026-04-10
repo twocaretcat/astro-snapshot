@@ -2,9 +2,10 @@ import { resolve } from 'node:path';
 import { describe, it } from '@std/testing/bdd';
 import { FileAsserter, ImageAsserter } from './utils/assertions.ts';
 import { cleanOutput, runAstroBuild } from './utils/setup.ts';
-import { OUTPUT_DIR, TEST_CASES } from './io.ts';
+import { OUTPUT_DIR } from './constants.ts';
 import { highlight } from './utils/text.ts';
 import { info } from 'node:console';
+import { TEST_CASES } from './test-cases/shared/index.ts';
 
 const DIR_NAME = import.meta.dirname!;
 
