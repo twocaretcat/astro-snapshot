@@ -13,9 +13,9 @@ await cleanOutput(ABS_OUTPUT_PATH);
 await runAstroBuild(ABS_FIXTURE_PATH);
 
 describe('astro-snapshot integration config', () => {
-	for (const [key, image] of Object.entries(SHARED_TEST_CASE_MAP)) {
-		const absolutePath = resolve(ABS_FIXTURE_PATH, image.screenshotConfig.outputPath);
-		const { expected } = image;
+	for (const [key, testCase] of Object.entries(SHARED_TEST_CASE_MAP)) {
+		const absolutePath = resolve(ABS_FIXTURE_PATH, testCase.screenshotConfig.outputPath);
+		const { expected } = testCase;
 
 		if (!expected) {
 			info(highlight`🚫 No expected output defined for ${key}. Skipping assertions...`);
