@@ -71,7 +71,7 @@ export const DEFAULT_DIMENSIONS_TEST_CASE_MAP: Record<string, IsolatedTestCase> 
 		},
 	},
 	// Provided width and height should override the defaults
-	'default width and height (overridden)': {
+	'default width and height (overridden per-page)': {
 		page,
 		screenshotConfig: {
 			outputPath: `${ISOLATED_OUTPUT_DIR}/default-width-and-height-overridden/${OUTPUT_FILENAME}`,
