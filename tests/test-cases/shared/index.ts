@@ -5,7 +5,7 @@ import { OVERWRITE_DISABLED_TEST_CASE_MAP } from './overwrite-disabled.ts';
 import { OVERWRITE_ENABLED_TEST_CASE_MAP } from './overwrite-enabled.ts';
 
 /**
- * All test cases.
+ * All test cases using a shared build.
  */
 export const SHARED_TEST_CASE_MAP = {
 	...DIMENSION_TEST_CASE_MAP,
@@ -13,4 +13,4 @@ export const SHARED_TEST_CASE_MAP = {
 	...OVERWRITE_DISABLED_TEST_CASE_MAP,
 	...OVERWRITE_ENABLED_TEST_CASE_MAP,
 	...OTHER_TEST_CASE_MAP,
-};
+} as const;
