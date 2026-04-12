@@ -7,13 +7,13 @@ import type { Config } from '../packages/astro-snapshot/src/index.ts';
 export type Color = sharp.Stats['dominant'];
 
 /**
- * Properties an output image is expected to have.
+ * Properties an output image is expected to have. If a property is omitted, it will not be checked.
  */
 interface ImageExpectation {
-	format: string;
-	width: number;
-	height: number;
-	color: Color;
+	format?: string;
+	width?: number;
+	height?: number;
+	color?: Color;
 }
 
 /**
