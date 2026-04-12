@@ -4,6 +4,8 @@
  * @module
  */
 import { info } from 'node:console';
+import { mkdir } from 'node:fs/promises';
+import { dirname } from 'node:path';
 import { highlight } from './text.ts';
 import { ABS_FIXTURE_PATH } from '../constants.ts';
 
@@ -21,6 +23,21 @@ export async function cleanOutput(absoluteOutputPath: string) {
 		// (i.e. missing --allow-write permission)
 		if (!(error instanceof Deno.errors.NotFound)) throw error;
 	}
+}
+
+/**
+ * Creates a placeholder text file at `absolutePath`.
+ *
+ * Used to seed the output directory before overwrite tests so that the
+ * integration has an existing file to skip or replace. If the build's
+ * overwrite logic works correctly, the placeholder will be replaced with a
+ * valid image. If it is skipped, Sharp will fail to read the file as an image,
+ * causing the color assertion to fail.
+ */
+export async function seedFile(absolutePath: string) {
+	await mkdir(dirname(absolutePath), { recursive: true });
+
+	return Deno.writeTextFile(absolutePath, 'placeholder');
 }
 
 /**
