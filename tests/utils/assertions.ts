@@ -58,7 +58,7 @@ export class FileAsserter {
 
 	/**
 	 * Asserts the path does not exist on disk.
-	 * Used to confirm no output was written (e.g. when `pages` is empty).
+	 * Used to confirm no output was written (ex. when `pages` is empty).
 	 */
 	async assertAbsent(): Promise<void> {
 		let exists = false;
@@ -109,7 +109,7 @@ export class ImageAsserter {
 		return this.#stats;
 	}
 
-	/** Asserts that the image format (e.g. `"png"`, `"jpeg"`) matches `expected`. */
+	/** Asserts that the image format (ex. `"png"`, `"jpeg"`) matches `expected`. */
 	async assertFormat(expected: string): Promise<void> {
 		const { format } = await this.#getMetadata();
 

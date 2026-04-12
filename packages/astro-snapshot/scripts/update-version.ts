@@ -14,7 +14,7 @@ if (!version) {
 // Validate version format (basic semver check)
 if (!/^\d+\.\d+\.\d+(-[a-zA-Z0-9.-]+)?(\+[a-zA-Z0-9.-]+)?$/.test(version)) {
 	console.error(`❌ Invalid version format: ${version}`);
-	console.error('Expected format: X.Y.Z (e.g., 1.0.0, 1.0.0-beta.1)');
+	console.error('Expected format: X.Y.Z (ex. 1.0.0, 1.0.0-beta.1)');
 	Deno.exit(1);
 }
 
