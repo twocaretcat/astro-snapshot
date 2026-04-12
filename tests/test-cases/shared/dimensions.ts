@@ -1,12 +1,16 @@
 import { DEFAULT, SHARED_OUTPUT_DIR } from '../../constants.ts';
 import type { TestCase } from '../../types.ts';
 
+const DIMENSION = {
+	width: 192,
+	height: 144,
+} as const;
 const { page, expected } = DEFAULT;
 
 /**
  * Test cases for `width` and `height`.
  */
-export const DIMENSION_TEST_CASE_MAP: Record<string, TestCase> = {
+export const DIMENSIONS_TEST_CASE_MAP: Record<string, TestCase> = {
 	// With no width/height set, the integration should fall back to the default values
 	'bare bones': {
 		page,
@@ -20,11 +24,11 @@ export const DIMENSION_TEST_CASE_MAP: Record<string, TestCase> = {
 		page,
 		screenshotConfig: {
 			outputPath: `${SHARED_OUTPUT_DIR}/width.png`,
-			width: 80,
+			width: DIMENSION.width,
 		},
 		expected: {
 			...expected,
-			width: 80,
+			width: DIMENSION.width,
 		},
 	},
 	// Provided height should override the default
@@ -32,11 +36,11 @@ export const DIMENSION_TEST_CASE_MAP: Record<string, TestCase> = {
 		page,
 		screenshotConfig: {
 			outputPath: `${SHARED_OUTPUT_DIR}/height.png`,
-			height: 40,
+			height: DIMENSION.height,
 		},
 		expected: {
 			...expected,
-			height: 40,
+			height: DIMENSION.height,
 		},
 	},
 	// Provided width and height should override the defaults
@@ -44,13 +48,11 @@ export const DIMENSION_TEST_CASE_MAP: Record<string, TestCase> = {
 		page,
 		screenshotConfig: {
 			outputPath: `${SHARED_OUTPUT_DIR}/width-and-height.png`,
-			width: 80,
-			height: 40,
+			...DIMENSION,
 		},
 		expected: {
 			...expected,
-			width: 80,
-			height: 40,
+			...DIMENSION,
 		},
 	},
 };

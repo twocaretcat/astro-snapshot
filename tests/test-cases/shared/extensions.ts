@@ -1,17 +1,18 @@
 import { DEFAULT, SHARED_OUTPUT_DIR } from '../../constants.ts';
 import type { TestCase } from '../../types.ts';
 
+const OUTPUT_FILENAME = 'format' as const;
 const { page, expected } = DEFAULT;
 
 /**
  * Test cases for the `outputPath` file extension.
  */
-export const EXTENSION_TEST_CASE_MAP: Record<string, TestCase> = {
+export const EXTENSIONS_TEST_CASE_MAP: Record<string, TestCase> = {
 	// A .png extension should result in a PNG screenshot
 	'.png extension': {
 		page,
 		screenshotConfig: {
-			outputPath: `${SHARED_OUTPUT_DIR}/format.png`,
+			outputPath: `${SHARED_OUTPUT_DIR}/${OUTPUT_FILENAME}.png`,
 		},
 		expected: {
 			...expected,
@@ -24,7 +25,7 @@ export const EXTENSION_TEST_CASE_MAP: Record<string, TestCase> = {
 		screenshotConfig: {
 			// @ts-ignore TODO: Fix TypeError: .jpg isn't allowed as a file extension
 			// see https://github.com/twocaretcat/astro-snapshot/issues/51
-			outputPath: `${SHARED_OUTPUT_DIR}/format.jpg`,
+			outputPath: `${SHARED_OUTPUT_DIR}/${OUTPUT_FILENAME}.jpg`,
 		},
 		expected: {
 			...expected,
@@ -35,7 +36,7 @@ export const EXTENSION_TEST_CASE_MAP: Record<string, TestCase> = {
 	'.jpeg extension': {
 		page,
 		screenshotConfig: {
-			outputPath: `${SHARED_OUTPUT_DIR}/format.jpeg`,
+			outputPath: `${SHARED_OUTPUT_DIR}/${OUTPUT_FILENAME}.jpeg`,
 		},
 		expected: {
 			...expected,
@@ -46,7 +47,7 @@ export const EXTENSION_TEST_CASE_MAP: Record<string, TestCase> = {
 	'.webp extension': {
 		page,
 		screenshotConfig: {
-			outputPath: `${SHARED_OUTPUT_DIR}/format.webp`,
+			outputPath: `${SHARED_OUTPUT_DIR}/${OUTPUT_FILENAME}.webp`,
 		},
 		expected: {
 			...expected,
