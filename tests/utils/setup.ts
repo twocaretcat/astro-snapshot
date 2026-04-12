@@ -20,7 +20,7 @@ export async function cleanOutput(absoluteOutputPath: string) {
 		await Deno.remove(absoluteOutputPath, { recursive: true });
 	} catch (error) {
 		// Ignore if the directory doesn't exist yet, but re-throw everything else
-		// (i.e. missing --allow-write permission)
+		// (ex. missing --allow-write permission)
 		if (!(error instanceof Deno.errors.NotFound)) throw error;
 	}
 }

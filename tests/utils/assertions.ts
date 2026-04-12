@@ -4,8 +4,8 @@
  * Two classes are provided, each fetching file information once on construction
  * and exposing assertion methods that await the shared result:
  *
- * 1. FileAsserter: Wraps Deno.stat; covers existence, absence, and mtime checks.
- * 2. ImageAsserter: Wraps a Sharp instance; covers format, dimensions, and dominant color.
+ * 1. FileAsserter: Wraps Deno.stat. Covers existence, absence, and mtime checks.
+ * 2. ImageAsserter: Wraps a Sharp instance. Covers format, dimensions, and dominant color.
  *
  * @module
  */
@@ -35,16 +35,22 @@ function keysOf<T extends object>(obj: T): (keyof T)[] {
  */
 export class FileAsserter {
 	readonly #path: string;
-	readonly #stat: Promise<Deno.FileInfo>;
+
+	#stat: Promise<Deno.FileInfo> | undefined;
 
 	constructor(absolutePath: string) {
 		this.#path = absolutePath;
-		this.#stat = Deno.stat(absolutePath);
+	}
+
+	#getStat(): Promise<Deno.FileInfo> {
+		this.#stat ??= Deno.stat(this.#path);
+
+		return this.#stat;
 	}
 
 	/** Asserts the file exists and is non-empty. */
 	async assertExists(): Promise<void> {
-		const stat = await this.#stat;
+		const stat = await this.#getStat();
 
 		assert(stat.isFile, `Expected an image file at ${this.#path}`);
 		assert(stat.size > 0, `Image at ${this.#path} is empty`);
@@ -58,7 +64,7 @@ export class FileAsserter {
 		let exists = false;
 
 		try {
-			await this.#stat;
+			await this.#getStat();
 
 			exists = true;
 		} catch (error) {
