@@ -43,6 +43,8 @@ export interface TestCase {
 /**
  * A test case for an isolated build. All page and config fields are optional
  * since some scenarios (ex. empty-pages) produce no output at all.
+ *
+ * In comparison with {@link TestCase}, omitting `expected` will assert that the output directory is empty.
  */
 export interface IsolatedTestCase extends Partial<TestCase> {
 	/**
