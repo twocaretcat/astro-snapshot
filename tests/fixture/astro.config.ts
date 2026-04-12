@@ -1,20 +1,97 @@
+/**
+ * Unified Astro config for all integration tests.
+ *
+ * The active scenario is selected via the `SCENARIO` environment variable.
+ *
+ * The 'shared' scenario runs the full shared build used by shared.test.ts.
+ * All other scenarios are derived from the isolated test case files and run
+ * isolated builds for isolated.test.ts.
+ *
+ * @module
+ */
 import { defineConfig } from 'astro/config';
-import snapshot from '../../packages/astro-snapshot/src/index.ts';
+import process from 'node:process';
 import type { Config } from '../../packages/astro-snapshot/src/index.ts';
+import snapshot from '../../packages/astro-snapshot/src/index.ts';
+import type { IsolatedTestCase, SharedTestCase } from '../types.ts';
+import { ISOLATED_TEST_CASE_MAP } from '../test-cases/isolated/index.ts';
 import { SHARED_TEST_CASE_MAP } from '../test-cases/shared/index.ts';
 
-const pages: Config['pages'] = {};
+type SnapshotConfig = Parameters<typeof snapshot>[0];
 
-// Group fixture images by page to build the snapshot `pages` map
-for (const { page, screenshotConfig } of Object.values(SHARED_TEST_CASE_MAP)) {
-	(pages[page] ??= []).push(screenshotConfig);
+/**
+ * Builds the `pages` map for the shared scenario by grouping all shared test
+ * cases by their page route.
+ */
+function buildSharedPages(testCases: Record<string, SharedTestCase>): Config['pages'] {
+	const pages: Config['pages'] = {};
+
+	for (const { page, screenshotConfig } of Object.values(testCases)) {
+		(pages[page] ??= []).push(screenshotConfig);
+	}
+
+	return pages;
 }
+
+/**
+ * Builds a single-entry `pages` map for an isolated test case, or an empty
+ * map if the test case has no page or screenshotConfig.
+ */
+function buildIsolatedPages(testCase: IsolatedTestCase): Config['pages'] {
+	const { page, screenshotConfig } = testCase;
+
+	if (!page || !screenshotConfig) return {};
+
+	return {
+		[page]: [screenshotConfig],
+	};
+}
+
+/**
+ * Builds the full scenarios map from the shared and isolated test cases.
+ * Each key is a valid SCENARIO env var value.
+ */
+function buildScenarios(
+	sharedTestCases: Record<string, SharedTestCase>,
+	isolatedTestCases: Record<string, IsolatedTestCase>,
+): Record<string, SnapshotConfig> {
+	const scenarios: Record<string, SnapshotConfig> = {
+		shared: {
+			pages: buildSharedPages(sharedTestCases),
+		},
+	};
+
+	for (const [key, testCase] of Object.entries(isolatedTestCases)) {
+		scenarios[key] = {
+			...testCase.integrationConfig,
+			pages: buildIsolatedPages(testCase),
+		};
+	}
+
+	return scenarios;
+}
+
+/**
+ * Resolves and validates the active scenario from the SCENARIO environment
+ * variable, throwing a descriptive error if it is missing or unrecognized.
+ */
+function resolveScenario(scenarios: Record<string, SnapshotConfig>): SnapshotConfig {
+	const scenario = process.env.SCENARIO;
+
+	if (!scenario || !(scenario in scenarios)) {
+		const valid = Object.keys(scenarios).join(', ');
+
+		throw new Error(`Unknown or missing SCENARIO: "${scenario}". Valid values: ${valid}`);
+	}
+
+	return scenarios[scenario];
+}
+
+const SCENARIOS = buildScenarios(SHARED_TEST_CASE_MAP, ISOLATED_TEST_CASE_MAP);
 
 // https://astro.build/config
 export default defineConfig({
 	integrations: [
-		snapshot({
-			pages,
-		}),
+		snapshot(resolveScenario(SCENARIOS)),
 	],
 });
