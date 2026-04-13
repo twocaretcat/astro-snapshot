@@ -13,7 +13,7 @@ import type { AstroIntegrationLogger } from 'astro';
  *
  * Determines the file extension following the last period (".") in the path,
  * ensuring it is part of the filename (not a directory). The function
- * normalizes certain extensions (ex., `"jpg"` → `"jpeg"`) and validates
+ * normalizes certain extensions (ex. `"jpg"` → `"jpeg"`) and validates
  * that the format is supported.
  *
  * @param path - The file path to extract the format from.
@@ -32,7 +32,7 @@ export function getFormat(path: string): Format {
 	const lastDot = path.lastIndexOf('.');
 	const lastSlash = Math.max(path.lastIndexOf('/'), path.lastIndexOf('\\'));
 
-	// No dot, or dot is part of a directory (ex., ".config/file")
+	// No dot, or dot is part of a directory (ex. ".config/file")
 	if (lastDot <= lastSlash) {
 		throw new Error('No file extension found');
 	}
@@ -109,8 +109,8 @@ export function logStatus(
 /**
  * Formats a duration in milliseconds as a human-readable string.
  *
- * Values under 1000ms are displayed as whole milliseconds (ex., "53ms").
- * Values 1000ms and above are displayed as seconds with one decimal place (ex., "1.4s").
+ * Values under 1000ms are displayed as whole milliseconds (ex. "53ms").
+ * Values 1000ms and above are displayed as seconds with one decimal place (ex. "1.4s").
  *
  * @param ms - The duration in milliseconds to format
  * @returns A formatted duration string with appropriate unit suffix

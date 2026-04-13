@@ -12,6 +12,8 @@ import { ABS_FIXTURE_PATH } from '../constants.ts';
 /**
  * Removes the output directory so stale screenshots can't cause a false pass.
  * Silently succeeds if the directory doesn't exist yet.
+ *
+ * @param absoluteOutputPath - Absolute path to the output directory to remove.
  */
 export async function cleanOutput(absoluteOutputPath: string) {
 	info(highlight`🧹 Cleaning output directory at ${absoluteOutputPath}...`);
@@ -33,6 +35,8 @@ export async function cleanOutput(absoluteOutputPath: string) {
  * overwrite logic works correctly, the placeholder will be replaced with a
  * valid image. If it is skipped, Sharp will fail to read the file as an image,
  * causing the color assertion to fail.
+ *
+ * @param absolutePath - Absolute path where the placeholder file will be written.
  */
 export async function seedFile(absolutePath: string) {
 	await mkdir(dirname(absolutePath), { recursive: true });
@@ -44,6 +48,8 @@ export async function seedFile(absolutePath: string) {
  * Runs `astro build` inside the fixture project for the given scenario.
  *
  * Throws with combined stdout/stderr if the build fails.
+ *
+ * @param scenario - The scenario key to pass as the `SCENARIO` environment variable.
  */
 export async function runAstroBuildWithScenario(scenario: string) {
 	info(highlight`🔨 Running \`astro build\` for scenario ${scenario}...`);

@@ -22,6 +22,8 @@ type SnapshotConfig = Parameters<typeof snapshot>[0];
 /**
  * Builds the `pages` map for the shared scenario by grouping all shared test
  * cases by their page route.
+ *
+ * @param testCases - All shared test case definitions.
  */
 function buildSharedPages(testCases: Record<string, SharedTestCase>): Config['pages'] {
 	const pages: Config['pages'] = {};
@@ -36,6 +38,8 @@ function buildSharedPages(testCases: Record<string, SharedTestCase>): Config['pa
 /**
  * Builds a single-entry `pages` map for an isolated test case, or an empty
  * map if the test case has no page or screenshotConfig.
+ *
+ * @param testCase - The isolated test case to build the pages map from.
  */
 function buildIsolatedPages(testCase: IsolatedTestCase): Config['pages'] {
 	const { page, screenshotConfig } = testCase;
@@ -50,6 +54,9 @@ function buildIsolatedPages(testCase: IsolatedTestCase): Config['pages'] {
 /**
  * Builds the full scenarios map from the shared and isolated test cases.
  * Each key is a valid SCENARIO env var value.
+ *
+ * @param sharedTestCases - All shared test case definitions.
+ * @param isolatedTestCases - All isolated test case definitions.
  */
 function buildScenarios(
 	sharedTestCases: Record<string, SharedTestCase>,
@@ -74,6 +81,8 @@ function buildScenarios(
 /**
  * Resolves and validates the active scenario from the SCENARIO environment
  * variable, throwing a descriptive error if it is missing or unrecognized.
+ *
+ * @param scenarios - The full map of scenario keys to integration configs.
  */
 function resolveScenario(scenarios: Record<string, SnapshotConfig>): SnapshotConfig {
 	const scenario = process.env.SCENARIO;

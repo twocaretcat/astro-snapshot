@@ -23,8 +23,7 @@ export const EXTENSIONS_TEST_CASE_MAP: Record<string, TestCase> = {
 	'.jpg extension': {
 		page,
 		screenshotConfig: {
-			// @ts-ignore TODO: Fix TypeError: .jpg isn't allowed as a file extension
-			// see https://github.com/twocaretcat/astro-snapshot/issues/51
+			// @ts-ignore: TODO: Fix type error (https://github.com/twocaretcat/astro-snapshot/issues/51)
 			outputPath: `${SHARED_OUTPUT_DIR}/${OUTPUT_FILENAME}.jpg`,
 		},
 		expected: {

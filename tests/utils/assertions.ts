@@ -29,6 +29,8 @@ function keysOf<T extends object>(obj: T): (keyof T)[] {
  * Calls `Deno.stat` once on construction and provides assertion methods
  * that share the result.
  *
+ * @param absolutePath - Absolute path to the file to assert against.
+ *
  * @example
  * const file = new FileAsserter(absolutePath);
  * await file.assertExists();
@@ -79,6 +81,8 @@ export class FileAsserter {
  * Constructs a Sharp instance once and lazily fetches metadata and stats,
  * caching each so repeated assertions share the same result.
  *
+ * @param absolutePath - Absolute path to the image file to assert against.
+ *
  * @example
  * const image = new ImageAsserter(absolutePath);
  * await image.assertFormat('png');
@@ -109,21 +113,30 @@ export class ImageAsserter {
 		return this.#stats;
 	}
 
-	/** Asserts that the image format (ex. `"png"`, `"jpeg"`) matches `expected`. */
+	/** Asserts that the image format (ex. `"png"`, `"jpeg"`) matches `expected`.
+	 *
+	 * @param expected - The expected image format string.
+	 */
 	async assertFormat(expected: string): Promise<void> {
 		const { format } = await this.#getMetadata();
 
 		strictEqual(format, expected, `Expected format "${expected}", got "${format}" at ${this.#path}`);
 	}
 
-	/** Asserts that the image width in pixels matches `expected`. */
+	/** Asserts that the image width in pixels matches `expected`.
+	 *
+	 * @param expected - The expected width in pixels.
+	 */
 	async assertWidth(expected: number): Promise<void> {
 		const { width } = await this.#getMetadata();
 
 		strictEqual(width, expected, `Expected width ${expected}px, got ${width}px at ${this.#path}`);
 	}
 
-	/** Asserts that the image height in pixels matches `expected`. */
+	/** Asserts that the image height in pixels matches `expected`.
+	 *
+	 * @param expected - The expected height in pixels.
+	 */
 	async assertHeight(expected: number): Promise<void> {
 		const { height } = await this.#getMetadata();
 
@@ -133,6 +146,9 @@ export class ImageAsserter {
 	/**
 	 * Asserts that the dominant color of the image is within `threshold` of
 	 * `expected` for each channel.
+	 *
+	 * @param expected - The expected dominant color.
+	 * @param threshold - Allowable deviation per channel (default: 10).
 	 *
 	 * @example
 	 * // Predominantly red (#f00) background

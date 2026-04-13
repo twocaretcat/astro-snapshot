@@ -92,9 +92,7 @@ export interface ScreenshotConfig {
 	overwrite?: boolean;
 
 	/**
-	 * Options to pass to Puppeteer's `page.goto()` method.
-	 * Controls how navigation and page loading are handled.
-	 * @see https://pptr.dev/api/puppeteer.waitforoptions
+	 * Options to pass to Puppeteer's {@link https://pptr.dev/api/puppeteer.gotooptions | page.goto()} method.
 	 *
 	 * @example
 	 * ```ts
@@ -104,10 +102,9 @@ export interface ScreenshotConfig {
 	gotoOptions?: GoToOptions;
 
 	/**
-	 * Options to pass to Puppeteer's `page.screenshot()` method.
-	 * Note: `path` will be overridden by the integration.
-	 * Note: `format` will be inferred from the output path.
-	 * @see https://pptr.dev/api/puppeteer.screenshotoptions
+	 * Options to pass to Puppeteer's {@link https://pptr.dev/api/puppeteer.screenshotoptions | page.screenshot()} method.
+	 *
+	 * @remarks `path` will be overridden by the integration. `format` will be inferred from the output path.
 	 *
 	 * @example
 	 * ```ts
@@ -117,9 +114,9 @@ export interface ScreenshotConfig {
 	screenshotOptions?: Omit<ScreenshotOptions, 'path' | 'format'>;
 
 	/**
-	 * Options to pass to Puppeteer's `page.setViewport()` method.
-	 * Note: `width` and `height` will be merged with these options.
-	 * @see https://pptr.dev/api/puppeteer.viewport
+	 * Options to pass to Puppeteer's {@link https://pptr.dev/api/puppeteer.viewport | page.setViewport()} method.
+	 *
+	 * @remarks `width` and `height` will be merged with these options.
 	 *
 	 * @example
 	 * ```ts
@@ -155,7 +152,7 @@ export interface ScreenshotConfig {
 export interface SnapshotIntegrationConfig {
 	/**
 	 * Map of page paths to their screenshot configurations.
-	 * Each key represents a route (e.g., "/", "/about", "/blog/post-1").
+	 * Each key represents a route (ex. "/", "/about", "/blog/post-1").
 	 *
 	 * @example
 	 * ```ts
@@ -186,8 +183,7 @@ export interface SnapshotIntegrationConfig {
 	defaults?: Omit<ScreenshotConfig, 'outputPath'>;
 
 	/**
-	 * Puppeteer launch options.
-	 * @see https://pptr.dev/api/puppeteer.launchoptions
+	 * Options to pass to Puppeteer's {@link https://pptr.dev/api/puppeteer.launchoptions | launch()} method.
 	 *
 	 * @example
 	 * ```ts
