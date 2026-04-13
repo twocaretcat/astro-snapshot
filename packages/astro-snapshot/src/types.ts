@@ -8,6 +8,8 @@ import type { AstroIntegration } from 'astro';
 import type { GoToOptions, ScreenshotOptions, Viewport } from 'puppeteer';
 import type puppeteer from 'puppeteer';
 
+type MaybeUppercase<T extends string> = T | Uppercase<T>;
+
 /**
  * Supported image output formats for screenshots.
  * Derived from Puppeteer's {@link ScreenshotOptions.type}.
@@ -27,7 +29,7 @@ export type Format = Exclude<ScreenshotOptions['type'], undefined>;
  * const extension: Extension = '.jpg';
  * ```
  */
-export type Extension = `.${Format | 'jpg'}`;
+export type Extension = MaybeUppercase<`.${Format | 'jpg'}`>;
 
 /**
  * Type alias for the Astro `astro:config:done` hook handler.
