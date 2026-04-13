@@ -4,15 +4,15 @@
  * Two classes are provided, each fetching file information once on construction
  * and exposing assertion methods that await the shared result:
  *
- * 1. FileAsserter: Wraps Deno.stat; covers existence, absence, and mtime checks.
- * 2. ImageAsserter: Wraps a Sharp instance; covers format, dimensions, and dominant color.
+ * 1. FileAsserter: Wraps Deno.stat. Covers existence, absence, and mtime checks.
+ * 2. ImageAsserter: Wraps a Sharp instance. Covers format, dimensions, and dominant color.
  *
  * @module
  */
 
 import assert, { strictEqual } from 'node:assert';
 import sharp from 'sharp';
-import type { Color } from '../fixtures.ts';
+import type { Color } from '../types.ts';
 
 /**
  * Returns the keys of an object with proper TypeScript typing.
@@ -29,23 +29,30 @@ function keysOf<T extends object>(obj: T): (keyof T)[] {
  * Calls `Deno.stat` once on construction and provides assertion methods
  * that share the result.
  *
+ * @param absolutePath - Absolute path to the file to assert against.
+ *
  * @example
  * const file = new FileAsserter(absolutePath);
  * await file.assertExists();
- * await file.assertMtimeNewer(seedMtime);
  */
 export class FileAsserter {
 	readonly #path: string;
-	readonly #stat: Promise<Deno.FileInfo>;
+
+	#stat: Promise<Deno.FileInfo> | undefined;
 
 	constructor(absolutePath: string) {
 		this.#path = absolutePath;
-		this.#stat = Deno.stat(absolutePath);
+	}
+
+	#getStat(): Promise<Deno.FileInfo> {
+		this.#stat ??= Deno.stat(this.#path);
+
+		return this.#stat;
 	}
 
 	/** Asserts the file exists and is non-empty. */
 	async assertExists(): Promise<void> {
-		const stat = await this.#stat;
+		const stat = await this.#getStat();
 
 		assert(stat.isFile, `Expected an image file at ${this.#path}`);
 		assert(stat.size > 0, `Image at ${this.#path} is empty`);
@@ -53,13 +60,13 @@ export class FileAsserter {
 
 	/**
 	 * Asserts the path does not exist on disk.
-	 * Used to confirm no output was written (e.g. when `pages` is empty).
+	 * Used to confirm no output was written (ex. when `pages` is empty).
 	 */
 	async assertAbsent(): Promise<void> {
 		let exists = false;
 
 		try {
-			await this.#stat;
+			await this.#getStat();
 
 			exists = true;
 		} catch (error) {
@@ -68,41 +75,13 @@ export class FileAsserter {
 
 		assert(!exists, `Expected path to not exist: ${this.#path}`);
 	}
-
-	/**
-	 * Asserts the file's mtime has not changed from `originalMtime`.
-	 * Used to confirm a file was skipped (not overwritten) by the integration.
-	 */
-	async assertMtimeUnchanged(originalMtime: Date): Promise<void> {
-		const { mtime } = await this.#stat;
-
-		assert(mtime !== null, `Could not read mtime of ${this.#path}`);
-		strictEqual(
-			mtime!.getTime(),
-			originalMtime.getTime(),
-			`Expected mtime of ${this.#path} to be unchanged (file should have been skipped)`,
-		);
-	}
-
-	/**
-	 * Asserts the file's mtime is strictly newer than `originalMtime`.
-	 * Used to confirm a file was regenerated (overwritten) by the integration.
-	 */
-	async assertMtimeNewer(originalMtime: Date): Promise<void> {
-		const { mtime } = await this.#stat;
-
-		assert(mtime !== null, `Could not read mtime of ${this.#path}`);
-		assert(
-			mtime!.getTime() > originalMtime.getTime(),
-			`Expected mtime of ${this.#path} to be newer (file should have been overwritten), ` +
-				`but ${mtime!.toISOString()} is not after ${originalMtime.toISOString()}`,
-		);
-	}
 }
 
 /**
  * Constructs a Sharp instance once and lazily fetches metadata and stats,
  * caching each so repeated assertions share the same result.
+ *
+ * @param absolutePath - Absolute path to the image file to assert against.
  *
  * @example
  * const image = new ImageAsserter(absolutePath);
@@ -134,21 +113,30 @@ export class ImageAsserter {
 		return this.#stats;
 	}
 
-	/** Asserts that the image format (e.g. `"png"`, `"jpeg"`) matches `expected`. */
+	/** Asserts that the image format (ex. `"png"`, `"jpeg"`) matches `expected`.
+	 *
+	 * @param expected - The expected image format string.
+	 */
 	async assertFormat(expected: string): Promise<void> {
 		const { format } = await this.#getMetadata();
 
 		strictEqual(format, expected, `Expected format "${expected}", got "${format}" at ${this.#path}`);
 	}
 
-	/** Asserts that the image width in pixels matches `expected`. */
+	/** Asserts that the image width in pixels matches `expected`.
+	 *
+	 * @param expected - The expected width in pixels.
+	 */
 	async assertWidth(expected: number): Promise<void> {
 		const { width } = await this.#getMetadata();
 
 		strictEqual(width, expected, `Expected width ${expected}px, got ${width}px at ${this.#path}`);
 	}
 
-	/** Asserts that the image height in pixels matches `expected`. */
+	/** Asserts that the image height in pixels matches `expected`.
+	 *
+	 * @param expected - The expected height in pixels.
+	 */
 	async assertHeight(expected: number): Promise<void> {
 		const { height } = await this.#getMetadata();
 
@@ -158,6 +146,9 @@ export class ImageAsserter {
 	/**
 	 * Asserts that the dominant color of the image is within `threshold` of
 	 * `expected` for each channel.
+	 *
+	 * @param expected - The expected dominant color.
+	 * @param threshold - Allowable deviation per channel (default: 10).
 	 *
 	 * @example
 	 * // Predominantly red (#f00) background

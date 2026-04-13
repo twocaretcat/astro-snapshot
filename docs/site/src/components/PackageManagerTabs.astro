@@ -4,7 +4,7 @@
  *
  * Each package manager can be configured via a simple string (the shell command to run),
  * or an object with optional metadata (`order`, `label`, `icon`) and/or a `code` string.
- * For complex tab content (e.g. multiple code blocks), pass a named slot matching the
+ * For complex tab content (ex. multiple code blocks), pass a named slot matching the
  * package manager ID alongside an object prop to carry ordering and display metadata.
  *
  * All tab instances on the page share a default `syncKey` so the user's choice persists
@@ -54,7 +54,7 @@ type CodeProps = ComponentProps<typeof StarlightCode>;
  * Per-package-manager configuration object.
  *
  * Extends `CodeProps` so any prop accepted by the `<Code>` component
- * (e.g. `lang`, `meta`, `theme`) can be passed through when rendering
+ * (ex. `lang`, `meta`, `theme`) can be passed through when rendering
  * a string command. `code` replaces the positional command string.
  *
  * `order`, `label`, and `icon` control tab display and ordering and are
