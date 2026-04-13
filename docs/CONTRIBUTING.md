@@ -62,50 +62,55 @@ Most `deno` commands can be run from the repo root to apply across all members, 
 directory if you're only working on that part of the project. The exceptions are tasks defined in a member's own
 `deno.json` (like `build:npm`), which must be run from that member's directory.
 
-```
+```txt
 astro-snapshot/
 │
 ├── 📂 .github/
 │   └── 📂 workflows/
-│       ├── 📄 docs.yml        # Deploy docs site to GitHub Pages
-│       ├── 📄 publish.yml     # Build & publish to JSR and npm
-│       └── 📄 test.yml        # Run integration tests
+│       ├── 📄 docs.yml               # Deploy docs site to GitHub Pages
+│       ├── 📄 publish.yml            # Build & publish to JSR and npm
+│       └── 📄 test.yml               # Run integration tests
 │
 ├── 📂 docs/
-│   ├── 📂 site/               # Docs site (workspace member)
+│   ├── 📂 site/                      # Docs site (workspace member)
 │   │   ├── 📂 src/
 │   │   ├── 📄 astro.config.ts
-│   │   └── 📄 deno.json       # Docs site dependencies
+│   │   └── 📄 deno.json              # Docs site dependencies
 │   ├── 📄 CONTRIBUTING.md
 │   ├── 📄 SECURITY.md
 │   └── 📄 icon.svg
 │
 ├── 📂 packages/
-│   └── 📂 astro-snapshot/     # The @twocaretcat/astro-snapshot library (workspace member)
-│       ├── 📂 npm/            # Build output for npm (auto-generated, not committed)
+│   └── 📂 astro-snapshot/            # The @twocaretcat/astro-snapshot library (workspace member)
+│       ├── 📂 npm/                   # Build output for npm (auto-generated, not committed)
 │       ├── 📂 scripts/
 │       │   ├── 📄 build-npm.ts       # Builds the npm package using dnt
 │       │   └── 📄 update-version.ts  # Updates the version in deno.json
 │       ├── 📂 src/
-│       │   ├── 📄 index.ts    # Main module and public API
-│       │   ├── 📄 types.ts    # Exported types
-│       │   └── 📄 utils.ts    # Internal utilities
-│       ├── 📄 deno.json       # Package name, version, exports, tasks, and dependencies
-│       ├── 📄 package.json    # npm peer dependencies
-│       ├── 📄 release.config.js  # Semantic Release configuration
-│       └── 📄 tsconfig.json   # TypeScript config for TypeDoc (API reference generation)
+│       │   ├── 📄 index.ts           # Main module and public API
+│       │   ├── 📄 types.ts           # Exported types
+│       │   └── 📄 utils.ts           # Internal utilities
+│       ├── 📄 deno.json              # Package name, version, exports, tasks, and dependencies
+│       ├── 📄 package.json           # npm peer dependencies
+│       ├── 📄 release.config.js      # Semantic Release configuration
+│       └── 📄 tsconfig.json          # TypeScript config for TypeDoc (API reference generation)
 │
 ├── 📂 tests/
-│   ├── 📂 fixture/            # Minimal Astro site used as a test fixture (workspace member)
+│   ├── 📂 fixture/                   # Minimal Astro site used as a test fixture (workspace member)
 │   │   ├── 📂 src/
-│   │   ├── 📄 astro.config.ts # Imports the integration from packages/astro-snapshot/src/
 │   │   └── 📄 deno.json
-│   ├── 📄 constants.ts        # Shared test constants (output paths, filenames)
-│   └── 📄 integration.test.ts # Integration test: builds the fixture and asserts on output
+│   ├── 📂 test-cases/
+│   │   ├── 📂 shared/                # Test case definitions for the shared build
+│   │   └── 📂 isolated/              # Test case definitions for isolated builds
+│   ├── 📂 utils/                     # Assertion classes, build helpers, text utilities
+│   ├── 📄 constants.ts
+│   ├── 📄 types.ts
+│   ├── 📄 shared.test.ts             # Test runner for the shared build
+│   └── 📄 isolated.test.ts           # Test runner for isolated builds
 │
-├── 📄 deno.json               # Workspace root: shared config, formatter, linter, shared deps
+├── 📄 deno.json                      # Workspace root: shared config, formatter, linter, shared deps
 ├── 📄 deno.lock
-├── 📄 package.json            # npm overrides for release tooling
+├── 📄 package.json                   # npm overrides for release tooling
 └── 📄 README.md
 ```
 
@@ -192,9 +197,25 @@ deno lint
 
 ## Testing
 
-We use Deno's built-in test runner for integration tests. The tests work by running an Astro build inside the fixture
-project and asserting on the output. The fixture is a minimal Astro site with the integration configured. It imports
-directly from the package source so changes are reflected immediately without a build step.
+We use Deno's built-in test runner for integration tests. The tests live in the [tests/](../tests/) directory and work
+by building the fixture project (a minimal Astro site at `tests/fixture/`) with the integration under test, then
+asserting on the generated screenshots using [Sharp](https://sharp.pixelplumbing.com/).
+
+We use two files to run tests based on the setup they require:
+
+- **[shared.test.ts](../tests/shared.test.ts)**: Runs all test cases that can be verified in a single Astro build. These
+  test cases live in [tests/test-cases/shared/](../tests//test-cases/shared/).
+- **[isolated.test.ts](../tests/isolated.test.ts)**: Runs test cases that require their own build, either because they
+  need specific integration-level config (such as `defaults.overwrite`) or controlled filesystem state. Each test case
+  runs as its own build. These test cases live in [tests/test-cases/isolated/](../tests//test-cases/isolated/).
+
+The [tests/fixture/astro.config.ts](../tests/fixture/astro.config.ts) file automatically loads the appropriate test case
+for the respective build based on the `SCENARIO` environment variable that is set by the test runner.
+
+> [!IMPORTANT]
+> These tasks should be run from the project root.
+
+### Running Integration Tests
 
 ```bash
 deno task test
@@ -205,8 +226,8 @@ deno task test
 > [!IMPORTANT]
 > These tasks are only available in the `docs/site/` workspace member. Run them from that directory.
 
-The documentation site is built with [Starlight](https://starlight.astro.build/) and lives in the [docs/site/](./site/)
-directory. It is deployed automatically to GitHub Pages on every push to `main`.
+The documentation site is built with [Starlight] and lives in the [docs/site/](./site/) directory. It is deployed
+automatically to GitHub Pages on every push to `main`.
 
 ### Running the Dev Server
 
@@ -298,9 +319,10 @@ See the existing source for examples of how to write code that fits with the pro
 
 ### Documentation
 
-- Add JSDoc comments for all exported functions and types
+- Add TSDoc comments for all exported functions and types
 - Keep comments up-to-date with code changes
-- If necessary, update the [README](../README.md) and any other applicable files in the [docs/](./) directory
+- If necessary, update the [README](../README.md), docs site, and any other applicable files in the [docs/](./)
+  directory
 
 ### Commit Messages
 
@@ -332,3 +354,4 @@ By contributing to this project, you agree that your contributions will be licen
 [dnt]: https://github.com/denoland/dnt
 [discussion]: https://github.com/twocaretcat/astro-snapshot/discussions
 [deno.json]: ../packages/astro-snapshot/deno.json
+[Starlight]: https://starlight.astro.build/
