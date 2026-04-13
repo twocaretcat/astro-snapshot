@@ -20,6 +20,16 @@ import type puppeteer from 'puppeteer';
 export type Format = Exclude<ScreenshotOptions['type'], undefined>;
 
 /**
+ * Supported file extensions for screenshots.
+ *
+ * @example
+ * ```ts
+ * const extension: Extension = '.jpg';
+ * ```
+ */
+export type Extension = `.${Format | 'jpg'}`;
+
+/**
  * Type alias for the Astro `astro:config:done` hook handler.
  * Triggered after the Astro configuration is finalized.
  */
@@ -56,7 +66,7 @@ export interface ScreenshotConfig {
 	 * outputPath: 'src/assets/og.webp'
 	 * ```
 	 */
-	outputPath: `${string}.${Format}`;
+	outputPath: `${string}${Extension}`;
 
 	/**
 	 * Width of the screenshot viewport in pixels.
