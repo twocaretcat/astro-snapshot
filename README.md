@@ -65,9 +65,8 @@ For installation and usage instructions, see the [docs](https://astro-snapshot.j
 ## 🛟 Support
 
 Need help? Refer to the [troubleshooting](https://astro-snapshot.johng.io/guide/troubleshooting/) page in the docs for a
-list of common issues and their solutions.
-
-See the [support resources](https://github.com/twocaretcat/.github/blob/main/docs/SUPPORT.md) for information on how to:
+list of common issues and their solutions, or see the
+[support resources](https://github.com/twocaretcat/.github/blob/main/docs/SUPPORT.md) for information on how to:
 
 - request features
 - report bugs
@@ -95,7 +94,7 @@ We are not affiliated with or endorsed by [Astro].
 
 ## 🖇️ Related
 
-See the [related projects](https://astro-snapshot.johng.io/resources/related/) page in the docs a list of similar
+See the [related projects](https://astro-snapshot.johng.io/resources/related/) page in the docs for a list of similar
 projects you might like.
 
 ## 💕 Funding
