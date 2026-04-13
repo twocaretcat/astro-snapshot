@@ -37,7 +37,7 @@ export function getFormat(path: string): Format {
 		throw new Error('No file extension found');
 	}
 
-	const extension = path.slice(lastDot + 1);
+	const extension = path.slice(lastDot + 1).toLowerCase();
 
 	if (extension === 'jpg' || extension === 'jpeg') {
 		return 'jpeg';
