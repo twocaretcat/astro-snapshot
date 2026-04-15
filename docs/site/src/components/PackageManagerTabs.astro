@@ -92,7 +92,7 @@ interface Props {
 	vlt?: PackageManagerProp;
 	/**
 	 * Sync key forwarded to Starlight's `<Tabs syncKey>`.
-	 * Defaults to `"pkg-manager"` so all instances on a page stay in sync.
+	 * Defaults to `'pkg-manager'` so all instances on a page stay in sync.
 	 * Pass `undefined` explicitly to disable syncing.
 	 */
 	syncKey?: TabsProps['syncKey'];
@@ -131,7 +131,7 @@ const {
 	codeComponent: Code = StarlightCode,
 } = Astro.props;
 
-// Distinguish "not provided" (use default) from explicitly `undefined` (disable sync).
+// Distinguish 'not provided' (use default) from explicitly `undefined` (disable sync).
 const resolvedSyncKey = Object.hasOwn(Astro.props, 'syncKey') ? Astro.props.syncKey : 'pkg-manager';
 
 /**

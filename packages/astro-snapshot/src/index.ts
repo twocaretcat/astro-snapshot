@@ -101,9 +101,8 @@ export default function snapshot(
 		const outputPath = pageConfig.outputPath;
 
 		return {
-			// Or operator is used to ignore 0
-			width: pageConfig.width || defaults.width || 1200,
-			height: pageConfig.height || defaults.height || 630,
+			width: pageConfig.width ?? defaults.width ?? 1200,
+			height: pageConfig.height ?? defaults.height ?? 630,
 			overwrite: pageConfig.overwrite ?? defaults.overwrite ?? false,
 			goToOptions: {
 				waitUntil: 'networkidle2',
@@ -185,8 +184,32 @@ export default function snapshot(
 
 					const doesFileExist = await fileExists(absoluteOutputPath);
 
+					if (width < 1) {
+						logStatus(
+							logger,
+							'error',
+							normalizedPagePath,
+							relativePath,
+							`Width must be greater than 0. Please check your Astro config.`,
+						);
+
+						throw new Error();
+					}
+
+					if (height < 1) {
+						logStatus(
+							logger,
+							'error',
+							normalizedPagePath,
+							relativePath,
+							`Height must be greater than 0. Please check your Astro config.`,
+						);
+
+						throw new Error();
+					}
+
 					if (doesFileExist && !overwrite) {
-						logStatus(logger, normalizedPagePath, relativePath, 'skipped');
+						logStatus(logger, 'warn', normalizedPagePath, relativePath, 'skipped');
 
 						continue;
 					}
@@ -202,7 +225,15 @@ export default function snapshot(
 					await page.screenshot(screenshotOptions);
 					await page.close();
 
-					logStatus(logger, normalizedPagePath, relativePath, doesFileExist && overwrite ? 'overwritten' : undefined);
+					const wasOverwritten = doesFileExist && overwrite;
+
+					logStatus(
+						logger,
+						wasOverwritten ? 'warn' : 'info',
+						normalizedPagePath,
+						relativePath,
+						wasOverwritten ? 'overwritten' : '',
+					);
 				}
 			}
 		} finally {
