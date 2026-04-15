@@ -51,7 +51,7 @@ describe('astro-snapshot isolated builds', () => {
 			}
 
 			if (stderr) {
-				it(`stderr contains '${stdout}'`, () => build.assertStderrContains(stderr));
+				it(`stderr contains '${stderr}'`, () => build.assertStderrContains(stderr));
 			}
 
 			if (!success) return;
@@ -77,7 +77,7 @@ describe('astro-snapshot isolated builds', () => {
 			}
 
 			if (color) {
-				it(`image has correct dominant color (${color})`, () => img.assertDominantColor(color));
+				it(`image has correct dominant color (${JSON.stringify(color)})`, () => img.assertDominantColor(color));
 			}
 		});
 	}
