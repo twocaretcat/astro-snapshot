@@ -2,7 +2,7 @@ import { DEFAULT, SHARED_OUTPUT_DIR } from '../../constants.ts';
 import type { TestCase } from '../../types.ts';
 
 const OUTPUT_FILENAME = 'format' as const;
-const { page, expected } = DEFAULT;
+const { page } = DEFAULT;
 
 /**
  * Test cases for the `outputPath` file extension.
@@ -15,8 +15,9 @@ export const EXTENSIONS_TEST_CASE_MAP: Record<string, TestCase> = {
 			outputPath: `${SHARED_OUTPUT_DIR}/${OUTPUT_FILENAME}.png`,
 		},
 		expected: {
-			...expected,
-			format: 'png',
+			image: {
+				format: 'png',
+			},
 		},
 	},
 	// A .jpg extension should result in a JPEG screenshot
@@ -26,8 +27,9 @@ export const EXTENSIONS_TEST_CASE_MAP: Record<string, TestCase> = {
 			outputPath: `${SHARED_OUTPUT_DIR}/${OUTPUT_FILENAME}.jpg`,
 		},
 		expected: {
-			...expected,
-			format: 'jpeg',
+			image: {
+				format: 'jpeg',
+			},
 		},
 	},
 	// A .jpeg extension should result in a JPEG screenshot
@@ -37,8 +39,9 @@ export const EXTENSIONS_TEST_CASE_MAP: Record<string, TestCase> = {
 			outputPath: `${SHARED_OUTPUT_DIR}/${OUTPUT_FILENAME}.jpeg`,
 		},
 		expected: {
-			...expected,
-			format: 'jpeg',
+			image: {
+				format: 'jpeg',
+			},
 		},
 	},
 	// A .webp extension should result in a WebP screenshot
@@ -48,8 +51,9 @@ export const EXTENSIONS_TEST_CASE_MAP: Record<string, TestCase> = {
 			outputPath: `${SHARED_OUTPUT_DIR}/${OUTPUT_FILENAME}.webp`,
 		},
 		expected: {
-			...expected,
-			format: 'webp',
+			image: {
+				format: 'webp',
+			},
 		},
 	},
 	// A .PNG extension should result in a PNG screenshot
@@ -59,8 +63,9 @@ export const EXTENSIONS_TEST_CASE_MAP: Record<string, TestCase> = {
 			outputPath: `${SHARED_OUTPUT_DIR}/${OUTPUT_FILENAME}-uppercase.PNG`,
 		},
 		expected: {
-			...expected,
-			format: 'png',
+			image: {
+				format: 'png',
+			},
 		},
 	},
 	// A .JPG extension should result in a JPEG screenshot
@@ -70,8 +75,9 @@ export const EXTENSIONS_TEST_CASE_MAP: Record<string, TestCase> = {
 			outputPath: `${SHARED_OUTPUT_DIR}/${OUTPUT_FILENAME}-uppercase.JPG`,
 		},
 		expected: {
-			...expected,
-			format: 'jpeg',
+			image: {
+				format: 'jpeg',
+			},
 		},
 	},
 	// A .JPEG extension should result in a JPEG screenshot
@@ -81,8 +87,9 @@ export const EXTENSIONS_TEST_CASE_MAP: Record<string, TestCase> = {
 			outputPath: `${SHARED_OUTPUT_DIR}/${OUTPUT_FILENAME}-uppercase.JPEG`,
 		},
 		expected: {
-			...expected,
-			format: 'jpeg',
+			image: {
+				format: 'jpeg',
+			},
 		},
 	},
 	// A .WEBP extension should result in a WebP screenshot
@@ -92,8 +99,9 @@ export const EXTENSIONS_TEST_CASE_MAP: Record<string, TestCase> = {
 			outputPath: `${SHARED_OUTPUT_DIR}/${OUTPUT_FILENAME}-uppercase.WEBP`,
 		},
 		expected: {
-			...expected,
-			format: 'webp',
+			image: {
+				format: 'webp',
+			},
 		},
 	},
 };

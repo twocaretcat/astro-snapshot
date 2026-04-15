@@ -3,12 +3,13 @@ import { resolve } from 'node:path';
 import { ABS_FIXTURE_PATH, ISOLATED_OUTPUT_DIR } from './constants.ts';
 import { ISOLATED_TEST_CASE_MAP } from './test-cases/isolated/index.ts';
 import { TestSetup } from './types.ts';
-import { FileAsserter, ImageAsserter } from './utils/assertions.ts';
+import { BuildAsserter, FileAsserter, ImageAsserter } from './utils/assertions.ts';
 import { cleanOutput, runAstroBuildWithScenario, seedFile } from './utils/setup.ts';
 import { highlight } from './utils/text.ts';
 
 const ABS_OUTPUT_PATH = resolve(ABS_FIXTURE_PATH, ISOLATED_OUTPUT_DIR);
 
+let build: BuildAsserter;
 let file: FileAsserter;
 let img: ImageAsserter;
 
@@ -19,8 +20,8 @@ describe('astro-snapshot isolated builds', () => {
 		const { screenshotConfig, setup, expected } = testCase;
 		const outputPath = screenshotConfig ? resolve(ABS_FIXTURE_PATH, screenshotConfig.outputPath) : null;
 		const scenarioDir = resolve(ABS_OUTPUT_PATH, key);
-
-		const hasOutput = expected && outputPath;
+		const { success = true, stdout, stderr } = expected?.build ?? {};
+		const { format, width, height, color } = expected?.image ?? {};
 
 		describe(highlight`with ${key}`, () => {
 			beforeAll(async () => {
@@ -32,36 +33,51 @@ describe('astro-snapshot isolated builds', () => {
 					await seedFile(outputPath);
 				}
 
-				await runAstroBuildWithScenario(key);
+				const buildResult = await runAstroBuildWithScenario(key);
 
-				if (!hasOutput) return;
+				build = new BuildAsserter(buildResult);
 
-				file = new FileAsserter(outputPath);
-				img = new ImageAsserter(outputPath);
+				if (success && outputPath) {
+					file = new FileAsserter(outputPath);
+					img = new ImageAsserter(outputPath);
+				}
 			});
 
-			if (hasOutput) {
-				it('image exists and is non-empty', () => file.assertExists());
+			// Build outcome is always asserted
+			it(`build ${success ? 'succeeds' : 'fails'}`, () => build.assertSuccess(success));
 
-				const { format, width, height, color } = expected;
+			if (stdout) {
+				it(`stdout contains '${stdout}'`, () => build.assertStdoutContains(stdout));
+			}
 
-				if (format) {
-					it(`image is a ${format}`, () => img.assertFormat(format));
-				}
+			if (stderr) {
+				it(`stderr contains '${stderr}'`, () => build.assertStderrContains(stderr));
+			}
 
-				if (width) {
-					it(`image is ${width}px wide`, () => img.assertWidth(width));
-				}
+			if (!success) return;
 
-				if (height) {
-					it(`image is ${height}px tall`, () => img.assertHeight(height));
-				}
-
-				if (color) {
-					it('image has correct dominant color', () => img.assertDominantColor(color));
-				}
-			} else {
+			if (!outputPath) {
 				it('output directory is not created', () => new FileAsserter(scenarioDir).assertAbsent());
+
+				return;
+			}
+
+			it('image exists and is non-empty', () => file.assertExists());
+
+			if (format) {
+				it(`image is a ${format}`, () => img.assertFormat(format));
+			}
+
+			if (width) {
+				it(`image is ${width}px wide`, () => img.assertWidth(width));
+			}
+
+			if (height) {
+				it(`image is ${height}px tall`, () => img.assertHeight(height));
+			}
+
+			if (color) {
+				it(`image has correct dominant color (${JSON.stringify(color)})`, () => img.assertDominantColor(color));
 			}
 		});
 	}

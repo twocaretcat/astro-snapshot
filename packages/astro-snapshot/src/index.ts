@@ -34,8 +34,9 @@ import { fileURLToPath } from 'node:url';
 import { styleText } from 'node:util';
 import { launch } from 'puppeteer';
 import sirv from 'sirv';
+import { StatusLogger } from './status-logger.ts';
 import type { HandleBuildDone, HandleConfigDone, ScreenshotConfig, SnapshotIntegrationConfig } from './types.ts';
-import { fileExists, formatDuration, getFormat, logStatus } from './utils.ts';
+import { fileExists, formatDuration, getFormat } from './utils.ts';
 
 /**
  * Creates an Astro integration that captures screenshots of specified pages
@@ -101,9 +102,8 @@ export default function snapshot(
 		const outputPath = pageConfig.outputPath;
 
 		return {
-			// Or operator is used to ignore 0
-			width: pageConfig.width || defaults.width || 1200,
-			height: pageConfig.height || defaults.height || 630,
+			width: pageConfig.width ?? defaults.width ?? 1200,
+			height: pageConfig.height ?? defaults.height ?? 630,
 			overwrite: pageConfig.overwrite ?? defaults.overwrite ?? false,
 			goToOptions: {
 				waitUntil: 'networkidle2',
@@ -185,8 +185,18 @@ export default function snapshot(
 
 					const doesFileExist = await fileExists(absoluteOutputPath);
 
+					const statusLogger = new StatusLogger(logger, normalizedPagePath, relativePath);
+
+					if (width < 1) {
+						statusLogger.error('Width must be greater than 0. Please check your Astro config.');
+					}
+
+					if (height < 1) {
+						statusLogger.error('Height must be greater than 0. Please check your Astro config.');
+					}
+
 					if (doesFileExist && !overwrite) {
-						logStatus(logger, normalizedPagePath, relativePath, 'skipped');
+						statusLogger.warn('skipped');
 
 						continue;
 					}
@@ -202,7 +212,11 @@ export default function snapshot(
 					await page.screenshot(screenshotOptions);
 					await page.close();
 
-					logStatus(logger, normalizedPagePath, relativePath, doesFileExist && overwrite ? 'overwritten' : undefined);
+					if (doesFileExist && overwrite) {
+						statusLogger.warn('overwritten');
+					} else {
+						statusLogger.info();
+					}
 				}
 			}
 		} finally {

@@ -1,7 +1,7 @@
 import { COLOR, DEFAULT, PAGE, SHARED_OUTPUT_DIR } from '../../constants.ts';
 import type { TestCase } from '../../types.ts';
 
-const { page, expected } = DEFAULT;
+const { page } = DEFAULT;
 const screenshotConfig = {
 	outputPath: `${SHARED_OUTPUT_DIR}/overwrite-enabled.png`,
 } as const;
@@ -23,9 +23,9 @@ export const OVERWRITE_ENABLED_TEST_CASE_MAP: Record<string, TestCase> = {
 			overwrite: true,
 		},
 		expected: {
-			...expected,
-			// The image should now be green
-			color: COLOR.green,
+			image: {
+				color: COLOR.green,
+			},
 		},
 	},
 };

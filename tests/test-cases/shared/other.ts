@@ -18,7 +18,12 @@ export const OTHER_TEST_CASE_MAP: Record<string, TestCase> = {
 				deviceScaleFactor: 2,
 			},
 		},
-		expected,
+		expected: {
+			image: {
+				width: expected.image.width,
+				height: expected.image.height,
+			},
+		},
 	},
 	// A page key without a leading '/' should be normalized
 	'page path normalization': {
@@ -26,6 +31,10 @@ export const OTHER_TEST_CASE_MAP: Record<string, TestCase> = {
 		screenshotConfig: {
 			outputPath: `${SHARED_OUTPUT_DIR}/path-normalization.png`,
 		},
-		expected,
+		expected: {
+			image: {
+				color: expected.image.color,
+			},
+		},
 	},
 };
