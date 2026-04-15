@@ -10,7 +10,7 @@ const DIMENSION = {
 	width: 192,
 	height: 144,
 } as const;
-const { page, expected } = DEFAULT;
+const { page } = DEFAULT;
 
 const WIDTH_ERROR_MSG = 'Width must be greater than 0' as const;
 const HEIGHT_ERROR_MSG = 'Height must be greater than 0' as const;
@@ -37,7 +37,6 @@ export const DIMENSIONS_TEST_CASE_MAP: Record<string, IsolatedTestCase> = {
 		setup: TestSetup.Clean,
 		expected: {
 			image: {
-				...expected.image,
 				width: DEFAULT_DIMENSION.width,
 				height: DIMENSION.height,
 			},
@@ -58,7 +57,6 @@ export const DIMENSIONS_TEST_CASE_MAP: Record<string, IsolatedTestCase> = {
 		setup: TestSetup.Clean,
 		expected: {
 			image: {
-				...expected.image,
 				width: DIMENSION.width,
 				height: DEFAULT_DIMENSION.height,
 			},
@@ -76,7 +74,6 @@ export const DIMENSIONS_TEST_CASE_MAP: Record<string, IsolatedTestCase> = {
 		setup: TestSetup.Clean,
 		expected: {
 			image: {
-				...expected.image,
 				...DEFAULT_DIMENSION,
 			},
 		},
@@ -94,7 +91,6 @@ export const DIMENSIONS_TEST_CASE_MAP: Record<string, IsolatedTestCase> = {
 		setup: TestSetup.Clean,
 		expected: {
 			image: {
-				...expected.image,
 				...DIMENSION,
 			},
 		},

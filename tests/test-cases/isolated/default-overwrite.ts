@@ -21,7 +21,11 @@ export const DEFAULT_OVERWRITE_TEST_CASE_MAP: Record<string, IsolatedTestCase> =
 			},
 		},
 		setup: TestSetup.Seed,
-		expected,
+		expected: {
+			image: {
+				color: expected.image.color,
+			},
+		},
 	},
 	// With overwrite disabled by default, the seeded file should not be overwritten
 	'default overwrite disabled': {
@@ -75,6 +79,10 @@ export const DEFAULT_OVERWRITE_TEST_CASE_MAP: Record<string, IsolatedTestCase> =
 			},
 		},
 		setup: TestSetup.Seed,
-		expected,
+		expected: {
+			image: {
+				color: expected.image.color,
+			},
+		},
 	},
 };

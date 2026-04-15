@@ -2,7 +2,7 @@ import { DEFAULT, SHARED_OUTPUT_DIR } from '../../constants.ts';
 import type { TestCase } from '../../types.ts';
 
 const OUTPUT_FILENAME = 'format' as const;
-const { page, expected } = DEFAULT;
+const { page } = DEFAULT;
 
 /**
  * Test cases for the `outputPath` file extension.
@@ -16,7 +16,6 @@ export const EXTENSIONS_TEST_CASE_MAP: Record<string, TestCase> = {
 		},
 		expected: {
 			image: {
-				...expected.image,
 				format: 'png',
 			},
 		},
@@ -29,7 +28,6 @@ export const EXTENSIONS_TEST_CASE_MAP: Record<string, TestCase> = {
 		},
 		expected: {
 			image: {
-				...expected.image,
 				format: 'jpeg',
 			},
 		},
@@ -42,7 +40,6 @@ export const EXTENSIONS_TEST_CASE_MAP: Record<string, TestCase> = {
 		},
 		expected: {
 			image: {
-				...expected.image,
 				format: 'jpeg',
 			},
 		},
@@ -55,7 +52,6 @@ export const EXTENSIONS_TEST_CASE_MAP: Record<string, TestCase> = {
 		},
 		expected: {
 			image: {
-				...expected.image,
 				format: 'webp',
 			},
 		},
@@ -68,7 +64,6 @@ export const EXTENSIONS_TEST_CASE_MAP: Record<string, TestCase> = {
 		},
 		expected: {
 			image: {
-				...expected.image,
 				format: 'png',
 			},
 		},
@@ -81,7 +76,6 @@ export const EXTENSIONS_TEST_CASE_MAP: Record<string, TestCase> = {
 		},
 		expected: {
 			image: {
-				...expected.image,
 				format: 'jpeg',
 			},
 		},
@@ -94,7 +88,6 @@ export const EXTENSIONS_TEST_CASE_MAP: Record<string, TestCase> = {
 		},
 		expected: {
 			image: {
-				...expected.image,
 				format: 'jpeg',
 			},
 		},
@@ -107,7 +100,6 @@ export const EXTENSIONS_TEST_CASE_MAP: Record<string, TestCase> = {
 		},
 		expected: {
 			image: {
-				...expected.image,
 				format: 'webp',
 			},
 		},

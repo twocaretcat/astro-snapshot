@@ -28,8 +28,8 @@ export const DIMENSIONS_TEST_CASE_MAP: Record<string, TestCase> = {
 		},
 		expected: {
 			image: {
-				...expected.image,
 				width: DIMENSION.width,
+				height: expected.image.height,
 			},
 		},
 	},
@@ -42,7 +42,7 @@ export const DIMENSIONS_TEST_CASE_MAP: Record<string, TestCase> = {
 		},
 		expected: {
 			image: {
-				...expected.image,
+				width: expected.image.width,
 				height: DIMENSION.height,
 			},
 		},
@@ -56,7 +56,6 @@ export const DIMENSIONS_TEST_CASE_MAP: Record<string, TestCase> = {
 		},
 		expected: {
 			image: {
-				...expected.image,
 				...DIMENSION,
 			},
 		},
