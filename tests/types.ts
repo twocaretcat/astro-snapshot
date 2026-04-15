@@ -7,6 +7,26 @@ import type { Config } from '../packages/astro-snapshot/src/index.ts';
 export type Color = sharp.Stats['dominant'];
 
 /**
+ * Properties an Astro build is expected to have.
+ */
+export interface BuildResult {
+	/**
+	 * Whether the build is expected to succeed.
+	 *
+	 * @default true
+	 */
+	success?: boolean;
+	/**
+	 * If present, asserts that the build stdout contains this string.
+	 */
+	stdout?: string;
+	/**
+	 * If present, asserts that the build stderr contains this string.
+	 */
+	stderr?: string;
+}
+
+/**
  * Properties an output image is expected to have. If a property is omitted, it will not be checked.
  */
 interface ImageExpectation {
