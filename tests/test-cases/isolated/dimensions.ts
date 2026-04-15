@@ -12,11 +12,16 @@ const DIMENSION = {
 } as const;
 const { page, expected } = DEFAULT;
 
+const WIDTH_ERROR_MSG = 'Width must be greater than 0' as const;
+const HEIGHT_ERROR_MSG = 'Height must be greater than 0' as const;
+
 /**
- * Scenarios: `defaults.width` and `defaults.height` should propagate to pages
+ * Scenarios:
+ * - `defaults.width` and `defaults.height` should propagate to pages
  * that omit their own dimensions and be overridden by pages that specify them.
+ * - `width` or `height` values less than 0 should cause the build to fail.
  */
-export const DEFAULT_DIMENSIONS_TEST_CASE_MAP: Record<string, IsolatedTestCase> = {
+export const DIMENSIONS_TEST_CASE_MAP: Record<string, IsolatedTestCase> = {
 	// Provided height should override the default but width should be inherited
 	'default width': {
 		page,
@@ -91,6 +96,62 @@ export const DEFAULT_DIMENSIONS_TEST_CASE_MAP: Record<string, IsolatedTestCase> 
 			image: {
 				...expected.image,
 				...DIMENSION,
+			},
+		},
+	},
+	// A zero-width image should cause the build to fail
+	'zero-width': {
+		page,
+		screenshotConfig: {
+			outputPath: `${ISOLATED_OUTPUT_DIR}/zero-width/${OUTPUT_FILENAME}`,
+			width: 0,
+		},
+		expected: {
+			build: {
+				success: false,
+				stderr: WIDTH_ERROR_MSG,
+			},
+		},
+	},
+	// A zero-height image should cause the build to fail
+	'zero-height': {
+		page,
+		screenshotConfig: {
+			outputPath: `${ISOLATED_OUTPUT_DIR}/zero-height/${OUTPUT_FILENAME}`,
+			height: 0,
+		},
+		expected: {
+			build: {
+				success: false,
+				stderr: HEIGHT_ERROR_MSG,
+			},
+		},
+	},
+	// A negative-width image should cause the build to fail
+	'negative-width': {
+		page,
+		screenshotConfig: {
+			outputPath: `${ISOLATED_OUTPUT_DIR}/negative-width/${OUTPUT_FILENAME}`,
+			width: -1,
+		},
+		expected: {
+			build: {
+				success: false,
+				stderr: WIDTH_ERROR_MSG,
+			},
+		},
+	},
+	// A negative-height image should cause the build to fail
+	'negative height': {
+		page,
+		screenshotConfig: {
+			outputPath: `${ISOLATED_OUTPUT_DIR}/negative-height/${OUTPUT_FILENAME}`,
+			height: -1,
+		},
+		expected: {
+			build: {
+				success: false,
+				stderr: HEIGHT_ERROR_MSG,
 			},
 		},
 	},
