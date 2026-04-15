@@ -5,8 +5,6 @@
  */
 import { access } from 'node:fs/promises';
 import type { Format } from './types.ts';
-import { styleText } from 'node:util';
-import type { AstroIntegrationLogger } from 'astro';
 
 /**
  * Extracts and normalizes the image format from a given file path.
@@ -71,52 +69,6 @@ export async function fileExists(path: string): Promise<boolean> {
 	} catch {
 		return false;
 	}
-}
-
-/**
- * Logs a status message showing input/output file paths with optional warning.
- *
- * @param logger - The Astro integration logger instance to use for output
- * @param type - The type of log to display (info, warn, or error)
- * @param inputPath - The source file path to display
- * @param outputPath - The destination file path to display
- * @param message - Optional warning text to append
- *
- * @example
- * ```ts
- * logStatus(logger, 'info', 'src/input.ts', 'dist/output.js');
- * // Outputs (green): ▶ src/input.ts → dist/output.js
- *
- * logStatus(logger, 'warn', 'src/input.ts', 'dist/output.js', 'skipped');
- * // Outputs (yellow): ▶ src/input.ts → dist/output.js (skipped)
- *
- * logStatus(logger, 'error', 'src/input.ts', 'dist/output.js', 'Some error message');
- * // Outputs (red): ▶ src/input.ts → dist/output.js: Some error message
- * ```
- */
-const LOG_COLOR_MAP = {
-	info: 'green',
-	warn: 'yellow',
-	error: 'red',
-} as const;
-
-export function logStatus(
-	logger: AstroIntegrationLogger,
-	type: 'info' | 'warn' | 'error',
-	inputPath: string,
-	outputPath: string,
-	message?: string,
-) {
-	const isError = type === 'error';
-	const color = LOG_COLOR_MAP[type];
-	const bullet = styleText(color, '▶'.padStart(isError ? 1 : 2));
-	const suffix = (() => {
-		if (!message) return '';
-
-		return isError ? `: ${message}` : ` ${styleText('dim', `(${message})`)}`;
-	})();
-
-	logger[type](`${bullet} ${inputPath} → ${outputPath}${suffix}`);
 }
 
 /**
