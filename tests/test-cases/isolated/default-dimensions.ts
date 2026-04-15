@@ -31,9 +31,11 @@ export const DEFAULT_DIMENSIONS_TEST_CASE_MAP: Record<string, IsolatedTestCase> 
 		},
 		setup: TestSetup.Clean,
 		expected: {
-			...expected,
-			width: DEFAULT_DIMENSION.width,
-			height: DIMENSION.height,
+			image: {
+				...expected.image,
+				width: DEFAULT_DIMENSION.width,
+				height: DIMENSION.height,
+			},
 		},
 	},
 	// Provided width should override the default but height should be inherited
@@ -50,9 +52,11 @@ export const DEFAULT_DIMENSIONS_TEST_CASE_MAP: Record<string, IsolatedTestCase> 
 		},
 		setup: TestSetup.Clean,
 		expected: {
-			...expected,
-			width: DIMENSION.width,
-			height: DEFAULT_DIMENSION.height,
+			image: {
+				...expected.image,
+				width: DIMENSION.width,
+				height: DEFAULT_DIMENSION.height,
+			},
 		},
 	},
 	// With no width/height set, the integration should fall back to the default values
@@ -66,8 +70,10 @@ export const DEFAULT_DIMENSIONS_TEST_CASE_MAP: Record<string, IsolatedTestCase> 
 		},
 		setup: TestSetup.Clean,
 		expected: {
-			...expected,
-			...DEFAULT_DIMENSION,
+			image: {
+				...expected.image,
+				...DEFAULT_DIMENSION,
+			},
 		},
 	},
 	// Provided width and height should override the defaults
@@ -82,8 +88,10 @@ export const DEFAULT_DIMENSIONS_TEST_CASE_MAP: Record<string, IsolatedTestCase> 
 		},
 		setup: TestSetup.Clean,
 		expected: {
-			...expected,
-			...DIMENSION,
+			image: {
+				...expected.image,
+				...DIMENSION,
+			},
 		},
 	},
 };

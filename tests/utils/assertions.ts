@@ -38,7 +38,8 @@ export class BuildAsserter {
 	 */
 	assertSuccess(expected = true) {
 		strictEqual(
-			this.#result.success === expected,
+			this.#result.success,
+			expected,
 			expected
 				? `Expected build to succeed, but it failed:\n${this.#result.stdout}\n${this.#result.stderr}`
 				: 'Expected build to fail, but it succeeded',

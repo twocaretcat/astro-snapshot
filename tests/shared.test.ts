@@ -10,7 +10,12 @@ import { SHARED_TEST_CASE_MAP } from './test-cases/shared/index.ts';
 const ABS_OUTPUT_PATH = resolve(ABS_FIXTURE_PATH, OUTPUT_DIR, 'shared');
 
 await cleanOutput(ABS_OUTPUT_PATH);
-await runAstroBuildWithScenario('shared');
+
+const { success, stdout, stderr } = await runAstroBuildWithScenario('shared');
+
+if (!success) {
+	throw new Error(`Shared build failed:\n${stdout}\n${stderr}`);
+}
 
 let file: FileAsserter;
 let img: ImageAsserter;
@@ -31,7 +36,7 @@ describe('astro-snapshot integration config', () => {
 				img = new ImageAsserter(outputPath);
 			});
 
-			const { format, width, height, color } = expected;
+			const { format, width, height, color } = expected.image ?? {};
 
 			it('image exists and is non-empty', () => file.assertExists());
 

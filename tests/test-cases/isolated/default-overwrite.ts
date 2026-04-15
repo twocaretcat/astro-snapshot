@@ -35,8 +35,12 @@ export const DEFAULT_OVERWRITE_TEST_CASE_MAP: Record<string, IsolatedTestCase> =
 			},
 		},
 		setup: TestSetup.Seed,
-		// Assert that the file exists but nothing else
-		expected: {},
+		// Just assert that the file exists (no image-specific assertions)
+		expected: {
+			build: {
+				success: true,
+			},
+		},
 	},
 	// With overwrite enabled by default, but disabled per-page, the seeded file should not be overwritten
 	'default overwrite enabled (overridden per-page)': {
@@ -51,8 +55,12 @@ export const DEFAULT_OVERWRITE_TEST_CASE_MAP: Record<string, IsolatedTestCase> =
 			},
 		},
 		setup: TestSetup.Seed,
-		// Assert that the file exists but nothing else
-		expected: {},
+		// Just assert that the file exists (no image-specific assertions)
+		expected: {
+			build: {
+				success: true,
+			},
+		},
 	},
 	// With overwrite disabled by default, but enabled per-page, the seeded file should be overwritten
 	'default overwrite disabled (overridden per-page)': {

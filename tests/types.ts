@@ -1,5 +1,6 @@
 import type sharp from 'sharp';
 import type { Config } from '../packages/astro-snapshot/src/index.ts';
+import type { Format } from '../packages/astro-snapshot/src/types.ts';
 
 /**
  * A color in the format `{ r: number, g: number, b: number }`.
@@ -7,33 +8,37 @@ import type { Config } from '../packages/astro-snapshot/src/index.ts';
 export type Color = sharp.Stats['dominant'];
 
 /**
- * Properties an Astro build is expected to have.
+ * Output from an Astro build.
  */
 export interface BuildResult {
-	/**
-	 * Whether the build is expected to succeed.
-	 *
-	 * @default true
-	 */
-	success?: boolean;
-	/**
-	 * If present, asserts that the build stdout contains this string.
-	 */
-	stdout?: string;
-	/**
-	 * If present, asserts that the build stderr contains this string.
-	 */
-	stderr?: string;
+	/** Whether the build was successful or not. */
+	success: boolean;
+	/** Stdout from the build command. */
+	stdout: string;
+	/** Stderr from the build command. */
+	stderr: string;
 }
 
 /**
- * Properties an output image is expected to have. If a property is omitted, it will not be checked.
+ * Properties of an output image.
  */
-interface ImageExpectation {
-	format?: string;
-	width?: number;
-	height?: number;
-	color?: Color;
+interface ImageResult {
+	format: Format;
+	width: number;
+	height: number;
+	color: Color;
+}
+
+/**
+ * Combined expectation for a test case, covering both the build outcome and the properties of any generated image.
+ *
+ * If a property is omitted, it will not be checked (aside from the build, which is expected to succeed by default).
+ */
+export interface Expectation {
+	/** Expected build outcome. Defaults to a successful build with no output assertions. */
+	build?: Partial<BuildResult>;
+	/** Expected properties of the generated image. */
+	image?: Partial<ImageResult>;
 }
 
 /**
@@ -57,7 +62,7 @@ export interface TestCase {
 	/** Config entry passed to the snapshot integration (includes `outputPath`). */
 	readonly screenshotConfig: Config['pages'][string][number];
 	/** Properties the produced image is expected to have. If undefined, no assertions are made (useful for setup). */
-	readonly expected?: ImageExpectation;
+	readonly expected?: Expectation;
 }
 
 /**

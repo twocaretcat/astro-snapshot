@@ -23,9 +23,11 @@ export const OVERWRITE_ENABLED_TEST_CASE_MAP: Record<string, TestCase> = {
 			overwrite: true,
 		},
 		expected: {
-			...expected,
-			// The image should now be green
-			color: COLOR.green,
+			image: {
+				...expected.image,
+				// The image should now be green
+				color: COLOR.green,
+			},
 		},
 	},
 };
