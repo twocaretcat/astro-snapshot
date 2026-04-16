@@ -181,17 +181,17 @@ export interface ScreenshotConfig {
  */
 export interface SnapshotIntegrationConfig {
 	/**
-	 * Map of page paths to their screenshot configurations.
-	 * Each key represents a route (ex. "/", "/about", "/blog/post-1").
+	 * Map of page paths or external URLs to their screenshot configurations.
+	 *
+	 * Keys can be:
+	 * - A local page path (ex. `'/'`, `'/about'`) served via the local build server.
+	 * - An absolute `http://` or `https://` URL loaded directly without the local server.
 	 *
 	 * @example
 	 * ```ts
 	 * pages: {
 	 *   '/': [{ outputPath: 'src/assets/home-og.png' }],
-	 *   '/about': [
-	 *     { outputPath: 'src/assets/about-og.png', width: 1200, height: 630 },
-	 *     { outputPath: 'src/assets/about-square.png', width: 512, height: 512 },
-	 *   ],
+	 *   'https://johng.io': [{ outputPath: 'src/assets/external.png', width: 512, height: 512 }],
 	 * }
 	 * ```
 	 */

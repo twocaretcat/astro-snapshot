@@ -72,6 +72,22 @@ export async function fileExists(path: string): Promise<boolean> {
 }
 
 /**
+ * Returns `true` if the input string is an absolute `http://` or `https://` URL.
+ *
+ * @param str - A string to check.
+ *
+ * @example
+ * ```ts
+ * isExternalUrl('https://example.com'); // true
+ * isExternalUrl('/about');              // false
+ * isExternalUrl('about');               // false
+ * ```
+ */
+export function isExternalUrl(str: string): boolean {
+	return str.startsWith('http://') || str.startsWith('https://');
+}
+
+/**
  * Formats a duration in milliseconds as a human-readable string.
  *
  * Values under 1000ms are displayed as whole milliseconds (ex. '53ms').

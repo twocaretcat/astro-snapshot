@@ -41,7 +41,7 @@ import type {
 	ResolvedScreenshotConfig,
 	SnapshotIntegrationConfig,
 } from './types.ts';
-import { fileExists, formatDuration, getFormat } from './utils.ts';
+import { fileExists, formatDuration, getFormat, isExternalUrl } from './utils.ts';
 
 /**
  * Creates an Astro integration that captures screenshots of specified pages
@@ -83,7 +83,7 @@ import { fileExists, formatDuration, getFormat } from './utils.ts';
 export default function snapshot(
 	config: SnapshotIntegrationConfig,
 ): AstroIntegration {
-	// Integration-level config options
+	// Integration-level config
 	const pages = config.pages;
 	const defaults = {
 		...config.defaults,
@@ -93,8 +93,9 @@ export default function snapshot(
 		...config.launchOptions,
 	} as const;
 	const port = config.port ?? 4322;
-
+	// Resolved config
 	const screenshots: ResolvedScreenshotConfig[] = [];
+	let needsLocalServer = false;
 
 	/**
 	 * Handler for the `astro:config:done` lifecycle event.
@@ -107,15 +108,20 @@ export default function snapshot(
 		const rootDir = fileURLToPath(config.root);
 
 		for (const [pagePath, screenshotConfigs] of Object.entries(pages)) {
-			const normalizedPagePath = pagePath.startsWith('/') ? pagePath : `/${pagePath}`;
-			const pageUrl = `http://localhost:${port}${normalizedPagePath}`;
+			const pageIsExternal = isExternalUrl(pagePath);
+
+			if (!pageIsExternal) {
+				needsLocalServer = true;
+			}
+
+			const pageUrl = pageIsExternal ? pagePath : new URL(pagePath, `http://localhost:${port}`).href;
 
 			for (const screenshotConfig of screenshotConfigs) {
 				const width = screenshotConfig.width ?? defaults.width ?? 1200;
 				const height = screenshotConfig.height ?? defaults.height ?? 630;
 				const { outputPath } = screenshotConfig;
 				const absoluteOutputPath = resolve(rootDir, outputPath);
-				const statusLogger = new StatusLogger(logger, normalizedPagePath, outputPath);
+				const statusLogger = new StatusLogger(logger, pagePath, outputPath);
 
 				if (width < 1) {
 					statusLogger.error('Width must be greater than 0. Please check your Astro config.');
@@ -170,10 +176,12 @@ export default function snapshot(
 			return;
 		}
 
-		// Start a static file server to render pages
-		const server = createServer(sirv(fileURLToPath(dir)));
+		// Start a static file server when at least one page is local
+		const server = needsLocalServer ? createServer(sirv(fileURLToPath(dir))) : null;
 
-		await new Promise<void>((resolve) => server.listen(port, resolve));
+		if (server) {
+			await new Promise<void>((resolve) => server.listen(port, resolve));
+		}
 
 		// Launch Puppeteer
 		const browser = await launch(launchOptions);
@@ -227,7 +235,10 @@ export default function snapshot(
 			}
 		} finally {
 			await browser.close();
-			await new Promise<void>((resolve, reject) => server.close((error) => (error ? reject(error) : resolve())));
+
+			if (server) {
+				await new Promise<void>((resolve, reject) => server.close((error) => (error ? reject(error) : resolve())));
+			}
 		}
 
 		logger.info(
