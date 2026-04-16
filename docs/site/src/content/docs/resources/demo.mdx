@@ -16,14 +16,20 @@ Here's a screenshot of this page captured with Astro Snapshot:
 
 Snapception! How cool is that?
 
+Here's a screenshot of an external site:
+
+<Card>
+![Screenshot of johng.io/funding](../../../../src/assets/demo-external.png "Screenshot of johng.io/funding")
+</Card>
+
 ## Code
 
 :::note
-`overwrite` is disabled in this case because the screenshot already exists and we don't need to generate it on every build. If you want to get the same effect we are showing here, you'll need to set `overwrite: true` in your config and run the build a couple times.
+`overwrite` is disabled in this case because the screenshots already exist and we don't need to generate them on every build. If you want to get the same effect we are showing here, you'll need to set `overwrite: true` in your config and run the build a couple times.
 :::
 
 Here's the config used to set this up:
 
-<CodeFile path="astro.config.ts" meta="{11,17-28}" />
+<CodeFile path="astro.config.ts" meta="{11,17-36}" />
 
 For a complete example, check out the [source code](https://github.com/twocaretcat/astro-snapshot/tree/main/docs/site) for these docs.
