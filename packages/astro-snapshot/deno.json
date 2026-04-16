@@ -1,6 +1,6 @@
 {
 	"name": "@twocaretcat/astro-snapshot",
-	"version": "2.2.1",
+	"version": "2.3.0",
 	"exports": "./src/index.ts",
 	"exclude": [
 		"npm/"
@@ -17,7 +17,9 @@
 		"publish:npm": {
 			"description": "Build and publish the package to npm.",
 			"command": "cd npm && npm publish",
-			"dependencies": ["build:npm"]
+			"dependencies": [
+				"build:npm"
+			]
 		},
 		"publish:jsr": {
 			"description": "Copy the README into the package directory and publish the package to JSR.",
