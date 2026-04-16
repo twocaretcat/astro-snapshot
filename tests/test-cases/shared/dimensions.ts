@@ -27,8 +27,10 @@ export const DIMENSIONS_TEST_CASE_MAP: Record<string, TestCase> = {
 			width: DIMENSION.width,
 		},
 		expected: {
-			...expected,
-			width: DIMENSION.width,
+			image: {
+				width: DIMENSION.width,
+				height: expected.image.height,
+			},
 		},
 	},
 	// Provided height should override the default
@@ -39,8 +41,10 @@ export const DIMENSIONS_TEST_CASE_MAP: Record<string, TestCase> = {
 			height: DIMENSION.height,
 		},
 		expected: {
-			...expected,
-			height: DIMENSION.height,
+			image: {
+				width: expected.image.width,
+				height: DIMENSION.height,
+			},
 		},
 	},
 	// Provided width and height should override the defaults
@@ -51,8 +55,9 @@ export const DIMENSIONS_TEST_CASE_MAP: Record<string, TestCase> = {
 			...DIMENSION,
 		},
 		expected: {
-			...expected,
-			...DIMENSION,
+			image: {
+				...DIMENSION,
+			},
 		},
 	},
 };

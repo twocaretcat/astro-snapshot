@@ -10,13 +10,18 @@ const DIMENSION = {
 	width: 192,
 	height: 144,
 } as const;
-const { page, expected } = DEFAULT;
+const { page } = DEFAULT;
+
+const WIDTH_ERROR_MSG = 'Width must be greater than 0' as const;
+const HEIGHT_ERROR_MSG = 'Height must be greater than 0' as const;
 
 /**
- * Scenarios: `defaults.width` and `defaults.height` should propagate to pages
+ * Scenarios:
+ * - `defaults.width` and `defaults.height` should propagate to pages
  * that omit their own dimensions and be overridden by pages that specify them.
+ * - `width` or `height` values less than 0 should cause the build to fail.
  */
-export const DEFAULT_DIMENSIONS_TEST_CASE_MAP: Record<string, IsolatedTestCase> = {
+export const DIMENSIONS_TEST_CASE_MAP: Record<string, IsolatedTestCase> = {
 	// Provided height should override the default but width should be inherited
 	'default width': {
 		page,
@@ -31,9 +36,10 @@ export const DEFAULT_DIMENSIONS_TEST_CASE_MAP: Record<string, IsolatedTestCase> 
 		},
 		setup: TestSetup.Clean,
 		expected: {
-			...expected,
-			width: DEFAULT_DIMENSION.width,
-			height: DIMENSION.height,
+			image: {
+				width: DEFAULT_DIMENSION.width,
+				height: DIMENSION.height,
+			},
 		},
 	},
 	// Provided width should override the default but height should be inherited
@@ -50,9 +56,10 @@ export const DEFAULT_DIMENSIONS_TEST_CASE_MAP: Record<string, IsolatedTestCase> 
 		},
 		setup: TestSetup.Clean,
 		expected: {
-			...expected,
-			width: DIMENSION.width,
-			height: DEFAULT_DIMENSION.height,
+			image: {
+				width: DIMENSION.width,
+				height: DEFAULT_DIMENSION.height,
+			},
 		},
 	},
 	// With no width/height set, the integration should fall back to the default values
@@ -66,8 +73,9 @@ export const DEFAULT_DIMENSIONS_TEST_CASE_MAP: Record<string, IsolatedTestCase> 
 		},
 		setup: TestSetup.Clean,
 		expected: {
-			...expected,
-			...DEFAULT_DIMENSION,
+			image: {
+				...DEFAULT_DIMENSION,
+			},
 		},
 	},
 	// Provided width and height should override the defaults
@@ -82,8 +90,65 @@ export const DEFAULT_DIMENSIONS_TEST_CASE_MAP: Record<string, IsolatedTestCase> 
 		},
 		setup: TestSetup.Clean,
 		expected: {
-			...expected,
-			...DIMENSION,
+			image: {
+				...DIMENSION,
+			},
+		},
+	},
+	// A zero-width image should cause the build to fail
+	'zero-width': {
+		page,
+		screenshotConfig: {
+			outputPath: `${ISOLATED_OUTPUT_DIR}/zero-width/${OUTPUT_FILENAME}`,
+			width: 0,
+		},
+		expected: {
+			build: {
+				success: false,
+				stderr: WIDTH_ERROR_MSG,
+			},
+		},
+	},
+	// A zero-height image should cause the build to fail
+	'zero-height': {
+		page,
+		screenshotConfig: {
+			outputPath: `${ISOLATED_OUTPUT_DIR}/zero-height/${OUTPUT_FILENAME}`,
+			height: 0,
+		},
+		expected: {
+			build: {
+				success: false,
+				stderr: HEIGHT_ERROR_MSG,
+			},
+		},
+	},
+	// A negative-width image should cause the build to fail
+	'negative-width': {
+		page,
+		screenshotConfig: {
+			outputPath: `${ISOLATED_OUTPUT_DIR}/negative-width/${OUTPUT_FILENAME}`,
+			width: -1,
+		},
+		expected: {
+			build: {
+				success: false,
+				stderr: WIDTH_ERROR_MSG,
+			},
+		},
+	},
+	// A negative-height image should cause the build to fail
+	'negative height': {
+		page,
+		screenshotConfig: {
+			outputPath: `${ISOLATED_OUTPUT_DIR}/negative-height/${OUTPUT_FILENAME}`,
+			height: -1,
+		},
+		expected: {
+			build: {
+				success: false,
+				stderr: HEIGHT_ERROR_MSG,
+			},
 		},
 	},
 };

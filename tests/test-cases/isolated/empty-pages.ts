@@ -6,5 +6,12 @@ import type { IsolatedTestCase } from '../../types.ts';
  */
 export const EMPTY_PAGES_TEST_CASE_MAP: Record<string, IsolatedTestCase> = {
 	// The output directory should be empty
-	'empty pages': {},
+	'empty pages': {
+		expected: {
+			build: {
+				success: true,
+				stdout: 'No pages configured for screenshot generation',
+			},
+		},
+	},
 };

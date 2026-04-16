@@ -32,10 +32,11 @@ which allow you to completely customize how images are generated.
 
 ### Features
 
-- **🧩 Framework agnostic**: Generate images from any valid Astro page
+- **🧩 Framework agnostic**: Generate images from any valid Astro page or external site
   - Unlike other integrations for generating social images, not limited to preset layouts
   - Unlike [Satori], not limited to certain types of JSX elements or CSS properties
   - Use whatever front-end framework you want
+  - Capture third-party sites by specifying a URL instead of a path
 - **📸 Customizable outputs**: Full control over the generated images
   - Generate multiple images per page with different configurations
   - Save images to `public`, `dist`, `src`, or any other directory
@@ -65,9 +66,8 @@ For installation and usage instructions, see the [docs](https://astro-snapshot.j
 ## 🛟 Support
 
 Need help? Refer to the [troubleshooting](https://astro-snapshot.johng.io/guide/troubleshooting/) page in the docs for a
-list of common issues and their solutions.
-
-See the [support resources](https://github.com/twocaretcat/.github/blob/main/docs/SUPPORT.md) for information on how to:
+list of common issues and their solutions, or see the
+[support resources](https://github.com/twocaretcat/.github/blob/main/docs/SUPPORT.md) for information on how to:
 
 - request features
 - report bugs
@@ -95,7 +95,7 @@ We are not affiliated with or endorsed by [Astro].
 
 ## 🖇️ Related
 
-See the [related projects](https://astro-snapshot.johng.io/resources/related/) page in the docs a list of similar
+See the [related projects](https://astro-snapshot.johng.io/resources/related/) page in the docs for a list of similar
 projects you might like.
 
 ## 💕 Funding

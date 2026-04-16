@@ -22,14 +22,20 @@ export const OVERWRITE_DISABLED_TEST_CASE_MAP: Record<string, TestCase> = {
 			...screenshotConfig,
 			overwrite: false,
 		},
-		// The image should still be red
-		expected,
+		expected: {
+			image: {
+				color: expected.image.color,
+			},
+		},
 	},
-	// 3. The third write should skip because overwrite is false by default
+	// 3. The third write should also skip because overwrite is false by default
 	'overwrite disabled (implicit)': {
 		page: PAGE.green,
 		screenshotConfig,
-		// The image should still be red
-		expected,
+		expected: {
+			image: {
+				color: expected.image.color,
+			},
+		},
 	},
 };

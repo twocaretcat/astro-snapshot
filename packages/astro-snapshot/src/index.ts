@@ -29,13 +29,19 @@
 import type { AstroIntegration } from 'astro';
 import { mkdir } from 'node:fs/promises';
 import { createServer } from 'node:http';
-import { dirname, relative, resolve } from 'node:path';
+import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { styleText } from 'node:util';
 import { launch } from 'puppeteer';
 import sirv from 'sirv';
-import type { HandleBuildDone, HandleConfigDone, ScreenshotConfig, SnapshotIntegrationConfig } from './types.ts';
-import { fileExists, formatDuration, getFormat, logStatus } from './utils.ts';
+import { StatusLogger } from './status-logger.ts';
+import type {
+	HandleBuildDone,
+	HandleConfigDone,
+	ResolvedScreenshotConfig,
+	SnapshotIntegrationConfig,
+} from './types.ts';
+import { fileExists, formatDuration, getFormat, isExternalUrl } from './utils.ts';
 
 /**
  * Creates an Astro integration that captures screenshots of specified pages
@@ -77,7 +83,7 @@ import { fileExists, formatDuration, getFormat, logStatus } from './utils.ts';
 export default function snapshot(
 	config: SnapshotIntegrationConfig,
 ): AstroIntegration {
-	// Resolved config options
+	// Integration-level config
 	const pages = config.pages;
 	const defaults = {
 		...config.defaults,
@@ -87,58 +93,75 @@ export default function snapshot(
 		...config.launchOptions,
 	} as const;
 	const port = config.port ?? 4322;
-
-	let rootDir: string;
+	// Resolved config
+	const screenshots: ResolvedScreenshotConfig[] = [];
+	let needsLocalServer = false;
 
 	/**
-	 * Merges per-page configuration with defaults and resolves
-	 * the final screenshot configuration.
+	 * Handler for the `astro:config:done` lifecycle event.
+	 * Resolves, validates, and saves all screenshot configuration for later use.
 	 *
-	 * @param pageConfig - Configuration for a specific page.
-	 * @returns Fully resolved configuration for Puppeteer.
+	 * @param options - Object containing the resolved Astro config and helper functions.
+	 * @throws {Error} If the integration config is invalid.
 	 */
-	const resolveScreenshotConfig = (pageConfig: ScreenshotConfig) => {
-		const outputPath = pageConfig.outputPath;
+	const handleConfigDone: HandleConfigDone = ({ config, logger }) => {
+		const rootDir = fileURLToPath(config.root);
 
-		return {
-			// Or operator is used to ignore 0
-			width: pageConfig.width || defaults.width || 1200,
-			height: pageConfig.height || defaults.height || 630,
-			overwrite: pageConfig.overwrite ?? defaults.overwrite ?? false,
-			goToOptions: {
-				waitUntil: 'networkidle2',
-				...defaults.gotoOptions,
-				...pageConfig.gotoOptions,
-			} as const,
-			outputPath,
-			screenshotOptions: {
-				path: outputPath,
-				type: getFormat(outputPath),
-				fullPage: false,
-				...defaults.screenshotOptions,
-				...pageConfig.screenshotOptions,
-			} as const,
-			setViewportOptions: {
-				...defaults.setViewportOptions,
-				...pageConfig.setViewportOptions,
-			} as const,
-		};
+		for (const [pagePath, screenshotConfigs] of Object.entries(pages)) {
+			const pageIsExternal = isExternalUrl(pagePath);
+
+			if (!pageIsExternal) {
+				needsLocalServer = true;
+			}
+
+			const pageUrl = pageIsExternal ? pagePath : new URL(pagePath, `http://localhost:${port}`).href;
+
+			for (const screenshotConfig of screenshotConfigs) {
+				const width = screenshotConfig.width ?? defaults.width ?? 1200;
+				const height = screenshotConfig.height ?? defaults.height ?? 630;
+				const { outputPath } = screenshotConfig;
+				const absoluteOutputPath = resolve(rootDir, outputPath);
+				const statusLogger = new StatusLogger(logger, pagePath, outputPath);
+
+				if (width < 1) {
+					statusLogger.error('Width must be greater than 0. Please check your Astro config.');
+				}
+
+				if (height < 1) {
+					statusLogger.error('Height must be greater than 0. Please check your Astro config.');
+				}
+
+				screenshots.push({
+					pageUrl,
+					absoluteOutputPath,
+					width,
+					height,
+					overwrite: screenshotConfig.overwrite ?? defaults.overwrite ?? false,
+					goToOptions: {
+						waitUntil: 'networkidle2',
+						...defaults.gotoOptions,
+						...screenshotConfig.gotoOptions,
+					} as const,
+					screenshotOptions: {
+						path: absoluteOutputPath,
+						type: getFormat(outputPath),
+						fullPage: false,
+						...defaults.screenshotOptions,
+						...screenshotConfig.screenshotOptions,
+					} as const,
+					setViewportOptions: {
+						...defaults.setViewportOptions,
+						...screenshotConfig.setViewportOptions,
+					} as const,
+					statusLogger,
+				});
+			}
+		}
 	};
 
 	/**
-	 * Handles the `astro:config:done` lifecycle event.
-	 * Stores the Astro configuration and root directory for later use.
-	 *
-	 * @param options - Object containing the resolved Astro config.
-	 */
-	const handleConfigDone: HandleConfigDone = ({ config }) => {
-		rootDir = fileURLToPath(config.root);
-	};
-
-	/**
-	 * Handles the `astro:build:done` lifecycle event.
-	 * Starts a local static file server and uses Puppeteer to generate
-	 * screenshots for all configured pages.
+	 * Handler for the `astro:build:done` lifecycle event.
+	 * Consumes the pre-resolved config, optionally starts a static file server for local pages, then uses Puppeteer to capture all configured screenshots.
 	 *
 	 * @param options - Object containing the build output directory and Astro logger instance.
 	 */
@@ -147,20 +170,18 @@ export default function snapshot(
 
 		logger.info('🔭 Integration loaded.');
 
-		const pageEntries = Object.entries(pages);
-
-		if (pageEntries.length === 0) {
-			logger.warn(
-				'No pages configured for screenshot generation. Skipping...',
-			);
+		if (screenshots.length === 0) {
+			logger.warn('No pages configured for screenshot generation. Skipping...');
 
 			return;
 		}
 
-		// Start a static file server to render pages
-		const server = createServer(sirv(fileURLToPath(dir)));
+		// Start a static file server when at least one page is local
+		const server = needsLocalServer ? createServer(sirv(fileURLToPath(dir))) : null;
 
-		await new Promise<void>((resolve) => server.listen(port, resolve));
+		if (server) {
+			await new Promise<void>((resolve) => server.listen(port, resolve));
+		}
 
 		// Launch Puppeteer
 		const browser = await launch(launchOptions);
@@ -170,44 +191,54 @@ export default function snapshot(
 		logger.label = '';
 
 		try {
-			for (const [pagePath, screenshotConfigs] of pageEntries) {
-				const normalizedPagePath = pagePath.startsWith('/') ? pagePath : `/${pagePath}`;
-				const pageUrl = `http://localhost:${port}${normalizedPagePath}` as const;
+			for (const screenshot of screenshots) {
+				const {
+					pageUrl,
+					absoluteOutputPath,
+					width,
+					height,
+					overwrite,
+					goToOptions,
+					screenshotOptions,
+					setViewportOptions,
+					statusLogger,
+				} = screenshot;
 
-				for (const screenshotConfig of screenshotConfigs) {
-					const { width, height, overwrite, goToOptions, outputPath, screenshotOptions, setViewportOptions } =
-						resolveScreenshotConfig(
-							screenshotConfig,
-						);
+				const doesFileExist = await fileExists(absoluteOutputPath);
 
-					const absoluteOutputPath = resolve(rootDir, outputPath);
-					const relativePath = relative(rootDir, absoluteOutputPath);
+				if (doesFileExist && !overwrite) {
+					statusLogger.warn('skipped');
 
-					const doesFileExist = await fileExists(absoluteOutputPath);
+					continue;
+				}
 
-					if (doesFileExist && !overwrite) {
-						logStatus(logger, normalizedPagePath, relativePath, 'skipped');
+				// Ensure output directory exists
+				await mkdir(dirname(absoluteOutputPath), { recursive: true });
 
-						continue;
-					}
+				// Create page and take screenshot
+				const page = await browser.newPage();
 
-					// Ensure output directory exists
-					await mkdir(dirname(absoluteOutputPath), { recursive: true });
+				await page.setViewport({
+					width,
+					height,
+					...setViewportOptions,
+				});
+				await page.goto(pageUrl, goToOptions);
+				await page.screenshot(screenshotOptions);
+				await page.close();
 
-					// Create page and take screenshot
-					const page = await browser.newPage();
-
-					await page.setViewport({ width, height, ...setViewportOptions });
-					await page.goto(pageUrl, goToOptions);
-					await page.screenshot(screenshotOptions);
-					await page.close();
-
-					logStatus(logger, normalizedPagePath, relativePath, doesFileExist && overwrite ? 'overwritten' : undefined);
+				if (doesFileExist && overwrite) {
+					statusLogger.warn('overwritten');
+				} else {
+					statusLogger.info();
 				}
 			}
 		} finally {
 			await browser.close();
-			await new Promise<void>((resolve, reject) => server.close((error) => (error ? reject(error) : resolve())));
+
+			if (server) {
+				await new Promise<void>((resolve, reject) => server.close((error) => (error ? reject(error) : resolve())));
+			}
 		}
 
 		logger.info(

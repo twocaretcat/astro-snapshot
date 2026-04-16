@@ -1,18 +1,75 @@
 /**
  * Assertion helpers for integration tests.
  *
- * Two classes are provided, each fetching file information once on construction
- * and exposing assertion methods that await the shared result:
+ * Three classes are provided:
  *
- * 1. FileAsserter: Wraps Deno.stat. Covers existence, absence, and mtime checks.
- * 2. ImageAsserter: Wraps a Sharp instance. Covers format, dimensions, and dominant color.
+ * 1. BuildAsserter: Asserts on the outcome of an Astro build.
+ * 2. FileAsserter: Asserts on the existence or absence of a file in the build output.
+ * 3. ImageAsserter: Asserts on properties of an image in the build output like format, dimensions, and dominant color.
  *
  * @module
  */
 
 import assert, { strictEqual } from 'node:assert';
 import sharp from 'sharp';
-import type { Color } from '../types.ts';
+import type { BuildResult, Color } from '../types.ts';
+
+/**
+ * Accepts a {@link BuildResult} and provides assertion methods over it.
+ *
+ * @param result - The build result returned by `runAstroBuildWithScenario()`.
+ *
+ * @example
+ * const build = new BuildAsserter(result);
+ * await build.assertSuccess();
+ * await build.assertStderrContains('Invalid width');
+ */
+export class BuildAsserter {
+	readonly #result: BuildResult;
+
+	constructor(result: BuildResult) {
+		this.#result = result;
+	}
+
+	/**
+	 * Asserts that the build succeeded or failed.
+	 *
+	 * @param expected - Pass `false` to assert that the build failed. Defaults to `true`.
+	 */
+	assertSuccess(expected = true) {
+		strictEqual(
+			this.#result.success,
+			expected,
+			expected
+				? `Expected build to succeed, but it failed:\n${this.#result.stdout}\n${this.#result.stderr}`
+				: 'Expected build to fail, but it succeeded',
+		);
+	}
+
+	/**
+	 * Asserts that the build stdout contains `text`.
+	 *
+	 * @param text - The substring expected to appear in stdout.
+	 */
+	assertStdoutContains(text: string) {
+		assert(
+			this.#result.stdout.includes(text),
+			`Expected stdout to contain '${text}'`,
+		);
+	}
+
+	/**
+	 * Asserts that the build stderr contains `text`.
+	 *
+	 * @param text - The substring expected to appear in stderr.
+	 */
+	assertStderrContains(text: string) {
+		assert(
+			this.#result.stderr.includes(text),
+			`Expected stderr to contain '${text}'`,
+		);
+	}
+}
 
 /**
  * Returns the keys of an object with proper TypeScript typing.
@@ -113,14 +170,14 @@ export class ImageAsserter {
 		return this.#stats;
 	}
 
-	/** Asserts that the image format (ex. `"png"`, `"jpeg"`) matches `expected`.
+	/** Asserts that the image format (ex. `'png'`, `'jpeg'`) matches `expected`.
 	 *
 	 * @param expected - The expected image format string.
 	 */
 	async assertFormat(expected: string): Promise<void> {
 		const { format } = await this.#getMetadata();
 
-		strictEqual(format, expected, `Expected format "${expected}", got "${format}" at ${this.#path}`);
+		strictEqual(format, expected, `Expected format '${expected}', got '${format}' at ${this.#path}`);
 	}
 
 	/** Asserts that the image width in pixels matches `expected`.

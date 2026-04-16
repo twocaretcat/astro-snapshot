@@ -8,6 +8,7 @@ import { mkdir } from 'node:fs/promises';
 import { dirname } from 'node:path';
 import { highlight } from './text.ts';
 import { ABS_FIXTURE_PATH } from '../constants.ts';
+import type { BuildResult } from '../types.ts';
 
 /**
  * Removes the output directory so stale screenshots can't cause a false pass.
@@ -47,29 +48,31 @@ export async function seedFile(absolutePath: string) {
 /**
  * Runs `astro build` inside the fixture project for the given scenario.
  *
- * Throws with combined stdout/stderr if the build fails.
+ * Returns a {@link BuildResult} rather than throwing on failure, so callers
+ * can assert on both successful and failing builds.
  *
  * @param scenario - The scenario key to pass as the `SCENARIO` environment variable.
  */
 export async function runAstroBuildWithScenario(scenario: string) {
 	info(highlight`🔨 Running \`astro build\` for scenario ${scenario}...`);
 
-	const result = await new Deno.Command(Deno.execPath(), {
+	const { success, stdout, stderr } = await new Deno.Command(Deno.execPath(), {
 		args: ['run', '-A', 'astro', 'build'],
 		cwd: ABS_FIXTURE_PATH,
 		stdout: 'piped',
 		stderr: 'piped',
-		// Deno merges these with the inherited parent environment
+		// Deno merges this with the inherited parent environment
 		env: {
 			SCENARIO: scenario,
 		},
 	}).output();
 
-	if (!result.success) {
-		const decoder = new TextDecoder();
-		const stdout = decoder.decode(result.stdout);
-		const stderr = decoder.decode(result.stderr);
+	const decoder = new TextDecoder();
+	const result: BuildResult = {
+		success,
+		stdout: decoder.decode(stdout),
+		stderr: decoder.decode(stderr),
+	};
 
-		throw new Error(`Astro build failed:\n${stdout}\n${stderr}`);
-	}
+	return result;
 }

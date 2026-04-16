@@ -54,9 +54,11 @@ export const DEFAULT = {
 	 * This is what the integration should fall back to.
 	 */
 	expected: {
-		format: 'png',
-		width: 1200,
-		height: 630,
-		color: COLOR.red,
+		image: {
+			format: 'png',
+			width: 1200,
+			height: 630,
+			color: COLOR.red,
+		},
 	},
 } as const;

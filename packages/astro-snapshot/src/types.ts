@@ -7,6 +7,9 @@
 import type { AstroIntegration } from 'astro';
 import type { GoToOptions, ScreenshotOptions, Viewport } from 'puppeteer';
 import type puppeteer from 'puppeteer';
+import type { StatusLogger } from './status-logger.ts';
+
+type MaybeUppercase<T extends string> = T | Uppercase<T>;
 
 /**
  * Supported image output formats for screenshots.
@@ -20,6 +23,16 @@ import type puppeteer from 'puppeteer';
 export type Format = Exclude<ScreenshotOptions['type'], undefined>;
 
 /**
+ * Supported file extensions for screenshots.
+ *
+ * @example
+ * ```ts
+ * const extension: Extension = '.jpg';
+ * ```
+ */
+export type Extension = MaybeUppercase<`.${Format | 'jpg'}`>;
+
+/**
  * Type alias for the Astro `astro:config:done` hook handler.
  * Triggered after the Astro configuration is finalized.
  */
@@ -30,6 +43,23 @@ export type HandleConfigDone = AstroIntegration['hooks']['astro:config:done'];
  * Triggered after the build process completes.
  */
 export type HandleBuildDone = AstroIntegration['hooks']['astro:build:done'];
+
+/**
+ * Fully-resolved configuration for a single screenshot, computed during `astro:config:done`.
+ */
+export interface ResolvedScreenshotConfig {
+	/** Fully-qualified URL that Puppeteer will navigate to. */
+	pageUrl: string;
+	/** Absolute path where the screenshot file will be written. */
+	absoluteOutputPath: string;
+	width: number;
+	height: number;
+	overwrite: boolean;
+	goToOptions: GoToOptions;
+	screenshotOptions: ScreenshotOptions;
+	setViewportOptions: Omit<Viewport, 'width' | 'height'>;
+	statusLogger: StatusLogger;
+}
 
 /**
  * Configuration for a single page screenshot.
@@ -56,7 +86,7 @@ export interface ScreenshotConfig {
 	 * outputPath: 'src/assets/og.webp'
 	 * ```
 	 */
-	outputPath: `${string}.${Format}`;
+	outputPath: `${string}${Extension}`;
 
 	/**
 	 * Width of the screenshot viewport in pixels.
@@ -151,17 +181,17 @@ export interface ScreenshotConfig {
  */
 export interface SnapshotIntegrationConfig {
 	/**
-	 * Map of page paths to their screenshot configurations.
-	 * Each key represents a route (ex. "/", "/about", "/blog/post-1").
+	 * Map of page paths or external URLs to their screenshot configurations.
+	 *
+	 * Keys can be:
+	 * - A local page path (ex. `'/'`, `'/about'`) served via the local build server.
+	 * - An absolute `http://` or `https://` URL loaded directly without the local server.
 	 *
 	 * @example
 	 * ```ts
 	 * pages: {
 	 *   '/': [{ outputPath: 'src/assets/home-og.png' }],
-	 *   '/about': [
-	 *     { outputPath: 'src/assets/about-og.png', width: 1200, height: 630 },
-	 *     { outputPath: 'src/assets/about-square.png', width: 512, height: 512 },
-	 *   ],
+	 *   'https://johng.io': [{ outputPath: 'src/assets/external.png', width: 512, height: 512 }],
 	 * }
 	 * ```
 	 */

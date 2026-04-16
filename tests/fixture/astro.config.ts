@@ -13,7 +13,7 @@ import { defineConfig } from 'astro/config';
 import process from 'node:process';
 import type { Config } from '../../packages/astro-snapshot/src/index.ts';
 import snapshot from '../../packages/astro-snapshot/src/index.ts';
-import type { IsolatedTestCase, SharedTestCase } from '../types.ts';
+import type { IsolatedTestCase, TestCase } from '../types.ts';
 import { ISOLATED_TEST_CASE_MAP } from '../test-cases/isolated/index.ts';
 import { SHARED_TEST_CASE_MAP } from '../test-cases/shared/index.ts';
 
@@ -25,7 +25,7 @@ type SnapshotConfig = Parameters<typeof snapshot>[0];
  *
  * @param testCases - All shared test case definitions.
  */
-function buildSharedPages(testCases: Record<string, SharedTestCase>): Config['pages'] {
+function buildSharedPages(testCases: Record<string, TestCase>): Config['pages'] {
 	const pages: Config['pages'] = {};
 
 	for (const { page, screenshotConfig } of Object.values(testCases)) {
@@ -59,7 +59,7 @@ function buildIsolatedPages(testCase: IsolatedTestCase): Config['pages'] {
  * @param isolatedTestCases - All isolated test case definitions.
  */
 function buildScenarios(
-	sharedTestCases: Record<string, SharedTestCase>,
+	sharedTestCases: Record<string, TestCase>,
 	isolatedTestCases: Record<string, IsolatedTestCase>,
 ): Record<string, SnapshotConfig> {
 	const scenarios: Record<string, SnapshotConfig> = {
@@ -90,7 +90,7 @@ function resolveScenario(scenarios: Record<string, SnapshotConfig>): SnapshotCon
 	if (!scenario || !(scenario in scenarios)) {
 		const valid = Object.keys(scenarios).join(', ');
 
-		throw new Error(`Unknown or missing SCENARIO: "${scenario}". Valid values: ${valid}`);
+		throw new Error(`Unknown or missing SCENARIO: '${scenario}'. Valid values: ${valid}`);
 	}
 
 	return scenarios[scenario];
