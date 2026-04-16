@@ -32,10 +32,11 @@ which allow you to completely customize how images are generated.
 
 ### Features
 
-- **🧩 Framework agnostic**: Generate images from any valid Astro page
+- **🧩 Framework agnostic**: Generate images from any valid Astro page or external site
   - Unlike other integrations for generating social images, not limited to preset layouts
   - Unlike [Satori], not limited to certain types of JSX elements or CSS properties
   - Use whatever front-end framework you want
+  - Capture third-party sites by specifying a URL instead of a path
 - **📸 Customizable outputs**: Full control over the generated images
   - Generate multiple images per page with different configurations
   - Save images to `public`, `dist`, `src`, or any other directory

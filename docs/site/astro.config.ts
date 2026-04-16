@@ -24,6 +24,14 @@ export default defineConfig({
 						overwrite: false,
 					},
 				],
+				'https://johng.io/funding': [
+					{
+						outputPath: `src/assets/demo-external.png`,
+						width: 1280,
+						height: 720,
+						overwrite: false,
+					},
+				],
 			},
 		}),
 		starlight({

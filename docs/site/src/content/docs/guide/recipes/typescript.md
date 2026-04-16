@@ -2,7 +2,7 @@
 title: TypeScript
 description: Use the Config type for type-safe configuration.
 sidebar:
-  order: 3
+  order: 4
 ---
 
 Import the `Config` type to get full type checking and autocompletion for your integration config.

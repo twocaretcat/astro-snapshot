@@ -25,7 +25,7 @@ export const OTHER_TEST_CASE_MAP: Record<string, TestCase> = {
 			},
 		},
 	},
-	// A page key without a leading '/' should be normalized
+	// A page path without a leading '/' should be normalized
 	'page path normalization': {
 		page: 'red',
 		screenshotConfig: {
@@ -34,6 +34,30 @@ export const OTHER_TEST_CASE_MAP: Record<string, TestCase> = {
 		expected: {
 			image: {
 				color: expected.image.color,
+			},
+		},
+	},
+	// A page path should also accept an HTTPS URL
+	'HTTPS URL': {
+		page: 'https://johng.io',
+		screenshotConfig: {
+			outputPath: `${SHARED_OUTPUT_DIR}/https-url.png`,
+		},
+		expected: {
+			build: {
+				success: true,
+			},
+		},
+	},
+	// A page path should also accept an HTTP URL
+	'HTTP URL': {
+		page: 'http://tally.johng.io/en',
+		screenshotConfig: {
+			outputPath: `${SHARED_OUTPUT_DIR}/http-url.png`,
+		},
+		expected: {
+			build: {
+				success: true,
 			},
 		},
 	},

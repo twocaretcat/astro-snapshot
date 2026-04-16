@@ -2,7 +2,7 @@
 title: Kitchen Sink
 description: See what's possible with Astro Snapshot using the full suite of available options.
 sidebar:
-  order: 4
+  order: 5
 ---
 
 Here's a configuration example using every available option.

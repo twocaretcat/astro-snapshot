@@ -2,7 +2,7 @@
 title: Puppeteer Customization
 description: Capture retina-quality screenshots by passing through options directly to Puppeteer.
 sidebar:
-  order: 2
+  order: 3
 ---
 
 Astro Snapshot allow you to pass through options directly to Puppeteer for more control over the screenshot generation
