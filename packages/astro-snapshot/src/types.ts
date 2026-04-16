@@ -7,6 +7,7 @@
 import type { AstroIntegration } from 'astro';
 import type { GoToOptions, ScreenshotOptions, Viewport } from 'puppeteer';
 import type puppeteer from 'puppeteer';
+import type { StatusLogger } from './status-logger.ts';
 
 type MaybeUppercase<T extends string> = T | Uppercase<T>;
 
@@ -42,6 +43,23 @@ export type HandleConfigDone = AstroIntegration['hooks']['astro:config:done'];
  * Triggered after the build process completes.
  */
 export type HandleBuildDone = AstroIntegration['hooks']['astro:build:done'];
+
+/**
+ * Fully-resolved configuration for a single screenshot, computed during `astro:config:done`.
+ */
+export interface ResolvedScreenshotConfig {
+	/** Fully-qualified URL that Puppeteer will navigate to. */
+	pageUrl: string;
+	/** Absolute path where the screenshot file will be written. */
+	absoluteOutputPath: string;
+	width: number;
+	height: number;
+	overwrite: boolean;
+	goToOptions: GoToOptions;
+	screenshotOptions: ScreenshotOptions;
+	setViewportOptions: Omit<Viewport, 'width' | 'height'>;
+	statusLogger: StatusLogger;
+}
 
 /**
  * Configuration for a single page screenshot.
