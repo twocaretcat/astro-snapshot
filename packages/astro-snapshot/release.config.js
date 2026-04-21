@@ -22,7 +22,8 @@ export default {
 			'@semantic-release/exec',
 			{
 				prepareCmd: 'deno task version ${nextRelease.version}',
-				publishCmd: 'deno task "publish:*"',
+				// For some reason, `npm publish` fails when run from a Deno task with an ENEEDAUTH error, so we have to run it separately here
+				publishCmd: '(deno task build:npm && (cd npm && npm publish)); (deno task publish:jsr)',
 			},
 		],
 		[
