@@ -2,7 +2,7 @@
 	"$schema": "https://johng.io/schema/project-metadata.json",
 	"name": "Astro Snapshot",
 	"logoPath": "docs/icon.svg",
-	"background": "An Astro integration for generating screenshots of your pages automatically at build time. Perfect for creating social images, content previews, dynamic icons, and more!",
+	"background": "An integration for the Astro web framework that allows users to generate images from their pages at build time. Created as a more powerful, full-featured alternative to existing integrations that perform similar functions, this project allowed me to deepen my understanding of Astro's build lifecycle. It has 100s of monthly downloads on npm, where it is freely available for others to use.",
 	"category": "Plugin",
 	"subcategory": "Astro",
 	"schema": {
